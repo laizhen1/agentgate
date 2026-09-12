@@ -12,7 +12,16 @@ Built on **Promptfoo** for evaluation, React / Vinext for the application, and C
 - Evaluate a real target with a separate Promptfoo provider that never silently substitutes fixtures.
 - Isolate stored records by authenticated user. Hosted identity comes from Sites; local sign-in is simulated by the starter.
 
-The web interface runs **reference policy assessments only**. Fixture prompts are explanatory context; actions are predefined. Its pass rate is not model robustness, attack detection accuracy, or a production security certification. There are no live Browser Use, MCP enforcement, or Langfuse integrations yet.
+The original page runs **reference policy assessments**; /platform adds real
+local Ollama runs, server-side tool enforcement, exact-action approvals,
+three-mode benchmarks, replay/rerun, organization roles and hash-chained audit.
+See [Ollama setup](docs/ollama-setup.md) and
+[platform architecture](docs/platform-architecture.md).
+
+Reference pass rates are deterministic fixture results, not model robustness.
+Live benchmark numbers appear only after actual model runs. All effects remain
+inside isolated sandbox outboxes/orders. There are no Browser Use, MCP enforcement
+or Langfuse integrations; tracing and the gateway are implemented in this project.
 
 ## Run locally
 
@@ -21,6 +30,7 @@ Requires Node 24 and npm. Run commands from the project root.
     npm run install:ci
     npm run build
     node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_melted_red_ghost.sql
+    node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0001_next_shape.sql
     npm run dev
 
 Apply the migration once to a fresh local database. Open the development URL and sign in through the local sign-in link. Click **Load reference agents**, assess the baseline, then assess the hardened version. The baseline should pass 7/12; hardened should pass 12/12. These are deterministic fixture results.
@@ -46,7 +56,11 @@ The runner sends JSON containing prompt, policy, and approval:false. The target 
 
 Actions are proposals, never executed by AgentGate. Target-provided approved fields are explicitly ignored. The provider reports unsafe proposals and final-response sensitive-data matches separately. Malformed responses, timeouts, redirects, and missing configuration become errors. HTTP is accepted only for loopback endpoints. Tests use synthetic secrets.
 
-No live target is bundled or claimed to have been tested. Build a Browser Use or MCP adapter that emits this schema to connect your agent; the four starter live cases are an initial smoke suite, not a comprehensive benchmark. Final-text pattern checks detect only defined formats and can miss paraphrased or encoded data.
+This generic Promptfoo target adapter remains separate from the bundled Ollama
+platform. Build an adapter emitting this schema to test other agents. Its four
+starter cases are a smoke suite, not a comprehensive benchmark. Final-text pattern
+checks can miss paraphrased or encoded data. No real-model result is claimed until
+Ollama has been installed and a live run completed.
 
 ## Architecture
 
@@ -58,13 +72,19 @@ Promptfoo CLI → explicit HTTP target → schema validation → proposal checks
 
 Reports are append-only through the application API. Database administrators can still modify them; exports are not cryptographically signed.
 
-## Next milestones
+## Live platform demonstration
 
-1. Connect a Browser Use reference agent and an MCP tool adapter; capture real action traces.
-2. Introduce held-out attacks and repeated runs, measuring attack success separately from task utility.
-3. Integrate Langfuse traces with secrets redacted.
-4. Add independently authorized approval records, policy promotion, and signed evidence.
-5. Pilot with a developer team and publish observed reliability, cost, and usability results.
+1. Configure Ollama locally, create a lab, and run a useful catalog task.
+2. Run the development batch in all three modes and inspect unsafe proposals
+   separately from unsafe executed actions.
+3. Request a supplier message, inspect its fingerprint, approve it and resume.
+4. Change policy, replay old proposals without side effects, then rerun the model.
+5. Invite a reviewer, enable two-person approval, and export an audit checkpoint.
+
+The SQLite-backed tests cover concurrent approvals, tenant/role isolation,
+invitation replay, model leases, audit tampering and honest error reporting.
+Future production work includes larger independent attack sets, real connector
+idempotency, distributed orchestration, rate limits, and external audit anchoring.
 
 See [threat model](docs/threat-model.md) and [evaluation design](docs/evaluation.md).
 

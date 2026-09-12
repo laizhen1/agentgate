@@ -6,6 +6,8 @@
     "node": ">=22.13.0"
   },
   "scripts": {
+    "format:platform": "prettier --write app/platform app/api/platform lib/platform tests/platform.test.ts tests/platform-api.integration.mjs scripts/verify-audit.ts",
+    "format:check": "prettier --check app/platform app/api/platform lib/platform tests/platform.test.ts tests/platform-api.integration.mjs scripts/verify-audit.ts",
     "eval:reference": "promptfoo eval -c evals/promptfooconfig.ts --no-cache",
     "eval:live": "promptfoo eval -c evals/live.config.ts --no-cache",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
@@ -55,6 +57,7 @@
     "drizzle-kit": "0.31.10",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.6",
+    "prettier": "3.6.2",
     "promptfoo": "0.123.0",
     "react-server-dom-webpack": "19.2.6",
     "tailwindcss": "4.2.1",

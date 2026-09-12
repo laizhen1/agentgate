@@ -1,0 +1,74 @@
+.platform-toolbar {
+  display: flex;
+  align-items: end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.platform-toolbar > .field {
+  flex: 1;
+  min-width: 220px;
+  margin-top: 0;
+}
+.platform-toolbar > [data-slot="select-trigger"] {
+  min-width: 160px;
+}
+.platform-tabs {
+  height: auto;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.platform-subhead {
+  margin-top: 28px;
+}
+.platform-run-list {
+  max-height: 700px;
+  overflow: auto;
+}
+.platform-trace {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  gap: 16px;
+  border-left: 2px solid #dbe6fa;
+  padding: 14px 0 14px 16px;
+}
+.platform-trace time {
+  font-size: 12px;
+  color: #53667c;
+}
+.platform-trace p {
+  margin: 5px 0;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+}
+.platform .evidence small {
+  overflow-wrap: anywhere;
+}
+.platform .evidence summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.platform .evidence .actions {
+  margin-top: 16px;
+}
+.platform fieldset {
+  margin: 16px 0;
+}
+.platform .field [data-slot="select-trigger"] {
+  width: 100%;
+}
+.platform [data-slot="table-container"] {
+  margin: 22px 0;
+}
+@media (max-width: 800px) {
+  .platform .topbar {
+    flex-wrap: wrap;
+    padding: 14px 0;
+  }
+  .platform-toolbar {
+    align-items: stretch;
+  }
+  .platform-trace {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}

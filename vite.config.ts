@@ -1,5 +1,5 @@
 import vinext from "vinext";
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import hostingConfig from "./.openai/hosting.json";
 import { sites } from "./build/sites-vite-plugin";
 
@@ -33,7 +33,8 @@ const localBindingConfig = {
     : [],
 };
 
-export default defineConfig(async () => {
+export default defineConfig(async ({ command, mode }) => {
+  const localModel = command === "serve" ? loadEnv(mode, process.cwd(), "AGENTGATE_") : {};
   // Use Miniflare's local Request.cf placeholder unless fetching is requested.
   process.env.CLOUDFLARE_CF_FETCH_ENABLED ??= "false";
   process.env.WRANGLER_SEND_METRICS ??= "false";
@@ -58,7 +59,13 @@ export default defineConfig(async () => {
       cloudflare({
         viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
         inspectorPort: false,
-        config: localBindingConfig,
+        config: {
+          ...localBindingConfig,
+          vars: command === "serve" ? {
+            AGENTGATE_OLLAMA_MODEL: localModel.AGENTGATE_OLLAMA_MODEL ?? "",
+            AGENTGATE_OLLAMA_URL: localModel.AGENTGATE_OLLAMA_URL ?? "http://127.0.0.1:11434",
+          } : {},
+        },
       }),
     ],
   };
