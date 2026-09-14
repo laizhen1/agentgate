@@ -16,6 +16,7 @@ import {
   type Org,
   type Session,
   type ModelReply,
+  type GovernancePolicy,
 } from "./domain.ts";
 import { OrgStore } from "./store.ts";
 import { validateConfig, chat, type ModelConfig } from "./ollama.ts";
@@ -31,9 +32,10 @@ const policy = z
           "read_document",
           "send_email",
           "delete_record",
+          "create_purchase_request",
         ]),
       )
-      .max(4),
+      .max(5),
     allowedHosts: z
       .array(
         z.string().regex(/^(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/),
@@ -41,6 +43,18 @@ const policy = z
       .max(10),
     requireApproval: z.boolean(),
     blockSensitive: z.boolean(),
+  })
+  .strict();
+const governance = z
+  .object({
+    approvedVendors: z.array(z.string().min(2).max(80)).min(1).max(30),
+    allowedCurrency: z
+      .string()
+      .length(3)
+      .transform((value) => value.toUpperCase()),
+    blockedCategories: z.array(z.string().min(2).max(80)).max(30),
+    autoApproveLimit: z.number().nonnegative().max(10_000_000),
+    monthlyBudget: z.number().positive().max(100_000_000),
   })
   .strict();
 export const commandSchema = z.discriminatedUnion("operation", [
@@ -74,6 +88,27 @@ export const commandSchema = z.discriminatedUnion("operation", [
       orgId: id,
       policy,
       twoPerson: z.boolean(),
+    })
+    .strict(),
+  z
+    .object({
+      operation: z.literal("governance"),
+      orgId: id,
+      governance,
+    })
+    .strict(),
+  z
+    .object({
+      operation: z.literal("mcpToken"),
+      orgId: id,
+      name: z.string().trim().min(2).max(80),
+    })
+    .strict(),
+  z
+    .object({
+      operation: z.literal("revokeMcpToken"),
+      orgId: id,
+      tokenId: id,
     })
     .strict(),
   z
@@ -207,7 +242,11 @@ export class Platform {
             proposalId: p.id,
             original: p.decision,
             current: p.action
-              ? judge(p.action, org.policy)
+              ? judge(
+                  p.action,
+                  org.policy,
+                  org.governance as GovernancePolicy | undefined,
+                )
               : { decision: "deny", reason: "Invalid action" },
           })),
         },
@@ -262,6 +301,35 @@ export class Platform {
             current.policyVersion++;
             current.twoPerson = command.twoPerson;
             return { policyVersion: current.policyVersion };
+          case "governance":
+            requireRole(current, user.userId, admins);
+            current.governance = command.governance;
+            current.governanceVersion = (current.governanceVersion ?? 1) + 1;
+            return { governanceVersion: current.governanceVersion };
+          case "mcpToken": {
+            requireRole(current, user.userId, admins);
+            const secret = `agt_${crypto.randomUUID().replaceAll("-", "")}${crypto.randomUUID().replaceAll("-", "")}`;
+            const token = {
+              id: crypto.randomUUID(),
+              name: command.name,
+              prefix: secret.slice(0, 12),
+              hash: await digest(secret),
+              createdAt: new Date().toISOString(),
+              createdBy: user.userId,
+            };
+            (current.apiTokens ??= []).push(token);
+            return { token: secret, tokenId: token.id, prefix: token.prefix };
+          }
+          case "revokeMcpToken": {
+            requireRole(current, user.userId, admins);
+            const token = current.apiTokens?.find(
+              (item) => item.id === command.tokenId,
+            );
+            if (!token || token.revokedAt)
+              throw new Fault(404, "Active MCP token not found.");
+            token.revokedAt = new Date().toISOString();
+            return { revoked: true };
+          }
           case "benchmark": {
             requireRole(current, user.userId, operators);
             const batchId = crypto.randomUUID();

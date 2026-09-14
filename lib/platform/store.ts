@@ -4,6 +4,7 @@ import {
   Fault,
   requireRole,
   allRoles,
+  ensureOrgDefaults,
   type Org,
 } from "./domain.ts";
 
@@ -57,6 +58,7 @@ export class OrgStore {
           409,
           "Audit integrity check failed. Export and investigate before making changes.",
         );
+      ensureOrgDefaults(org);
       const result = await change(org);
       await audit(org, actor, event, subject);
       const encoded = JSON.stringify(org);

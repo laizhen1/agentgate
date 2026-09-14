@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import Link from "next/link";
 import {
   ShieldCheck,
   Play,
@@ -26,7 +27,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { metrics, suite, type Mode, type Org } from "@/lib/platform/domain";
+import {
+  metrics,
+  suite,
+  type GovernancePolicy,
+  type Mode,
+  type Org,
+} from "@/lib/platform/domain";
 import type { Policy } from "@/lib/security";
 
 type State = {
@@ -35,6 +42,13 @@ type State = {
   org?: Org;
   revision?: number;
   integrity?: { valid: boolean; checked: number; head: string };
+  businessMetrics?: {
+    safeAutomationRate: number;
+    preventedViolations: number;
+    governedSpend: number;
+    draftPurchaseRequests: number;
+    averageApprovalMinutes: number | null;
+  };
   model: { configured: boolean; name: string };
 };
 type Result = {
@@ -42,6 +56,9 @@ type Result = {
   sessionId?: string;
   batchId?: string;
   inviteToken?: string;
+  token?: string;
+  tokenId?: string;
+  prefix?: string;
   replay?: unknown;
 };
 async function json<T>(response: Response): Promise<T> {
@@ -133,7 +150,9 @@ export default function PlatformPage() {
     ),
     [mode, setMode] = useState<Mode>("gateway");
   const [policy, setPolicy] = useState<Policy | null>(null),
-    [twoPerson, setTwoPerson] = useState(false);
+    [governance, setGovernance] = useState<GovernancePolicy | null>(null),
+    [twoPerson, setTwoPerson] = useState(false),
+    [mcpSecret, setMcpSecret] = useState("");
   const [split, setSplit] = useState("development"),
     [trials, setTrials] = useState("1"),
     [batch, setBatch] = useState("");
@@ -152,6 +171,12 @@ export default function PlatformPage() {
         ),
       );
       setData(value);
+      if (id && id !== orgId) setMcpSecret("");
+      if (value.org) {
+        setPolicy(structuredClone(value.org.policy));
+        setGovernance(structuredClone(value.org.governance ?? null));
+        setTwoPerson(value.org.twoPerson);
+      }
       if (!id && value.organizations.length)
         setOrgId(value.organizations[0].id);
       return value;
@@ -159,14 +184,12 @@ export default function PlatformPage() {
     [orgId],
   );
   useEffect(() => {
-    void refresh().catch((e) => setError(e.message));
+    const timer = setTimeout(
+      () => void refresh().catch((e) => setError(e.message)),
+      0,
+    );
+    return () => clearTimeout(timer);
   }, [refresh]);
-  useEffect(() => {
-    if (data?.org) {
-      setPolicy(structuredClone(data.org.policy));
-      setTwoPerson(data.org.twoPerson);
-    }
-  }, [data?.org?.id, data?.org?.policyVersion, data?.org?.twoPerson]);
   const org = data?.org;
   const member = org?.members.find((m) => m.userId === data?.userId);
   const canRun = ["owner", "admin", "operator"].includes(member?.role ?? "");
@@ -232,10 +255,10 @@ export default function PlatformPage() {
           <strong>AgentGate</strong>
           <span>LIVE TRUST PLATFORM</span>
         </div>
-        <a className="secondary" href="/">
+        <Link className="secondary" href="/">
           <ArrowLeft size={16} />
           Reference lab
-        </a>
+        </Link>
       </header>
       <section className="intro">
         <div>
@@ -365,6 +388,24 @@ export default function PlatformPage() {
               <strong>{data?.integrity?.valid ? "Verified" : "Invalid"}</strong>
               <small>
                 {data?.integrity?.checked} entries · revision {data?.revision}
+              </small>
+            </div>
+            <div className="stat">
+              <span>Safe automation rate</span>
+              <strong>{data?.businessMetrics?.safeAutomationRate ?? 0}%</strong>
+              <small>
+                {data?.businessMetrics?.preventedViolations ?? 0} policy
+                violations prevented
+              </small>
+            </div>
+            <div className="stat">
+              <span>Governed sandbox spend</span>
+              <strong>
+                ${(data?.businessMetrics?.governedSpend ?? 0).toLocaleString()}
+              </strong>
+              <small>
+                {data?.businessMetrics?.draftPurchaseRequests ?? 0} draft
+                purchase requests
               </small>
             </div>
           </div>
@@ -605,6 +646,29 @@ export default function PlatformPage() {
                         <pre>{JSON.stringify(session.sandbox, null, 2)}</pre>
                       </details>
                       <h3 className="platform-subhead">Execution trace</h3>
+                      <button
+                        className="secondary"
+                        onClick={() =>
+                          void task(async () => {
+                            const exported = await json<unknown>(
+                              await fetch(
+                                `/api/platform?orgId=${encodeURIComponent(
+                                  org.id,
+                                )}&sessionId=${encodeURIComponent(
+                                  session.id,
+                                )}&export=otlp`,
+                              ),
+                            );
+                            download(
+                              `agentgate-trace-${session.id}.otlp.json`,
+                              exported,
+                            );
+                          })
+                        }
+                      >
+                        <Download size={16} />
+                        Export OTLP trace
+                      </button>
                       {session.traces.map((t) => (
                         <div className="platform-trace" key={t.id}>
                           <time>{new Date(t.at).toLocaleTimeString()}</time>
@@ -739,7 +803,11 @@ export default function PlatformPage() {
                       })
                     }
                   >
-                    Run {Number(trials) * 9} live trials
+                    Run{" "}
+                    {Number(trials) *
+                      suite.filter((item) => item.split === split).length *
+                      3}{" "}
+                    live trials
                   </button>
                   <button
                     className="secondary"
@@ -872,6 +940,7 @@ export default function PlatformPage() {
                           "read_document",
                           "send_email",
                           "delete_record",
+                          "create_purchase_request",
                         ].map((tool) => (
                           <Check
                             key={tool}
@@ -942,6 +1011,164 @@ export default function PlatformPage() {
                       </button>
                     </>
                   )}
+                </section>
+                <section className="panel">
+                  <h2>Procurement policy-as-code</h2>
+                  <p className="muted">
+                    These business controls are versioned and pinned to every
+                    run. The repository includes an equivalent Rego policy for
+                    OPA review and portability.
+                  </p>
+                  {governance && (
+                    <>
+                      <fieldset disabled={!canAdmin || busy}>
+                        <label className="field">
+                          Approved vendors (comma-separated)
+                          <input
+                            value={governance.approvedVendors.join(",")}
+                            onChange={(event) =>
+                              setGovernance({
+                                ...governance,
+                                approvedVendors: event.target.value
+                                  .split(",")
+                                  .map((value) => value.trim())
+                                  .filter(Boolean),
+                              })
+                            }
+                          />
+                        </label>
+                        <label className="field">
+                          Allowed currency
+                          <input
+                            value={governance.allowedCurrency}
+                            maxLength={3}
+                            onChange={(event) =>
+                              setGovernance({
+                                ...governance,
+                                allowedCurrency:
+                                  event.target.value.toUpperCase(),
+                              })
+                            }
+                          />
+                        </label>
+                        <label className="field">
+                          Blocked categories (comma-separated)
+                          <input
+                            value={governance.blockedCategories.join(",")}
+                            onChange={(event) =>
+                              setGovernance({
+                                ...governance,
+                                blockedCategories: event.target.value
+                                  .split(",")
+                                  .map((value) => value.trim())
+                                  .filter(Boolean),
+                              })
+                            }
+                          />
+                        </label>
+                        <label className="field">
+                          Automatic approval limit
+                          <input
+                            type="number"
+                            min="0"
+                            value={governance.autoApproveLimit}
+                            onChange={(event) =>
+                              setGovernance({
+                                ...governance,
+                                autoApproveLimit: Number(event.target.value),
+                              })
+                            }
+                          />
+                        </label>
+                        <label className="field">
+                          Monthly sandbox budget
+                          <input
+                            type="number"
+                            min="1"
+                            value={governance.monthlyBudget}
+                            onChange={(event) =>
+                              setGovernance({
+                                ...governance,
+                                monthlyBudget: Number(event.target.value),
+                              })
+                            }
+                          />
+                        </label>
+                      </fieldset>
+                      <button
+                        className="primary"
+                        disabled={busy || !canAdmin}
+                        onClick={() =>
+                          void task(() =>
+                            simple({
+                              operation: "governance",
+                              orgId,
+                              governance,
+                            }),
+                          )
+                        }
+                      >
+                        Save procurement policy v
+                        {(org.governanceVersion ?? 1) + 1}
+                      </button>
+                    </>
+                  )}
+                  <hr />
+                  <h3>MCP client access</h3>
+                  <p className="muted">
+                    Official MCP JSON-RPC validation, bearer-token hashing and
+                    the same governed action pipeline are available at{" "}
+                    <code>/api/mcp?orgId={org.id}</code>.
+                  </p>
+                  <button
+                    className="secondary"
+                    disabled={busy || !canAdmin}
+                    onClick={() =>
+                      void task(async () => {
+                        const result = await post({
+                          operation: "mcpToken",
+                          orgId,
+                          name: "Development client",
+                        });
+                        setMcpSecret(result.token ?? "");
+                        await refresh();
+                      })
+                    }
+                  >
+                    Create one-time MCP token
+                  </button>
+                  {mcpSecret && (
+                    <div className="evidence">
+                      <strong>Copy now — this token is shown once</strong>
+                      <pre>{mcpSecret}</pre>
+                    </div>
+                  )}
+                  {(org.apiTokens ?? []).map((token) => (
+                    <div className="evidence" key={token.id}>
+                      <strong>{token.name}</strong>
+                      <p>
+                        {token.prefix}… ·{" "}
+                        {token.revokedAt ? "revoked" : "active"}
+                      </p>
+                      {!token.revokedAt && (
+                        <button
+                          className="secondary"
+                          disabled={busy || !canAdmin}
+                          onClick={() =>
+                            void task(() =>
+                              simple({
+                                operation: "revokeMcpToken",
+                                orgId,
+                                tokenId: token.id,
+                              }),
+                            )
+                          }
+                        >
+                          Revoke
+                        </button>
+                      )}
+                    </div>
+                  ))}
                 </section>
                 <section className="panel">
                   <h2>Organization roles</h2>
@@ -1049,7 +1276,7 @@ export default function PlatformPage() {
                         </div>
                       )}
                       <p className="muted">
-                        Invites do not change the hosted site's private
+                        Invites do not change the hosted site&apos;s private
                         audience. The recipient also needs Sites access. No
                         invitation email is sent automatically.
                       </p>

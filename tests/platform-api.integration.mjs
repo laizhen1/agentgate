@@ -62,7 +62,12 @@ assert.equal(
 const updated = await post({
   operation: "policy",
   orgId,
-  policy: state.org.policy,
+  policy: {
+    ...state.org.policy,
+    allowedTools: Array.from(
+      new Set([...state.org.policy.allowedTools, "create_purchase_request"]),
+    ),
+  },
   twoPerson: false,
 });
 assert.equal(updated.status, 200);
@@ -70,6 +75,55 @@ const after = await get(orgId);
 assert.equal(after.org.policyVersion, state.org.policyVersion + 1);
 assert.equal(after.integrity.valid, true);
 assert.equal(after.revision, state.revision + 1);
+const tokenResult = await post({
+  operation: "mcpToken",
+  orgId,
+  name: "CI MCP client",
+});
+assert.equal(tokenResult.status, 200, JSON.stringify(tokenResult.data));
+async function mcp(method, params, id) {
+  const response = await fetch(origin + "/api/mcp?orgId=" + orgId, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + tokenResult.data.token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ jsonrpc: "2.0", id, method, params }),
+  });
+  const text = await response.text();
+  assert.equal(response.status, 200, text);
+  return JSON.parse(text);
+}
+const initialized = await mcp(
+  "initialize",
+  {
+    protocolVersion: "2025-11-25",
+    capabilities: {},
+    clientInfo: { name: "agentgate-ci", version: "1.0.0" },
+  },
+  1,
+);
+assert.equal(initialized.result.serverInfo.name, "agentgate");
+const listed = await mcp("tools/list", {}, 2);
+assert.ok(
+  listed.result.tools.some((tool) => tool.name === "create_purchase_request"),
+);
+const called = await mcp(
+  "tools/call",
+  {
+    name: "create_purchase_request",
+    arguments: {
+      vendorId: "acme-supply",
+      sku: "LAP-14",
+      quantity: 1,
+      unitPrice: 899,
+      currency: "USD",
+      category: "laptops",
+    },
+  },
+  3,
+);
+assert.match(called.result.content[0].text, /"status":"executed"/);
 assert.equal((await post({ operation: "create", name: "x" })).status, 400);
 assert.equal(
   (
@@ -86,6 +140,8 @@ assert.equal(
   400,
 );
 if (!state.model.configured) {
+  const sessionCountBeforeUnavailableRun = (await get(orgId)).org.sessions
+    .length;
   assert.equal(
     (
       await post({
@@ -99,10 +155,10 @@ if (!state.model.configured) {
   );
   assert.equal(
     (await get(orgId)).org.sessions.length,
-    state.org.sessions.length,
+    sessionCountBeforeUnavailableRun,
     "Missing model must not produce a fake run.",
   );
 }
 console.log(
-  "Platform API passed: sign-in, organization persistence, role, policy versioning, audit integrity, invalid input, CSRF, owner protection, explicit model availability.",
+  "Platform APIs passed: sign-in, persistence, roles, policy versioning, audit integrity, CSRF, MCP initialize/list/call, and explicit model availability.",
 );

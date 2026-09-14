@@ -3,7 +3,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "AgentGate | Agent Security Workbench",
-  description: "Test agent policies, investigate evidence, and compare release readiness.",
+  description:
+    "Test agent policies, investigate evidence, and compare release readiness.",
   other: {
     "codex-preview": "development",
   },

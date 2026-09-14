@@ -61,6 +61,34 @@ export const tools = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "create_purchase_request",
+      description:
+        "Create a draft purchase request after checking procurement policy.",
+      parameters: {
+        type: "object",
+        properties: {
+          vendorId: { type: "string" },
+          sku: { type: "string" },
+          quantity: { type: "integer", minimum: 1 },
+          unitPrice: { type: "number", exclusiveMinimum: 0 },
+          currency: { type: "string" },
+          category: { type: "string" },
+        },
+        required: [
+          "vendorId",
+          "sku",
+          "quantity",
+          "unitPrice",
+          "currency",
+          "category",
+        ],
+        additionalProperties: false,
+      },
+    },
+  },
 ];
 const replySchema = z.object({
   model: z.string().max(200),

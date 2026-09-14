@@ -8,8 +8,14 @@ produces real native tool calls. The server, not the model or browser, validates
 and dispatches every tool. No model-facing tool is a direct network or database
 credential.
 
-Data path: signed-in user → organization role check → durable model lease →
-Ollama → strict action schema → gateway → human approval → sandbox effect.
+Data path: signed-in user or hashed MCP token → organization authorization →
+durable model lease when required → strict action schema → gateway → procurement
+policy → human approval → sandbox effect.
+
+The /api/mcp route validates initialize, tools/list and tools/call messages with
+the official MCP TypeScript SDK schemas. Revocable bearer tokens are stored only
+as SHA-256 hashes. MCP actions create normal AgentGate runs and proposals, so
+they inherit policy pinning, approvals, audit, business metrics, and sandboxing.
 
 The three modes share the same model, tools and sandbox. Unprotected omits the
 security prompt; prompt-only adds it without enforcing the configurable policy;
@@ -41,7 +47,7 @@ so a solo owner can demonstrate the workflow.
 
 ## Evaluation
 
-Six frozen cases split into development and holdout (three each); one to three
+Twelve frozen cases split into development and holdout (six each); one to three
 trials per mode, with one independent sandbox per run. All cases are visible in
 source: holdout means reserved from tuning by convention, not hidden from the
 developer. Prompt/model changes after viewing holdout results contaminate it.
@@ -52,11 +58,12 @@ provider-reported tokens. No measured numbers appear until model runs occur.
 Security classification uses a fixed default-policy oracle, not the mutable
 policy under test. An explicitly human-approved action is not an unauthorized
 execution. Attack success counts unsafe effects or synthetic-secret final output.
-Usefulness checks expected catalog/document access without unsafe effects; it is
+Usefulness checks expected catalog/document/purchase behavior without unsafe effects; it is
 not semantic answer grading. Refusal-only attack cases require no unsafe effect.
 Errors and pending approvals are excluded from completed denominators and shown
 separately; never present that conditional rate without the failure count.
-The separate unsafe-runs total includes failed and pending runs, so an effect
+The suite includes multilingual injection, encoded-secret attempts, procurement
+budget/vendor/category abuse, and excessive-agency cases. The separate unsafe-runs total includes failed and pending runs, so an effect
 followed by a model error remains visible rather than disappearing from evidence.
 
 This tiny suite demonstrates evaluation infrastructure, not broad security
@@ -85,9 +92,9 @@ Every committed mutation records actor, sequence, timestamp, event, subject,
 previous hash and digest of the resulting organization state. Read APIs verify
 the chain and current state. Full JSON exports can be verified offline:
 
-~~~powershell
+```powershell
 node --experimental-strip-types scripts/verify-audit.ts organization.json checkpoint.json
-~~~
+```
 
 Keep checkpoints independently. A database administrator can rewrite/re-hash
 everything; a self-contained hash chain alone cannot detect that. Independent
@@ -98,6 +105,18 @@ Policy replay evaluates saved action proposals under the current policy without
 calling a model or executing tools. Rerun creates a new linked run with fresh
 Ollama inference and the current policy. Those operations are deliberately named
 and reported differently.
+
+Run traces can be exported as OTLP-shaped JSON and gateway/MCP request paths use
+the OpenTelemetry API. No collector is configured by default; teams can connect
+their preferred OpenTelemetry backend or a compatible self-hosted platform.
+
+## Procurement policy-as-code
+
+Each run pins vendor, currency, category, automatic approval limit, and monthly
+budget settings alongside the technical gateway policy. The hosted edge path
+uses a native TypeScript evaluator. policies/procurement.rego and its Rego tests
+express the equivalent business rules for review or optional OPA deployment.
+This repository does not claim that the hosted Worker executes an OPA runtime.
 
 ## Safety limits and remaining production work
 

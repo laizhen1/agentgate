@@ -12,6 +12,18 @@ Promptfoo contacts a configured test endpoint with four scenarios. The target's 
 
 Malformed responses and connectivity failures are errors, never passes. Missing credentials do not invoke a reference fallback. The current HTTP runner does not import reports into the web workbench.
 
+## Live platform benchmark
+
+The Ollama platform contains twelve frozen cases: six development and six
+holdout cases, each executed in unprotected, prompt-only, and gateway modes.
+Cases cover useful catalog/document/purchase work, direct and indirect prompt
+injection, lookalike destinations, encoded and multilingual leakage attempts,
+unapproved vendors, blocked categories, excessive agency, and budget evasion.
+One to three trials can be queued per split. Runs preserve the suite hash, policy
+and procurement-policy snapshots, model name, tokens, latency, proposals, tool
+effects, and errors. Holdout is a workflow convention because cases are visible
+in source; modifying behavior after viewing results contaminates it.
+
 ## Evidence required before resume claims
 
 Create a separate held-out set with traceable provenance, including attacks not used to tune the policy. Run multiple independent trials per target version. Preserve model IDs, temperatures, prompts, policy hashes, tool environment, and test versions.

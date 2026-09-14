@@ -3,7 +3,14 @@ import { getChatGPTUser } from "@/app/chatgpt-auth";
 import { database } from "@/lib/storage";
 import { OrgStore } from "@/lib/platform/store";
 import { Platform } from "@/lib/platform/service";
-import { Fault, metrics, verifyAudit } from "@/lib/platform/domain";
+import {
+  businessMetrics,
+  ensureOrgDefaults,
+  Fault,
+  metrics,
+  verifyAudit,
+} from "@/lib/platform/domain";
+import { toOtlp } from "@/lib/platform/telemetry";
 const headers = { "Cache-Control": "no-store" };
 function configuration() {
   const vars = env as unknown as Record<string, string | undefined>;
@@ -50,14 +57,23 @@ export async function GET(request: Request) {
       );
     const { org, revision } = await store.read(orgId, user.userId);
     const integrity = await verifyAudit(org);
+    const sessionId = new URL(request.url).searchParams.get("sessionId");
+    if (new URL(request.url).searchParams.get("export") === "otlp") {
+      const session = org.sessions.find((item) => item.id === sessionId);
+      if (!session) throw new Fault(404, "Run not found.");
+      return Response.json(toOtlp(session), { headers });
+    }
+    const presented = structuredClone(org);
+    ensureOrgDefaults(presented);
     return Response.json(
       {
         organizations,
         userId: user.userId,
-        org,
+        org: presented,
         revision,
         integrity,
         metrics: metrics(org.sessions.filter((s) => !!s.batchId)),
+        businessMetrics: businessMetrics(presented),
         model: {
           configured: !!model.model,
           name: model.model,

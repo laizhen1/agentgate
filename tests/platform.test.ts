@@ -11,6 +11,7 @@ import {
   verifyAudit,
   digest,
   metrics,
+  suite,
   actionSchema,
   type ModelReply,
 } from "../lib/platform/domain.ts";
@@ -373,7 +374,10 @@ test("benchmark queues all three modes, pins suite hash and keeps replay non-mut
       owner,
     );
     const before = await store.read(org.id, owner.userId);
-    assert.equal(before.org.sessions.length, 9);
+    assert.equal(
+      before.org.sessions.length,
+      suite.filter((test) => test.split === "holdout").length * 3,
+    );
     assert.equal(before.org.batches[0].suiteHash.length, 64);
     assert.equal(new Set(before.org.sessions.map((s) => s.mode)).size, 3);
     await api.command(
@@ -430,7 +434,7 @@ test("Ollama adapter sends native tools, validates output and refuses remote end
   const fetcher = (async (_url: unknown, init: RequestInit) => {
     const body = JSON.parse(String(init.body));
     assert.equal(body.stream, false);
-    assert.equal(body.tools.length, 4);
+    assert.equal(body.tools.length, 5);
     assert.equal(init.redirect, "error");
     return Response.json({
       model: config.model,

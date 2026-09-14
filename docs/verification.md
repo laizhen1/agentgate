@@ -1,5 +1,23 @@
 # Verification record
 
+## MCP and procurement expansion — September 14, 2026
+
+- 28 unit and SQLite-backed tests passed, including procurement policy decisions,
+  sandbox purchase execution, and governance-bound approval fingerprints.
+- TypeScript and repository-wide ESLint passed after removing the previous lint
+  debt. CI now gates lint and authenticated HTTP/MCP integration in addition to
+  tests, formatting, Promptfoo, and production build.
+- The official MCP TypeScript schemas validate initialize, tools/list and
+  tools/call. Tokens are hashed and revocable; MCP actions enter the same policy,
+  approval, audit, and sandbox pipeline.
+- Twelve live development/holdout cases now cover multilingual and encoded
+  injection attempts plus vendor, category, threshold, and budget controls.
+- OpenTelemetry API spans and OTLP-shaped durable trace export are implemented.
+  No external collector was configured or claimed.
+- The included Rego bundle is an OPA-compatible reference with tests. The hosted
+  Worker uses the tested native equivalent; an OPA runtime was not executed in
+  this environment.
+
 ## Live platform expansion — September 12, 2026
 
 - 25 unit and SQLite-backed service tests passed (including the original eight).

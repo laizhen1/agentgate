@@ -6,11 +6,12 @@
     "node": ">=22.13.0"
   },
   "scripts": {
-    "format:platform": "prettier --write app/platform app/api/platform lib/platform tests/platform.test.ts tests/platform-api.integration.mjs scripts/verify-audit.ts",
-    "format:check": "prettier --check app/platform app/api/platform lib/platform tests/platform.test.ts tests/platform-api.integration.mjs scripts/verify-audit.ts",
+    "format:platform": "prettier --write app lib tests scripts evals policies docs .github README.md",
+    "format:check": "prettier --check app lib tests scripts evals policies docs .github README.md",
     "eval:reference": "promptfoo eval -c evals/promptfooconfig.ts --no-cache",
     "eval:live": "promptfoo eval -c evals/live.config.ts --no-cache",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "test:api": "node tests/platform-api.integration.mjs",
     "typecheck": "tsc --noEmit",
     "install:ci": "node scripts/install-ci.mjs",
     "dev": "vinext dev --port 5173",
@@ -22,6 +23,8 @@
   "dependencies": {
     "@base-ui/react": "^1.7.0",
     "@hookform/resolvers": "^5.7.1",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "@opentelemetry/api": "1.9.0",
     "@shadcn/react": "^0.3.0",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",

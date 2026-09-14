@@ -6,17 +6,32 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     env:
-      PROMPTFOO_DISABLE_TELEMETRY: '1'
-      PROMPTFOO_DISABLE_UPDATE: '1'
+      PROMPTFOO_DISABLE_TELEMETRY: "1"
+      PROMPTFOO_DISABLE_UPDATE: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: "24"
           cache: npm
       - run: npm run install:ci
       - run: npm test
       - run: npm run typecheck
+      - run: npm run lint
       - run: npm run format:check
       - run: npm run eval:reference
       - run: npm run build
+      - name: Apply local API test migrations
+        run: |
+          node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_melted_red_ghost.sql
+          node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0001_next_shape.sql
+      - name: Verify authenticated HTTP and MCP APIs
+        run: |
+          npm run dev > /tmp/agentgate-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill $server_pid || true' EXIT
+          for attempt in {1..30}; do
+            curl --silent --fail http://127.0.0.1:5173/api/mcp && break
+            sleep 1
+          done
+          npm run test:api

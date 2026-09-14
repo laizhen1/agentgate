@@ -1,4 +1,4 @@
-# Threat model — version 0.1
+# Threat model — version 0.2
 
 ## Protected assets and boundaries
 
@@ -6,11 +6,20 @@ Stored agent policies and reports belong to a signed-in user. Every API query fi
 
 Write requests require same-origin JSON. Schemas constrain policy inputs. Queries use parameter binding. Reports preserve policy snapshots instead of reinterpreting historical results against new settings.
 
-The policy boundary tests proposed actions before execution. The current product has no tool executor. Sending a message and deleting a record require trusted approval when the policy enables it. Model-supplied approval is untrusted. Future approvals must bind an authenticated approver to the exact action hash, expiration, and single-use execution record.
+The live platform executes only isolated in-memory sandbox tools. Every Ollama or
+MCP proposal passes through strict action validation and the server-side policy
+boundary. Sending, deleting, and high-value purchasing require trusted approval
+when configured. Approval binds an authenticated reviewer to the organization,
+run, proposal, policy and procurement-policy snapshots, exact canonical action,
+expiration, and one-use execution record. Model-supplied approval is untrusted.
 
 ## Cases represented
 
-Unapproved tools; indirect instructions in supplier material; external data destinations; malformed and lookalike URLs; synthetic credential and personal-data leakage; approval bypass; legitimate lookup and approved message controls.
+Unapproved tools; direct, indirect, encoded, and multilingual injections;
+external, malformed, and lookalike destinations; synthetic credential and
+personal-data leakage; approval bypass; excessive agency; unapproved vendors;
+blocked categories; budget evasion; legitimate lookup, purchase, and approved
+message controls.
 
 ## Known limits
 
@@ -18,6 +27,12 @@ The reference adapter does not contain an LLM. Its injection scenario is a prede
 
 Pattern matching is not comprehensive data-loss prevention. It does not reliably cover encoding, paraphrase, arbitrary secrets, or multilingual attacks. The host allowlist is a lexical check and does not resolve DNS or inspect redirect chains because no destination requests are executed. A production network executor needs an independent egress boundary and DNS/address validation.
 
-The hosted preview is private. Application records are per-user; there is no organization membership model, delegated reviewer role, live approval workflow, or enforced production agent gateway yet. Assessment storage is append-only through the API, not tamper-proof at database level.
+The hosted preview is private. Live records are organization-scoped with owner,
+admin, operator, reviewer, and viewer roles. MCP clients use revocable bearer
+tokens whose hashes are stored in the organization aggregate. Token possession
+currently grants access to that organization's exposed sandbox tools; production
+deployment should add per-token scopes, rate limits, rotation policy, and a
+secret manager. The hash-chained audit log detects relative modification but is
+not tamper-proof without an independently stored checkpoint.
 
 The live CLI contacts only an operator-configured endpoint and never runs proposed tools. It is not a sandbox for an agent that executes tools inside its own server. Test targets must themselves run with restricted credentials and isolated side effects.
