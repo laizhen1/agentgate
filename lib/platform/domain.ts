@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { ThreatAssessment } from "./threat.ts";
 import { defaultPolicy, evaluateAction, type Policy } from "../security.ts";
 
 export type Role = "owner" | "admin" | "operator" | "reviewer" | "viewer";
@@ -92,6 +93,7 @@ export type Trace = {
   durationMs?: number;
 };
 export type Session = {
+  threats?: ThreatAssessment[];
   id: string;
   actor: string;
   createdAt: string;
@@ -141,6 +143,7 @@ export type Audit = {
   hash: string;
 };
 export type Org = {
+  threatAssessments?: ThreatAssessment[];
   id: string;
   name: string;
   members: { userId: string; email: string; role: Role }[];

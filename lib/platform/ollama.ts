@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { Fault, type Message, type ModelReply } from "./domain.ts";
 
-export type ModelConfig = { url: string; model: string };
+export type ModelConfig = { url: string; model: string; threatUrl?: string };
 export const tools = [
   {
     type: "function",

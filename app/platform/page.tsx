@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
+import { ThreatLab } from "./threat-lab";
 import {
   ShieldCheck,
   Play,
@@ -416,9 +417,22 @@ export default function PlatformPage() {
                 Approvals ({pending.length})
               </TabsTrigger>
               <TabsTrigger value="benchmarks">Benchmarks</TabsTrigger>
+              <TabsTrigger value="threats">Threat detection</TabsTrigger>
               <TabsTrigger value="policy">Policy & team</TabsTrigger>
               <TabsTrigger value="audit">Audit & export</TabsTrigger>
             </TabsList>
+            <TabsContent value="threats">
+              <ThreatLab
+                key={org.id}
+                org={org}
+                disabled={busy || !canRun}
+                scan={(text) =>
+                  task(() =>
+                    simple({ operation: "detectThreat", orgId: org.id, text }),
+                  )
+                }
+              />
+            </TabsContent>
             <TabsContent value="runs">
               <div className="grid">
                 <aside className="panel">

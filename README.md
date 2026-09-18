@@ -144,3 +144,8 @@ See [threat model](docs/threat-model.md) and [evaluation design](docs/evaluation
 - Application setup and private hosting use the Sites starter.
 
 This repository is an original application using upstream components, not a fork of Browser Use or Promptfoo. Upstream stars are not AgentGate's adoption metrics.
+
+## BERT-family threat detection
+
+The platform includes an observation-only Threat Detection Lab and optional live
+user/tool-message scanning. See [local setup and model limitations](docs/threat-detection.md).

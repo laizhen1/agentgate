@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/.venv-threat/
+/services/threat/__pycache__/
 
 # next.js
 /.next/

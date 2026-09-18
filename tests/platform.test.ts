@@ -545,3 +545,124 @@ test("rerun uses current policy and links the original; exhausted run cannot cal
     sql.close();
   }
 });
+
+test("threat assessments persist with audit evidence and reject unauthorized roles", async () => {
+  const { store, org } = await fixture();
+  const platform = new Platform(store, config);
+  await platform.command(
+    { operation: "detectThreat", orgId: org.id, text: "Analyze this prompt" },
+    owner,
+  );
+  const saved = (await store.read(org.id, owner.userId)).org;
+  assert.equal(saved.threatAssessments?.length, 1);
+  assert.equal(saved.threatAssessments?.[0].status, "unavailable");
+  assert.equal((await verifyAudit(saved)).valid, true);
+  await assert.rejects(() =>
+    platform.command(
+      { operation: "detectThreat", orgId: org.id, text: "test" },
+      outsider,
+    ),
+  );
+  await store.mutate(org.id, owner.userId, "test.viewer", org.id, (current) => {
+    current.members.push({
+      userId: "viewer",
+      email: "viewer@example.com",
+      role: "viewer",
+    });
+  });
+  await assert.rejects(
+    () =>
+      platform.command(
+        { operation: "detectThreat", orgId: org.id, text: "test" },
+        { userId: "viewer", email: "viewer@example.com" },
+      ),
+    /role/,
+  );
+});
+
+test("live BERT observations scan all tool results without changing gateway decisions", async () => {
+  const { store, org } = await fixture();
+  const seen: string[] = [];
+  let calls = 0;
+  const model = async (): Promise<ModelReply> => {
+    calls++;
+    if (calls === 1)
+      return {
+        ...final,
+        message: {
+          role: "assistant",
+          content: "",
+          tool_calls: [
+            {
+              function: {
+                name: "read_document",
+                arguments: { documentId: "supplier-brief" },
+              },
+            },
+            {
+              function: {
+                name: "search_catalog",
+                arguments: { query: "laptop" },
+              },
+            },
+          ],
+        },
+      };
+    return final;
+  };
+  const detector: typeof import("../lib/platform/threat.ts").detectThreat =
+    async (_url, text, source) => {
+      seen.push(text);
+      return {
+        id: crypto.randomUUID(),
+        at: new Date().toISOString(),
+        source,
+        text,
+        status: "scored",
+        threshold: 0.5,
+        label: "injection",
+        result: {
+          model: "test-bert",
+          revision: "test",
+          score: 0.99,
+          windows: 1,
+          durationMs: 1,
+        },
+      };
+    };
+  const platform = new Platform(
+    store,
+    { ...config, threatUrl: "http://127.0.0.1:8765" },
+    model,
+    detector,
+  );
+  const launched = await platform.command(
+    {
+      operation: "run",
+      orgId: org.id,
+      prompt: "Read document and catalog",
+      mode: "gateway",
+    },
+    owner,
+  );
+  const sessionId = (launched as { sessionId: string }).sessionId;
+  await platform.command(
+    { operation: "step", orgId: org.id, sessionId },
+    owner,
+  );
+  await platform.command(
+    { operation: "step", orgId: org.id, sessionId },
+    owner,
+  );
+  const saved = (await store.read(org.id, owner.userId)).org;
+  const session = saved.sessions[0];
+  assert.equal(seen.length, 3);
+  assert.ok(seen.some((text) => text.includes("IGNORE PRIOR RULES")));
+  assert.equal(session.threats?.length, 3);
+  assert.equal(session.status, "completed");
+  assert.equal(
+    session.proposals.filter((p) => p.status === "executed").length,
+    2,
+  );
+  assert.equal((await verifyAudit(saved)).valid, true);
+});

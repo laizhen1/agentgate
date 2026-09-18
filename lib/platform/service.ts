@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { detectThreat } from "./threat.ts";
 import {
   allRoles,
   admins,
@@ -58,6 +59,13 @@ const governance = z
   })
   .strict();
 export const commandSchema = z.discriminatedUnion("operation", [
+  z
+    .object({
+      operation: z.literal("detectThreat"),
+      orgId: id,
+      text: z.string().trim().min(1).max(6000),
+    })
+    .strict(),
   z
     .object({
       operation: z.literal("create"),
@@ -156,6 +164,7 @@ function sessionFor(org: Org, sessionId: string): Session {
   return session;
 }
 export class Platform {
+  private detector: typeof detectThreat;
   private store: OrgStore;
   private config: ModelConfig;
   private model: (
@@ -169,7 +178,9 @@ export class Platform {
       config: ModelConfig,
       messages: Session["messages"],
     ) => Promise<ModelReply> = chat,
+    detector: typeof detectThreat = detectThreat,
   ) {
+    this.detector = detector;
     this.store = store;
     this.config = config;
     this.model = model;
@@ -229,6 +240,33 @@ export class Platform {
       );
     }
     const { org } = await this.store.read(command.orgId, user.userId);
+    if (command.operation === "detectThreat") {
+      requireRole(org, user.userId, operators);
+      if ((org.threatAssessments?.length ?? 0) >= 50)
+        throw new Fault(
+          409,
+          "Threat lab limit reached (50 assessments). Export this organization and create another lab.",
+        );
+      const assessment = await this.detector(
+        this.config.threatUrl,
+        command.text,
+        "lab",
+      );
+      return this.store.mutate(
+        org.id,
+        user.userId,
+        "threat.assessed",
+        assessment.id,
+        (current) => {
+          requireRole(current, user.userId, operators);
+          const records = (current.threatAssessments ??= []);
+          if (records.length >= 50)
+            throw new Fault(409, "Threat lab limit reached.");
+          records.push(assessment);
+          return { assessmentId: assessment.id };
+        },
+      );
+    }
     if (command.operation === "replay") {
       requireRole(org, user.userId, allRoles);
       const session = sessionFor(org, command.sessionId);
@@ -433,6 +471,24 @@ export class Platform {
     );
     if (!leased) return { budgetExhausted: true };
     let reply: ModelReply | undefined;
+    // Scan every new tool result, including multi-tool replies, but never system messages.
+    const incoming = [];
+    for (let i = leased.length - 1; i >= 0; i--) {
+      const message = leased[i];
+      if (message.role !== "user" && message.role !== "tool") break;
+      incoming.unshift(message);
+    }
+    const threats = this.config.threatUrl
+      ? await Promise.all(
+          incoming.map((message) =>
+            this.detector(
+              this.config.threatUrl,
+              message.content,
+              message.role as "user" | "tool",
+            ),
+          ),
+        )
+      : [];
     let failure: string | undefined;
     try {
       reply = await this.model(this.config, leased);
@@ -455,6 +511,19 @@ export class Platform {
             "A newer step superseded this response; it was not executed.",
           );
         delete session.lease;
+        for (const threat of threats) {
+          (session.threats ??= []).push(threat);
+          trace(
+            session,
+            "threat." + threat.status,
+            threat.result
+              ? threat.label +
+                  ": " +
+                  threat.result.score.toFixed(4) +
+                  " (observation only)"
+              : threat.error!,
+          );
+        }
         if (failure) {
           session.status = "failed";
           session.error = failure;
