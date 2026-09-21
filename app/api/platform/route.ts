@@ -18,6 +18,7 @@ function configuration() {
     url: vars.AGENTGATE_OLLAMA_URL ?? "http://127.0.0.1:11434",
     model: vars.AGENTGATE_OLLAMA_MODEL ?? "",
     threatUrl: vars.AGENTGATE_THREAT_URL,
+    retrievalUrl: vars.AGENTGATE_RETRIEVAL_URL,
   };
 }
 function failure(error: unknown) {

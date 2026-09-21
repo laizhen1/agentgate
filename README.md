@@ -149,3 +149,38 @@ This repository is an original application using upstream components, not a fork
 
 The platform includes an observation-only Threat Detection Lab and optional live
 user/tool-message scanning. See [local setup and model limitations](docs/threat-detection.md).
+
+## ML experiments and governed RAG
+
+- **Evaluation and error analysis:** per-example JSON exports, an offline HTML
+  review screen with false-positive/false-negative and category/language/length
+  filters, precision–recall threshold sweeps, validation-only threshold selection,
+  and p50/p95 latency. See [ML workflow](docs/ml-workflow.md).
+- **Fine-tuning:** a reproducible grouped split utility and a PyTorch/Hugging Face
+  training runner comparing TF-IDF logistic regression, the pinned DeBERTa model,
+  and a domain-fine-tuned checkpoint. Artifacts record provenance, seeds, settings,
+  checkpoint identities, and held-out results. No improvement is claimed until a
+  licensed dataset has been used for a completed experiment.
+- **Document retrieval:** organization-scoped document ingestion, content versions,
+  retrieval controls, overlapping chunks, Ollama embeddings, and a local FAISS
+  service. The Documents tab and governed `search_documents` tool return source
+  evidence with citations; Ollama and authenticated MCP share enforcement.
+  See [retrieval setup and boundaries](docs/retrieval.md).
+
+## Future implementations
+
+The following items are planned extensions, not completed features:
+
+4. **Structured assessment reports:** add a separate Ollama JSON-schema response
+   step for summaries, finding IDs, evidence references, recommendations, and
+   limitations. Validate references against stored evidence; calculate decisions
+   and metrics in code. Tool schemas and runtime validation already exist.
+5. **Broader Promptfoo release evaluation:** maintain independent attack datasets,
+   compare model/prompt releases, import live reports into the workbench, and report
+   unsafe proposals/executions, legitimate completion, false blocks, errors, and
+   latency separately. Add retrieval recall, citation correctness, grounding, and
+   document-injection evaluations for RAG.
+6. **Backend scaling and Python CI:** add the Python suites to GitHub Actions,
+   bounded inference scheduling with load tests, and separate tables for growing
+   assessments, traces, and document metadata. Preserve atomic approval/effect
+   commits when migrating away from the current bounded organization JSON record.

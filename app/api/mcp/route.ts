@@ -19,11 +19,16 @@ import {
   type ToolCall,
 } from "@/lib/platform/domain";
 import { observed } from "@/lib/platform/telemetry";
+import {
+  documentRetriever,
+  searchDocumentTool,
+} from "@/lib/platform/retrieval";
 
 export const runtime = "edge";
 const responseHeaders = { "Cache-Control": "no-store" };
 
 const tools = [
+  searchDocumentTool,
   {
     name: "search_catalog",
     description: "Search the isolated procurement catalog.",
@@ -239,13 +244,21 @@ export async function POST(request: Request) {
               "gateway",
             );
             const call: ToolCall = { function: { name, arguments: args } };
-            await applyReply(org, session, {
-              model: "external-mcp-client",
-              inputTokens: 0,
-              outputTokens: 0,
-              durationMs: 0,
-              message: { role: "assistant", content: "", tool_calls: [call] },
-            });
+            await applyReply(
+              org,
+              session,
+              {
+                model: "external-mcp-client",
+                inputTokens: 0,
+                outputTokens: 0,
+                durationMs: 0,
+                message: { role: "assistant", content: "", tool_calls: [call] },
+              },
+              documentRetriever(
+                (env as unknown as Record<string, string | undefined>)
+                  .AGENTGATE_RETRIEVAL_URL,
+              ),
+            );
             const proposal = session.proposals[0];
             return {
               runId: session.id,

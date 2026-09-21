@@ -6,6 +6,7 @@ const resultSchema = z
     score: z.number().finite().min(0).max(1),
     windows: z.number().int().min(1).max(64),
     durationMs: z.number().finite().nonnegative(),
+    threshold: z.number().finite().min(0).max(1).optional(),
   })
   .strict();
 export type ThreatAssessment = {
@@ -77,6 +78,7 @@ export async function detectThreat(
       await reader.cancel();
     }
     const result = resultSchema.parse(JSON.parse(raw));
+    assessment.threshold = result.threshold ?? assessment.threshold;
     return {
       ...assessment,
       status: "scored",

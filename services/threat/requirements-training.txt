@@ -1,0 +1,4 @@
+-r requirements.txt
+scikit-learn==1.9.1
+accelerate==1.15.0
+numpy==2.5.3

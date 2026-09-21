@@ -1,8 +1,22 @@
 import { z } from "zod";
 import { Fault, type Message, type ModelReply } from "./domain.ts";
+import { searchDocumentTool } from "./retrieval.ts";
 
-export type ModelConfig = { url: string; model: string; threatUrl?: string };
+export type ModelConfig = {
+  url: string;
+  model: string;
+  threatUrl?: string;
+  retrievalUrl?: string;
+};
 export const tools = [
+  {
+    type: "function",
+    function: {
+      name: searchDocumentTool.name,
+      description: searchDocumentTool.description,
+      parameters: searchDocumentTool.inputSchema,
+    },
+  },
   {
     type: "function",
     function: {

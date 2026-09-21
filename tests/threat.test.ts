@@ -8,6 +8,16 @@ const result = {
   windows: 1,
   durationMs: 20,
 };
+test("validated calibration threshold is used instead of the experimental default", async () => {
+  const assessment = await detectThreat(
+    "http://127.0.0.1:8765",
+    "example",
+    "lab",
+    async () => Response.json({ ...result, threshold: 0.95 }),
+  );
+  assert.equal(assessment.threshold, 0.95);
+  assert.equal(assessment.label, "benign");
+});
 test("scoring uses injection score and preserves observation evidence", async () => {
   const assessment = await detectThreat(
     "http://127.0.0.1:8765",

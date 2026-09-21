@@ -65,7 +65,11 @@ const updated = await post({
   policy: {
     ...state.org.policy,
     allowedTools: Array.from(
-      new Set([...state.org.policy.allowedTools, "create_purchase_request"]),
+      new Set([
+        ...state.org.policy.allowedTools,
+        "create_purchase_request",
+        "search_documents",
+      ]),
     ),
   },
   twoPerson: false,
@@ -105,6 +109,46 @@ const initialized = await mcp(
 );
 assert.equal(initialized.result.serverInfo.name, "agentgate");
 const listed = await mcp("tools/list", {}, 2);
+assert.ok(listed.result.tools.some((tool) => tool.name === "search_documents"));
+const document = await post({
+  operation: "addDocument",
+  orgId,
+  document: {
+    title: "API test brief",
+    source: "integration fixture",
+    text: "Laptop warranty is two years.",
+  },
+});
+assert.equal(document.status, 200, JSON.stringify(document.data));
+assert.equal(
+  (
+    await post({
+      operation: "documentAccess",
+      orgId,
+      documentId: document.data.documentId,
+      enabled: false,
+    })
+  ).status,
+  200,
+);
+const search = await mcp(
+  "tools/call",
+  { name: "search_documents", arguments: { query: "warranty" } },
+  22,
+);
+const searchAction = JSON.parse(search.result.content[0].text);
+assert.equal(searchAction.status, "executed");
+assert.equal(JSON.parse(searchAction.result).status, "insufficient_evidence");
+assert.equal(
+  (
+    await post({
+      operation: "deleteDocument",
+      orgId,
+      documentId: document.data.documentId,
+    })
+  ).status,
+  200,
+);
 assert.ok(
   listed.result.tools.some((tool) => tool.name === "create_purchase_request"),
 );

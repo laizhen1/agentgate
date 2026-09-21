@@ -1,6 +1,11 @@
 import { z } from "zod";
 import { detectThreat } from "./threat.ts";
 import {
+  documentInput,
+  documentRetriever,
+  searchDocuments,
+} from "./retrieval.ts";
+import {
   allRoles,
   admins,
   operators,
@@ -30,13 +35,14 @@ const policy = z
       .array(
         z.enum([
           "search_catalog",
+          "search_documents",
           "read_document",
           "send_email",
           "delete_record",
           "create_purchase_request",
         ]),
       )
-      .max(5),
+      .max(6),
     allowedHosts: z
       .array(
         z.string().regex(/^(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/),
@@ -59,6 +65,35 @@ const governance = z
   })
   .strict();
 export const commandSchema = z.discriminatedUnion("operation", [
+  z
+    .object({
+      operation: z.literal("addDocument"),
+      orgId: id,
+      document: documentInput,
+    })
+    .strict(),
+  z
+    .object({
+      operation: z.literal("documentAccess"),
+      orgId: id,
+      documentId: id,
+      enabled: z.boolean(),
+    })
+    .strict(),
+  z
+    .object({
+      operation: z.literal("deleteDocument"),
+      orgId: id,
+      documentId: id,
+    })
+    .strict(),
+  z
+    .object({
+      operation: z.literal("searchDocuments"),
+      orgId: id,
+      query: z.string().trim().min(1).max(500),
+    })
+    .strict(),
   z
     .object({
       operation: z.literal("detectThreat"),
@@ -301,6 +336,59 @@ export class Platform {
       "sessionId" in command ? command.sessionId : command.orgId,
       async (current) => {
         switch (command.operation) {
+          case "addDocument": {
+            requireRole(current, user.userId, admins);
+            const documents = (current.documents ??= []);
+            if (
+              documents.length >= 12 ||
+              documents.reduce((n, d) => n + d.text.length, 0) +
+                command.document.text.length >
+                36000
+            )
+              throw new Fault(
+                409,
+                "Document lab limit reached (12 documents / 36,000 characters).",
+              );
+            const document = {
+              ...command.document,
+              id: crypto.randomUUID(),
+              version: await digest(command.document),
+              enabled: true,
+              createdAt: new Date().toISOString(),
+              createdBy: user.userId,
+            };
+            documents.push(document);
+            return { documentId: document.id };
+          }
+          case "documentAccess": {
+            requireRole(current, user.userId, admins);
+            const document = current.documents?.find(
+              (d) => d.id === command.documentId,
+            );
+            if (!document) throw new Fault(404, "Document not found.");
+            document.enabled = command.enabled;
+            return { updated: true };
+          }
+          case "deleteDocument": {
+            requireRole(current, user.userId, admins);
+            if (!current.documents?.some((d) => d.id === command.documentId))
+              throw new Fault(404, "Document not found.");
+            current.documents = current.documents.filter(
+              (d) => d.id !== command.documentId,
+            );
+            return { deleted: true };
+          }
+          case "searchDocuments": {
+            requireRole(current, user.userId, operators);
+            return {
+              retrieval: await searchDocuments(
+                current,
+                user.userId,
+                command.query,
+                this.config.retrievalUrl,
+              ),
+            };
+          }
           case "run":
             requireRole(current, user.userId, operators);
             return {
@@ -528,7 +616,13 @@ export class Platform {
           session.status = "failed";
           session.error = failure;
           trace(session, "model.error", failure);
-        } else await applyReply(org, session, reply!);
+        } else
+          await applyReply(
+            org,
+            session,
+            reply!,
+            documentRetriever(this.config.retrievalUrl),
+          );
         return { sessionId, status: session.status };
       },
     );

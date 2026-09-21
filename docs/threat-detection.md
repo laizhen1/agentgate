@@ -44,8 +44,9 @@ service to pin a reproducible version. The default is pinned to commit 90c9989b1
 
 Inputs are limited to 6,000 characters. Overlapping 512-token windows with a
 64-token overlap cover the input; the largest injection softmax score is returned.
-The fixed 0.5 threshold is an experimental default, not a calibrated security
-guarantee. Maximum-window aggregation can increase false positives on long inputs.
+The 0.5 threshold is an experimental default; an optional validation artifact can
+select a different operating threshold (see [ML workflow](ml-workflow.md)). Neither
+is a security guarantee. Maximum-window aggregation can increase false positives on long inputs.
 Do not infer production accuracy from the two UI examples or reference fixtures.
 
 The service binds to 127.0.0.1 only, rejects browser-origin requests, does not log
@@ -66,9 +67,10 @@ separately, not treated as correct predictions. Keep evaluation data separate fr
 training data, including paraphrases and attack families. Include quoted attack
 discussions, indirect document attacks, long inputs and ordinary procurement tasks.
 
-No training pipeline or production-accuracy claim is included in this first version.
-A follow-up fine-tuning experiment needs a licensed, independently split dataset
-and comparison against a simple TF-IDF classifier.
+The [ML workflow](ml-workflow.md) provides grouped dataset splitting, per-example
+error review, validation threshold selection, and a training pipeline comparing
+TF-IDF, the pretrained checkpoint, and a fine-tuned encoder. A meaningful experiment
+requires a licensed, independently split dataset; no production accuracy is claimed.
 
 ## Verified local smoke results
 

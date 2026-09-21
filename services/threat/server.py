@@ -2,6 +2,8 @@
 import json
 import os
 import time
+import hashlib
+from pathlib import Path
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 MODEL = "protectai/deberta-v3-base-prompt-injection-v2"
@@ -12,11 +14,25 @@ class Detector:
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
         self.torch = torch
         revision = os.environ.get("AGENTGATE_THREAT_REVISION", "90c9989b1a342275dd0d1a95aad283c04e075671")
-        self.tokenizer = AutoTokenizer.from_pretrained(MODEL, revision=revision, trust_remote_code=False)
+        checkpoint = os.environ.get("AGENTGATE_THREAT_CHECKPOINT")
+        source = checkpoint or MODEL
+        options = {"local_files_only": True} if checkpoint else {"revision": revision}
+        self.tokenizer = AutoTokenizer.from_pretrained(source, trust_remote_code=False, **options)
         self.model = AutoModelForSequenceClassification.from_pretrained(
-            MODEL, revision=revision, trust_remote_code=False, use_safetensors=True
+            source, trust_remote_code=False, use_safetensors=True, **options
         ).eval()
-        self.revision = self.model.config._commit_hash or revision
+        self.name = "finetuned" if checkpoint else MODEL
+        self.revision = hashlib.sha256((Path(checkpoint) / "model.safetensors").read_bytes()).hexdigest() if checkpoint else self.model.config._commit_hash or revision
+        self.threshold = None
+        calibration = os.environ.get("AGENTGATE_THREAT_CALIBRATION")
+        if calibration:
+            artifact = json.loads(Path(calibration).read_text(encoding="utf-8"))
+            if artifact.get("split") != "validation" or artifact.get("identities") != [[self.name, self.revision]]:
+                raise ValueError("Calibration model/revision mismatch")
+            threshold = artifact.get("threshold")
+            if type(threshold) not in (int, float) or not 0 <= threshold <= 1:
+                raise ValueError("Invalid calibration threshold")
+            self.threshold = threshold
         labels = {int(k): str(v).upper() for k, v in self.model.config.id2label.items()}
         if labels != {0: "SAFE", 1: "INJECTION"}:
             raise RuntimeError("Unexpected model labels: " + str(labels))
@@ -34,8 +50,11 @@ class Detector:
             for offset in range(0, windows, 4):
                 batch = {key: value[offset:offset + 4] for key, value in encoded.items()}
                 scores.extend(self.model(**batch).logits.softmax(dim=-1)[:, 1].tolist())
-        return {"model": MODEL, "revision": self.revision, "score": max(scores),
-                "windows": windows, "durationMs": (time.perf_counter() - started) * 1000}
+        result = {"model": self.name, "revision": self.revision, "score": max(scores),
+                  "windows": windows, "durationMs": (time.perf_counter() - started) * 1000}
+        if self.threshold is not None:
+            result["threshold"] = self.threshold
+        return result
 
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, *_):

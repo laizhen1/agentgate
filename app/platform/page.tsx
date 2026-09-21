@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { ThreatLab } from "./threat-lab";
+import { DocumentLab } from "./document-lab";
 import {
   ShieldCheck,
   Play,
@@ -418,9 +419,24 @@ export default function PlatformPage() {
               </TabsTrigger>
               <TabsTrigger value="benchmarks">Benchmarks</TabsTrigger>
               <TabsTrigger value="threats">Threat detection</TabsTrigger>
+              <TabsTrigger value="documents">Documents</TabsTrigger>
               <TabsTrigger value="policy">Policy & team</TabsTrigger>
               <TabsTrigger value="audit">Audit & export</TabsTrigger>
             </TabsList>
+            <TabsContent value="documents">
+              <DocumentLab
+                key={org.id}
+                org={org}
+                disabled={busy}
+                canAdmin={canAdmin}
+                canRun={canRun}
+                command={async (body) => {
+                  const result = await post(body);
+                  await refresh();
+                  return result;
+                }}
+              />
+            </TabsContent>
             <TabsContent value="threats">
               <ThreatLab
                 key={org.id}
@@ -952,6 +968,7 @@ export default function PlatformPage() {
                         {[
                           "search_catalog",
                           "read_document",
+                          "search_documents",
                           "send_email",
                           "delete_record",
                           "create_purchase_request",

@@ -2,6 +2,8 @@ import contextlib
 import io
 import json
 import unittest
+import tempfile
+from pathlib import Path
 from unittest.mock import mock_open, patch
 
 from evaluate import main, validate_result
@@ -15,6 +17,30 @@ class EvaluationTests(unittest.TestCase):
     def test_valid_scores_include_threshold_boundaries(self):
         for score in (0, 0.5, 1):
             self.assertEqual(validate_result(dict(self.result, score=score))["score"], score)
+
+    def test_service_cannot_override_ground_truth(self):
+        with self.assertRaises(ValueError):
+            validate_result(dict(self.result, label=0, text="replacement"))
+
+    def test_validation_artifact_is_applied_without_retuning_and_rejects_leakage(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            validation = root / "validation.jsonl"
+            heldout = root / "test.jsonl"
+            validation.write_text('\n'.join(json.dumps(dict(text=t, label=label, group=g)) for t, label, g in [("ordinary", 0, "v0"), ("attack", 1, "v1")]), encoding="utf-8")
+            heldout.write_text('\n'.join(json.dumps(dict(text=t, label=label, group=g)) for t, label, g in [("different ordinary", 0, "t0"), ("different attack", 1, "t1")]), encoding="utf-8")
+            def responses():
+                return [io.BytesIO(json.dumps(dict(self.result, score=s)).encode()) for s in (.8, .9)]
+            with patch("evaluate.urllib.request.urlopen", side_effect=responses()), contextlib.redirect_stdout(io.StringIO()):
+                calibrated = main(validation, root / "validation-report", "validation", max_fpr=0)
+            self.assertEqual(calibrated["threshold"], .9)
+            artifact = root / "validation-report.calibration.json"
+            with patch("evaluate.urllib.request.urlopen", side_effect=responses()), contextlib.redirect_stdout(io.StringIO()):
+                tested = main(heldout, calibration=artifact)
+            self.assertEqual(tested["threshold"], .9)
+            heldout.write_text(heldout.read_text(encoding="utf-8").replace('"t0"', '"v0"'), encoding="utf-8")
+            with patch("evaluate.urllib.request.urlopen", side_effect=responses()), self.assertRaisesRegex(ValueError, "leakage"):
+                main(heldout, calibration=artifact)
 
     def test_invalid_results_are_rejected(self):
         cases = [None, [], {}, *[dict(self.result, score=value)

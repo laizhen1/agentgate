@@ -84,6 +84,77 @@ async function fixture() {
   await f.store.create(org, owner.userId);
   return { ...f, org };
 }
+
+test("document ingestion is audited, bounded and restricted to organization admins", async () => {
+  const { store, org, sql } = await fixture();
+  const platform = new Platform(store, config);
+  const input = {
+    operation: "addDocument",
+    orgId: org.id,
+    document: { title: "Warranty", source: "Supplier", text: "Two years." },
+  };
+  await assert.rejects(
+    platform.command(input, outsider),
+    /member|access|organization/i,
+  );
+  await store.mutate(
+    org.id,
+    owner.userId,
+    "test.member",
+    "viewer",
+    (current) => {
+      current.members.push({
+        userId: "viewer",
+        email: "viewer@example.com",
+        role: "viewer",
+      });
+    },
+  );
+  await assert.rejects(
+    platform.command(input, { userId: "viewer", email: "viewer@example.com" }),
+    /role|permission/i,
+  );
+  const added = (await platform.command(input, owner)) as {
+    documentId: string;
+  };
+  let saved = (await store.read(org.id, owner.userId)).org;
+  assert.equal(saved.documents?.length, 1);
+  assert.equal(saved.documents?.[0].version.length, 64);
+  assert.equal((await verifyAudit(saved)).valid, true);
+  await platform.command(
+    {
+      operation: "documentAccess",
+      orgId: org.id,
+      documentId: added.documentId,
+      enabled: false,
+    },
+    owner,
+  );
+  const searched = (await platform.command(
+    { operation: "searchDocuments", orgId: org.id, query: "warranty" },
+    owner,
+  )) as { retrieval: { status: string } };
+  assert.equal(searched.retrieval.status, "insufficient_evidence");
+  await assert.rejects(
+    platform.command(
+      { ...input, document: { ...input.document, text: "x".repeat(6001) } },
+      owner,
+    ),
+    /Invalid request/,
+  );
+  await platform.command(
+    {
+      operation: "deleteDocument",
+      orgId: org.id,
+      documentId: added.documentId,
+    },
+    owner,
+  );
+  saved = (await store.read(org.id, owner.userId)).org;
+  assert.equal(saved.documents?.length, 0);
+  assert.equal((await verifyAudit(saved)).valid, true);
+  sql.close();
+});
 test("strict tool schema refuses forged approval and unknown record scopes", () => {
   assert.equal(
     actionSchema.safeParse({
@@ -434,7 +505,13 @@ test("Ollama adapter sends native tools, validates output and refuses remote end
   const fetcher = (async (_url: unknown, init: RequestInit) => {
     const body = JSON.parse(String(init.body));
     assert.equal(body.stream, false);
-    assert.equal(body.tools.length, 5);
+    assert.equal(body.tools.length, 6);
+    assert.ok(
+      body.tools.some(
+        (tool: { function: { name: string } }) =>
+          tool.function.name === "search_documents",
+      ),
+    );
     assert.equal(init.redirect, "error");
     return Response.json({
       model: config.model,

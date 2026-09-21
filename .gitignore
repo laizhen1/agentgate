@@ -14,6 +14,9 @@
 /coverage
 /.venv-threat/
 /services/threat/__pycache__/
+/services/retrieval/__pycache__/
+/.venv-retrieval/
+/.venv-training/
 
 # next.js
 /.next/
