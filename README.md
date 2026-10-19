@@ -159,13 +159,43 @@ user/tool-message scanning. See [local setup and model limitations](docs/threat-
 - **Fine-tuning:** a reproducible grouped split utility and a PyTorch/Hugging Face
   training runner comparing TF-IDF logistic regression, the pinned DeBERTa model,
   and a domain-fine-tuned checkpoint. Artifacts record provenance, seeds, settings,
-  checkpoint identities, and held-out results. No improvement is claimed until a
-  licensed dataset has been used for a completed experiment.
+  checkpoint identities, and held-out results. A completed three-seed domain
+  adaptation pilot now includes 480 AI-authored synthetic examples and 1,001
+  separate public diagnostic examples. See the
+  [measured experiment](experiments/deberta-v1/results/REPORT.md),
+  [dataset limitations](experiments/deberta-v1/DATA_CARD.md), and
+  [reproduction guide](experiments/deberta-v1/README.md). These results are not
+  production-security or real-user-traffic measurements.
 - **Document retrieval:** organization-scoped document ingestion, content versions,
   retrieval controls, overlapping chunks, Ollama embeddings, and a local FAISS
   service. The Documents tab and governed `search_documents` tool return source
   evidence with citations; Ollama and authenticated MCP share enforcement.
   See [retrieval setup and boundaries](docs/retrieval.md).
+
+## Measured results and model-selection decision
+
+The completed pilot uses 480 AI-authored synthetic examples from 60 contrast
+families. The held-out domain test contains **12 families and 96 correlated
+variants**, not 96 independently authored scenarios. Fine-tuned metrics below
+are means across seeds 42, 43, and 44.
+
+| Evaluation                                               | Measured result                                                                |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Main protocol: validation-selected thresholds, domain F1 | Upstream 64.00%; fine-tuned mean 95.51%; TF-IDF 95.65%                         |
+| Main protocol: domain recall                             | Upstream 50.00%; fine-tuned mean 95.83%                                        |
+| Main protocol: domain false-positive rate                | Upstream 6.25%; fine-tuned mean 4.86%; seeds 42 and 43 each 6.25%              |
+| Separate deepset diagnostic, fixed threshold 0.5         | F1 declined from 57.98% to 50.75%; recall from 41.44% to 34.09%                |
+| Model-selection decision                                 | Keep the existing default detector; fine-tuned checkpoints remain experimental |
+
+The empirical 5% validation false-positive constraint is not a test-set guarantee.
+The neural model did not establish an F1 advantage over TF-IDF under the main
+protocol. External diagnostics are separate datasets: deepset has 662 labeled
+examples; NotInject has 339 benign examples and supports false-positive analysis,
+not attack recall or F1. These results do not establish production protection.
+
+See the [full report](experiments/deberta-v1/results/REPORT.md),
+[data card](experiments/deberta-v1/DATA_CARD.md), and
+[reproduction instructions and evidence](experiments/deberta-v1/README.md).
 
 ## Future implementations
 

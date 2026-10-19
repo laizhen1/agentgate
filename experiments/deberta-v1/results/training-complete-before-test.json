@@ -1,0 +1,30 @@
+{
+  "utc": "2026-10-19T21:12:19.272372+00:00",
+  "selection": {
+    "tfidf": {
+      "threshold": 0.5517245987805682,
+      "calibrationError": null,
+      "revision": "d5f11be30e2f513d62e76602a79ca5b3e17c3505699f76a8b1ecbc5bb96619a4"
+    },
+    "pretrained": {
+      "threshold": 0.9999363422393799,
+      "calibrationError": null,
+      "revision": "90c9989b1a342275dd0d1a95aad283c04e075671"
+    },
+    "finetuned-seed42": {
+      "threshold": 0.3602639436721802,
+      "calibrationError": null,
+      "revision": "f4e82e00900b178861dc3ae683e1cd4ba4b42261645d40fee2626f3d3ad13d65"
+    },
+    "finetuned-seed43": {
+      "threshold": 0.33895182609558105,
+      "calibrationError": null,
+      "revision": "b5b3c236b3e3417a5c1b99b791f285cbc3a974e9a28288a7aae5381e40693477"
+    },
+    "finetuned-seed44": {
+      "threshold": 0.3446640074253082,
+      "calibrationError": null,
+      "revision": "1b82060532c8cb451c8d660f5579ac29d6349408a91ac140a2067843512568cf"
+    }
+  }
+}

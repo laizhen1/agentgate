@@ -1,0 +1,78 @@
+{
+  "method": "Character 3-5 gram TF-IDF cosine on 120 original messages, excluding shared context wrappers",
+  "purpose": "Read-only audit after data freeze; not used for fitting, selecting thresholds, or changing examples",
+  "cross_split_pairs_at_least_0_85": 0,
+  "top_10_cross_split_pairs": [
+    {
+      "left": "quote-02",
+      "left_label": 1,
+      "right": "data-07",
+      "right_label": 1,
+      "cosine": 0.28822200932758385
+    },
+    {
+      "left": "data-02",
+      "left_label": 1,
+      "right": "data-07",
+      "right_label": 1,
+      "cosine": 0.28667205442992316
+    },
+    {
+      "left": "quote-05",
+      "left_label": 0,
+      "right": "rag-09",
+      "right_label": 0,
+      "cosine": 0.28223046640207367
+    },
+    {
+      "left": "auth-01",
+      "left_label": 1,
+      "right": "rag-05",
+      "right_label": 1,
+      "cosine": 0.279304636662392
+    },
+    {
+      "left": "quote-01",
+      "left_label": 1,
+      "right": "auth-03",
+      "right_label": 1,
+      "cosine": 0.2694282764715032
+    },
+    {
+      "left": "auth-09",
+      "left_label": 1,
+      "right": "audit-05",
+      "right_label": 1,
+      "cosine": 0.257333871624435
+    },
+    {
+      "left": "quote-08",
+      "left_label": 1,
+      "right": "rag-05",
+      "right_label": 1,
+      "cosine": 0.25340989233996686
+    },
+    {
+      "left": "data-06",
+      "left_label": 1,
+      "right": "buy-03",
+      "right_label": 1,
+      "cosine": 0.25204947995988974
+    },
+    {
+      "left": "data-03",
+      "left_label": 0,
+      "right": "buy-01",
+      "right_label": 0,
+      "cosine": 0.25197191242908074
+    },
+    {
+      "left": "quote-06",
+      "left_label": 1,
+      "right": "buy-07",
+      "right_label": 1,
+      "cosine": 0.24108957212292642
+    }
+  ],
+  "limitations": "Lexical similarity does not rule out shared meaning, authoring style, or benchmark shortcuts."
+}

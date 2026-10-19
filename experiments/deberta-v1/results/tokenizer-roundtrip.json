@@ -1,0 +1,6 @@
+{
+  "inputs_checked": 1481,
+  "mismatches": [],
+  "source_tokenizer_class": "DebertaV2TokenizerFast",
+  "saved_tokenizer_class": "DebertaV2TokenizerFast"
+}

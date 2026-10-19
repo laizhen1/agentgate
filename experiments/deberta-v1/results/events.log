@@ -1,0 +1,73 @@
+2026-10-19T21:02:19.557595+00:00 tfidf: validation selection saved (test unopened)
+2026-10-19T21:02:25.191189+00:00 pretrained: validation selection saved (test unopened)
+2026-10-19T21:02:25.874793+00:00 Training finetuned-seed42: 288 windows, full-parameter BF16, final epoch fixed
+2026-10-19T21:05:48.951981+00:00 finetuned-seed42: validation selection saved (test unopened)
+2026-10-19T21:05:49.113054+00:00 Finished finetuned-seed42; 197.3 training seconds
+2026-10-19T21:05:49.713213+00:00 Training finetuned-seed43: 288 windows, full-parameter BF16, final epoch fixed
+2026-10-19T21:09:19.107791+00:00 finetuned-seed43: validation selection saved (test unopened)
+2026-10-19T21:09:19.301918+00:00 Finished finetuned-seed43; 203.8 training seconds
+2026-10-19T21:09:19.942381+00:00 Training finetuned-seed44: 288 windows, full-parameter BF16, final epoch fixed
+2026-10-19T21:12:19.107144+00:00 finetuned-seed44: validation selection saved (test unopened)
+2026-10-19T21:12:19.250858+00:00 Finished finetuned-seed44; 174.6 training seconds
+2026-10-19T21:12:19.273373+00:00 All training complete. Opening held-out evaluation; no subsequent tuning is permitted.
+2026-10-19T21:12:19.354828+00:00 tfidf: saved domain-test
+2026-10-19T21:12:19.407832+00:00 tfidf scored 100/339
+2026-10-19T21:12:19.462521+00:00 tfidf scored 200/339
+2026-10-19T21:12:19.515276+00:00 tfidf scored 300/339
+2026-10-19T21:12:19.631066+00:00 tfidf: saved notinject
+2026-10-19T21:12:19.685864+00:00 tfidf scored 100/662
+2026-10-19T21:12:19.744938+00:00 tfidf scored 200/662
+2026-10-19T21:12:19.815740+00:00 tfidf scored 300/662
+2026-10-19T21:12:19.886633+00:00 tfidf scored 400/662
+2026-10-19T21:12:19.947308+00:00 tfidf scored 500/662
+2026-10-19T21:12:20.002151+00:00 tfidf scored 600/662
+2026-10-19T21:12:20.233348+00:00 tfidf: saved deepset
+2026-10-19T21:12:23.663101+00:00 pretrained: saved domain-test
+2026-10-19T21:12:26.345538+00:00 pretrained scored 100/339
+2026-10-19T21:12:29.022859+00:00 pretrained scored 200/339
+2026-10-19T21:12:31.771186+00:00 pretrained scored 300/339
+2026-10-19T21:12:32.989435+00:00 pretrained: saved notinject
+2026-10-19T21:12:35.620534+00:00 pretrained scored 100/662
+2026-10-19T21:12:38.305814+00:00 pretrained scored 200/662
+2026-10-19T21:12:41.009595+00:00 pretrained scored 300/662
+2026-10-19T21:12:43.657972+00:00 pretrained scored 400/662
+2026-10-19T21:12:46.344420+00:00 pretrained scored 500/662
+2026-10-19T21:12:49.067011+00:00 pretrained scored 600/662
+2026-10-19T21:12:51.072239+00:00 pretrained: saved deepset
+2026-10-19T21:12:54.384442+00:00 finetuned-seed42: saved domain-test
+2026-10-19T21:12:57.082584+00:00 finetuned-seed42 scored 100/339
+2026-10-19T21:13:00.065376+00:00 finetuned-seed42 scored 200/339
+2026-10-19T21:13:02.910247+00:00 finetuned-seed42 scored 300/339
+2026-10-19T21:13:04.093996+00:00 finetuned-seed42: saved notinject
+2026-10-19T21:13:07.235776+00:00 finetuned-seed42 scored 100/662
+2026-10-19T21:13:12.120485+00:00 finetuned-seed42 scored 200/662
+2026-10-19T21:13:16.891658+00:00 finetuned-seed42 scored 300/662
+2026-10-19T21:13:20.206379+00:00 finetuned-seed42 scored 400/662
+2026-10-19T21:13:23.822403+00:00 finetuned-seed42 scored 500/662
+2026-10-19T21:13:27.290578+00:00 finetuned-seed42 scored 600/662
+2026-10-19T21:13:29.529149+00:00 finetuned-seed42: saved deepset
+2026-10-19T21:13:33.226388+00:00 finetuned-seed43: saved domain-test
+2026-10-19T21:13:36.317705+00:00 finetuned-seed43 scored 100/339
+2026-10-19T21:13:39.346049+00:00 finetuned-seed43 scored 200/339
+2026-10-19T21:13:42.276391+00:00 finetuned-seed43 scored 300/339
+2026-10-19T21:13:43.521891+00:00 finetuned-seed43: saved notinject
+2026-10-19T21:13:46.521330+00:00 finetuned-seed43 scored 100/662
+2026-10-19T21:13:49.707176+00:00 finetuned-seed43 scored 200/662
+2026-10-19T21:13:52.901233+00:00 finetuned-seed43 scored 300/662
+2026-10-19T21:13:56.139826+00:00 finetuned-seed43 scored 400/662
+2026-10-19T21:13:59.289363+00:00 finetuned-seed43 scored 500/662
+2026-10-19T21:14:02.468184+00:00 finetuned-seed43 scored 600/662
+2026-10-19T21:14:05.046061+00:00 finetuned-seed43: saved deepset
+2026-10-19T21:14:10.210150+00:00 finetuned-seed44: saved domain-test
+2026-10-19T21:14:14.264436+00:00 finetuned-seed44 scored 100/339
+2026-10-19T21:14:17.476315+00:00 finetuned-seed44 scored 200/339
+2026-10-19T21:14:20.848877+00:00 finetuned-seed44 scored 300/339
+2026-10-19T21:14:22.289157+00:00 finetuned-seed44: saved notinject
+2026-10-19T21:14:25.945690+00:00 finetuned-seed44 scored 100/662
+2026-10-19T21:14:29.145162+00:00 finetuned-seed44 scored 200/662
+2026-10-19T21:14:32.230059+00:00 finetuned-seed44 scored 300/662
+2026-10-19T21:14:35.349767+00:00 finetuned-seed44 scored 400/662
+2026-10-19T21:14:38.271040+00:00 finetuned-seed44 scored 500/662
+2026-10-19T21:14:41.216141+00:00 finetuned-seed44 scored 600/662
+2026-10-19T21:14:43.406890+00:00 finetuned-seed44: saved deepset
+2026-10-19T21:14:43.549960+00:00 Experiment complete

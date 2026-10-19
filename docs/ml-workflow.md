@@ -142,3 +142,22 @@ $env:HF_HUB_OFFLINE = "1"
 This verifies the training/export/serving path without downloading weights. It is
 not a benchmark or evidence that the production detector improved. Unset these
 test environment variables before downloading a real checkpoint.
+
+## Completed reproducible experiment — October 20, 2026
+
+The [DeBERTa domain-adaptation experiment](../experiments/deberta-v1/README.md)
+provides frozen data, a three-seed full-parameter run, TF-IDF and original-checkpoint
+comparisons, validation-only threshold selection, and separate public diagnostics.
+See the [complete results](../experiments/deberta-v1/results/REPORT.md) and
+[STAR wording](../experiments/deberta-v1/results/STAR-resume-zh.md).
+
+The domain corpus is AI-authored synthetic data: 480 examples from 60 contrast
+families, split 288/96/96 with all variants of each family kept together. Public
+diagnostics comprise 339 NotInject and 662 deepset examples. No public diagnostic
+data is used for adaptation or threshold selection. Read the
+[data card](../experiments/deberta-v1/DATA_CARD.md) for provenance, source-license
+declarations, upstream-contamination uncertainty, and synthetic-data limitations.
+
+Actual training used an RTX 3060 Laptop GPU. The included Colab notebook is a
+syntax-checked reproduction entry point, not a claim of an executed Colab run.
+All trained checkpoints remain experimental; the default detector is unchanged.

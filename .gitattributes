@@ -1,0 +1,2 @@
+# Preserve frozen experiment bytes and provenance hashes across platforms.
+experiments/deberta-v1/** -text whitespace=trailing-space,space-before-tab,cr-at-eol

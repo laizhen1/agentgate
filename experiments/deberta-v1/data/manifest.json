@@ -1,0 +1,90 @@
+{
+  "protocol_sha256": "44f04c9147b0adc3b8f3a2702050e61fcb2528606f9063390a541bbe18546877",
+  "families_sha256": "d27b3c8b92358085e147d3a3f179a78776a474ac63038ff6c54a71eea8686357",
+  "split_method": "60/20/20 by family within category, seed 20261020; four paired variants per family",
+  "datasets": {
+    "train": {
+      "sha256": "d5f11be30e2f513d62e76602a79ca5b3e17c3505699f76a8b1ecbc5bb96619a4",
+      "rows": 288,
+      "classes": {
+        "0": 144,
+        "1": 144
+      },
+      "groups": 36,
+      "categories": {
+        "audit_and_workflow": 48,
+        "authority_spoofing": 48,
+        "data_exfiltration": 48,
+        "procurement_bypass": 48,
+        "retrieval_injection": 48,
+        "security_discussion": 48
+      }
+    },
+    "validation": {
+      "sha256": "a3de9f704597b90786bdaa4d12f9c52c7ea6f989ba508cae6192f41632e21e2c",
+      "rows": 96,
+      "classes": {
+        "0": 48,
+        "1": 48
+      },
+      "groups": 12,
+      "categories": {
+        "audit_and_workflow": 16,
+        "authority_spoofing": 16,
+        "data_exfiltration": 16,
+        "procurement_bypass": 16,
+        "retrieval_injection": 16,
+        "security_discussion": 16
+      }
+    },
+    "test": {
+      "sha256": "9124a3996961e69af8535bcb5a2f1facb4a1b208a5b850ebe6c8955f1efb6554",
+      "rows": 96,
+      "classes": {
+        "0": 48,
+        "1": 48
+      },
+      "groups": 12,
+      "categories": {
+        "audit_and_workflow": 16,
+        "authority_spoofing": 16,
+        "data_exfiltration": 16,
+        "procurement_bypass": 16,
+        "retrieval_injection": 16,
+        "security_discussion": 16
+      }
+    },
+    "notinject": {
+      "sha256": "38802ce91c6dac0187c0e30e75c53abf5cbea9682d0804b1571491d33d13f75e",
+      "rows": 339,
+      "classes": {
+        "0": 339
+      },
+      "groups": 339,
+      "categories": {
+        "Technique Queries": 87,
+        "Multilingual": 84,
+        "Common Queries": 126,
+        "Virtual Creation": 42
+      }
+    },
+    "deepset": {
+      "sha256": "0aade98ec6cef0c1589215b9977df8476202424bd09c7126403eabf5e70fd259",
+      "rows": 662,
+      "classes": {
+        "1": 263,
+        "0": 399
+      },
+      "groups": 662,
+      "categories": {
+        "public_injection": 263,
+        "public_benign": 399
+      }
+    }
+  },
+  "exclusions": [],
+  "duplicates_within_external": {
+    "notinject": 0,
+    "deepset": 0
+  }
+}

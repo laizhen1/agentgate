@@ -1,0 +1,6 @@
+/base-model/
+/sources/*.parquet
+/runs/
+/__pycache__/
+/.venv/
+*.partial

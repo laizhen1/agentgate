@@ -1,0 +1,320 @@
+{
+  "seed_aggregates": [
+    {
+      "dataset": "domain-test",
+      "threshold_policy": "validation-selected",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "precision": {
+        "mean": 0.9520914748878275,
+        "min": 0.9387755102040817,
+        "max": 0.9787234042553191,
+        "sample_sd": 0.023063927384040585
+      },
+      "recall": {
+        "mean": 0.9583333333333334,
+        "min": 0.9583333333333334,
+        "max": 0.9583333333333334,
+        "sample_sd": 0.0
+      },
+      "f1": {
+        "mean": 0.9551094230421414,
+        "min": 0.9484536082474226,
+        "max": 0.968421052631579,
+        "sample_sd": 0.011528209390221532
+      },
+      "falsePositiveRate": {
+        "mean": 0.04861111111111111,
+        "min": 0.020833333333333332,
+        "max": 0.0625,
+        "sample_sd": 0.024056261216234408
+      },
+      "p95LatencyMs": {
+        "mean": 38.37299166358813,
+        "min": 31.159999998635612,
+        "max": 49.191899997822475,
+        "sample_sd": 9.541453278433123
+      }
+    },
+    {
+      "dataset": "domain-test",
+      "threshold_policy": "fixed-0.5",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "precision": {
+        "mean": 0.9654074395715733,
+        "min": 0.9387755102040817,
+        "max": 0.9787234042553191,
+        "sample_sd": 0.023063927384040585
+      },
+      "recall": {
+        "mean": 0.9583333333333334,
+        "min": 0.9583333333333334,
+        "max": 0.9583333333333334,
+        "sample_sd": 0.0
+      },
+      "f1": {
+        "mean": 0.9617652378368602,
+        "min": 0.9484536082474226,
+        "max": 0.968421052631579,
+        "sample_sd": 0.011528209390221532
+      },
+      "falsePositiveRate": {
+        "mean": 0.03472222222222222,
+        "min": 0.020833333333333332,
+        "max": 0.0625,
+        "sample_sd": 0.024056261216234408
+      },
+      "p95LatencyMs": {
+        "mean": 38.37299166358813,
+        "min": 31.159999998635612,
+        "max": 49.191899997822475,
+        "sample_sd": 9.541453278433123
+      }
+    },
+    {
+      "dataset": "notinject",
+      "threshold_policy": "validation-selected",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "precision": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "sample_sd": 0.0
+      },
+      "recall": null,
+      "f1": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "sample_sd": 0.0
+      },
+      "falsePositiveRate": {
+        "mean": 0.12291052114060963,
+        "min": 0.12094395280235988,
+        "max": 0.12684365781710916,
+        "sample_sd": 0.0034061962784048797
+      },
+      "p95LatencyMs": {
+        "mean": 39.71667333438139,
+        "min": 34.735949999594595,
+        "max": 47.559989998990204,
+        "sample_sd": 6.8745785983928345
+      }
+    },
+    {
+      "dataset": "notinject",
+      "threshold_policy": "fixed-0.5",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "precision": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "sample_sd": 0.0
+      },
+      "recall": null,
+      "f1": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "sample_sd": 0.0
+      },
+      "falsePositiveRate": {
+        "mean": 0.1160275319567355,
+        "min": 0.11209439528023599,
+        "max": 0.12094395280235988,
+        "sample_sd": 0.004505974134666509
+      },
+      "p95LatencyMs": {
+        "mean": 39.71667333438139,
+        "min": 34.735949999594595,
+        "max": 47.559989998990204,
+        "sample_sd": 6.8745785983928345
+      }
+    },
+    {
+      "dataset": "deepset",
+      "threshold_policy": "validation-selected",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "precision": {
+        "mean": 0.9929435483870969,
+        "min": 0.989247311827957,
+        "max": 1.0,
+        "sample_sd": 0.006113375469979911
+      },
+      "recall": {
+        "mean": 0.3485424588086185,
+        "min": 0.33460076045627374,
+        "max": 0.3612167300380228,
+        "sample_sd": 0.013353173324274704
+      },
+      "f1": {
+        "mean": 0.5158421149574269,
+        "min": 0.5014245014245015,
+        "max": 0.5292479108635098,
+        "sample_sd": 0.013939273990605329
+      },
+      "falsePositiveRate": {
+        "mean": 0.001670843776106934,
+        "min": 0.0,
+        "max": 0.002506265664160401,
+        "sample_sd": 0.0014469931558637236
+      },
+      "p95LatencyMs": {
+        "mean": 44.802404996880774,
+        "min": 37.75916998929459,
+        "max": 55.261889997200335,
+        "sample_sd": 9.237931312172872
+      }
+    },
+    {
+      "dataset": "deepset",
+      "threshold_policy": "fixed-0.5",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "precision": {
+        "mean": 0.9927527669463153,
+        "min": 0.989010989010989,
+        "max": 1.0,
+        "sample_sd": 0.006277400124197073
+      },
+      "recall": {
+        "mean": 0.3409378960709759,
+        "min": 0.33079847908745247,
+        "max": 0.34980988593155893,
+        "sample_sd": 0.009568864936971797
+      },
+      "f1": {
+        "mean": 0.507490455332771,
+        "min": 0.49714285714285716,
+        "max": 0.5168539325842697,
+        "sample_sd": 0.00989231996451463
+      },
+      "falsePositiveRate": {
+        "mean": 0.001670843776106934,
+        "min": 0.0,
+        "max": 0.002506265664160401,
+        "sample_sd": 0.0014469931558637236
+      },
+      "p95LatencyMs": {
+        "mean": 44.802404996880774,
+        "min": 37.75916998929459,
+        "max": 55.261889997200335,
+        "sample_sd": 9.237931312172872
+      }
+    }
+  ],
+  "domain_paired_intervals": [
+    {
+      "seed": 42,
+      "threshold_policy": "validation-selected",
+      "clusters": 12,
+      "resamples": 5000,
+      "recall_delta_95_percentile_ci": [
+        0.25,
+        0.6666666666666666
+      ],
+      "fpr_delta_95_percentile_ci": [
+        0.0,
+        0.0
+      ],
+      "definition": "adapted minus original, paired family-cluster bootstrap; empirical intervals can degenerate at boundary"
+    },
+    {
+      "seed": 43,
+      "threshold_policy": "validation-selected",
+      "clusters": 12,
+      "resamples": 5000,
+      "recall_delta_95_percentile_ci": [
+        0.25,
+        0.6666666666666666
+      ],
+      "fpr_delta_95_percentile_ci": [
+        -0.0625,
+        0.0625
+      ],
+      "definition": "adapted minus original, paired family-cluster bootstrap; empirical intervals can degenerate at boundary"
+    },
+    {
+      "seed": 44,
+      "threshold_policy": "validation-selected",
+      "clusters": 12,
+      "resamples": 5000,
+      "recall_delta_95_percentile_ci": [
+        0.25,
+        0.6666666666666666
+      ],
+      "fpr_delta_95_percentile_ci": [
+        -0.10416666666666667,
+        0.0
+      ],
+      "definition": "adapted minus original, paired family-cluster bootstrap; empirical intervals can degenerate at boundary"
+    },
+    {
+      "seed": 42,
+      "threshold_policy": "fixed-0.5",
+      "clusters": 12,
+      "resamples": 5000,
+      "recall_delta_95_percentile_ci": [
+        0.041666666666666664,
+        0.31302083333332575
+      ],
+      "fpr_delta_95_percentile_ci": [
+        -0.3958333333333333,
+        -0.125
+      ],
+      "definition": "adapted minus original, paired family-cluster bootstrap; empirical intervals can degenerate at boundary"
+    },
+    {
+      "seed": 43,
+      "threshold_policy": "fixed-0.5",
+      "clusters": 12,
+      "resamples": 5000,
+      "recall_delta_95_percentile_ci": [
+        0.041666666666666664,
+        0.2916666666666667
+      ],
+      "fpr_delta_95_percentile_ci": [
+        -0.4583333333333333,
+        -0.14583333333333334
+      ],
+      "definition": "adapted minus original, paired family-cluster bootstrap; empirical intervals can degenerate at boundary"
+    },
+    {
+      "seed": 44,
+      "threshold_policy": "fixed-0.5",
+      "clusters": 12,
+      "resamples": 5000,
+      "recall_delta_95_percentile_ci": [
+        0.041666666666666664,
+        0.2916666666666667
+      ],
+      "fpr_delta_95_percentile_ci": [
+        -0.4583333333333333,
+        -0.14583333333333334
+      ],
+      "definition": "adapted minus original, paired family-cluster bootstrap; empirical intervals can degenerate at boundary"
+    }
+  ]
+}

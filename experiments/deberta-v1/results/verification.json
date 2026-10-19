@@ -1,0 +1,16 @@
+{
+  "verified": true,
+  "report_files_recomputed": 30,
+  "checkpoint_hashes": [
+    "f4e82e00900b178861dc3ae683e1cd4ba4b42261645d40fee2626f3d3ad13d65",
+    "b5b3c236b3e3417a5c1b99b791f285cbc3a974e9a28288a7aae5381e40693477",
+    "1b82060532c8cb451c8d660f5579ac29d6349408a91ac140a2067843512568cf"
+  ],
+  "checks": [
+    "data/code hashes",
+    "unique trained checkpoints",
+    "training-before-test marker",
+    "validation-only threshold",
+    "confusion counts and metrics"
+  ]
+}
