@@ -1,8 +1,39 @@
 # AgentGate
 
-An agent security workbench for reproducible policy testing and evidence-backed release gates.
+An AI agent evaluation workbench for measuring task completion, tool-use correctness, and resilience to prompt injection.
 
-Built on **Promptfoo** for evaluation, React / Vinext for the application, and Cloudflare D1 for persistent assessments. AgentGate's original layer is the policy engine, reference threat cases, versioned registry, enforcement evidence, and release workflow.
+AgentGate runs local tool-using models through procurement tasks, retrieves evidence with Ollama embeddings and FAISS, and checks the resulting answers and sandbox state independently of the gateway. Controlled comparisons separate model behavior, prompt defenses, and server-side enforcement. The existing DeBERTa experiment measures detector adaptation separately and preserves its baseline and cross-domain limitations.
+
+## Real agent benchmark
+
+The [120-episode pilot report](experiments/agent-pilot-v1/README.md) compares
+Qwen3 1.7B and Llama 3.2 3B across unprotected, prompt-only, and gateway plus
+scripted-review modes. Ten paired synthetic task families test exact tool
+parameters, purchases, approvals, real RAG answers and citations, indirect
+injection, duplicate effects, and answer contamination.
+
+The benchmark checks final outcomes independently of gateway verdicts. It retains
+all failures, records whether attacks actually reached the model, and publishes
+full inference/retrieval trajectories, model digests, frozen source hashes, token
+counts and latency. Ten families and one trial per cell make this a pilot, not a
+claim of general agent robustness.
+
+- [Protocol, architecture and reproduction commands](docs/agent-benchmark.md)
+- [Generated comparison report](experiments/agent-pilot-v1/REPORT.md)
+- [Machine-readable summary](experiments/agent-pilot-v1/summary.json)
+- [Recorded trajectories](experiments/agent-pilot-v1/episodes.jsonl)
+- [DeBERTa training experiment](experiments/deberta-v1/results/REPORT.md)
+
+```sh
+npm run benchmark -- --out artifacts/agent-pilot-v1
+npm run benchmark:report -- --input artifacts/agent-pilot-v1
+npm run benchmark:verify
+```
+
+Live runs require the local models and retrieval service described in the protocol.
+`benchmark:verify` replays the published evidence offline; CI does not download
+models or substitute mock inference for the live results. The app's original
+12-case reference suite and legacy platform dashboard are separate demonstrations.
 
 ## Current scope
 
@@ -104,8 +135,7 @@ Actions are proposals, never executed by AgentGate. Target-provided approved fie
 This generic Promptfoo target adapter remains separate from the bundled Ollama
 platform. Build an adapter emitting this schema to test other agents. Its four
 starter cases are a smoke suite, not a comprehensive benchmark. Final-text pattern
-checks can miss paraphrased or encoded data. No real-model result is claimed until
-Ollama has been installed and a live run completed.
+checks can miss paraphrased or encoded data. The separate headless pilot linked above records actual local model inference.
 
 ## Architecture
 

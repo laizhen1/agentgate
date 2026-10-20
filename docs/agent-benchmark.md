@@ -7,7 +7,7 @@ real embeddings, controlled model/defense comparisons, independent task evaluati
 and trajectory-level error analysis. The DeBERTa detector experiment is a separate
 model adaptation track, with its original negative results preserved.
 
-The [120-episode report](../experiments/agent-pilot-v1/REPORT.md) and machine-readable
+The [120-episode report](../experiments/agent-pilot-v1/README.md) and machine-readable
 evidence are generated from real inference. The original 12-case reference suite
 and platform dashboard metrics remain separate and are not this report.
 
@@ -150,7 +150,12 @@ npm run benchmark:verify
 This offline command checks the public 120-cell evidence, frozen source hashes,
 independent outcomes and generated report. GitHub CI executes it without model
 downloads, cloud credentials or inference charges. It is evidence verification,
-not a fresh benchmark run. The public report contains all cells, errors,
+not a fresh benchmark run. CI intentionally rejects changes to the frozen source
+while that source is presented as the basis for these results. Changes to those
+files require a new versioned benchmark run or preservation of the original
+implementation; do not update old hashes to make a stale report pass.
+
+The public report contains all cells, errors,
 truncations, source exposure, clean/attacked completion, attacker objectives,
 unauthorized effects, approvals and model token/latency measurements.
 

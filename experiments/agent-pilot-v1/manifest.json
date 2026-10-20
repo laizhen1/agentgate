@@ -1,0 +1,846 @@
+{
+  "protocol": {
+    "version": "agent-pilot-v1",
+    "models": [
+      "qwen3:1.7b",
+      "llama3.2:3b"
+    ],
+    "modes": [
+      "unprotected",
+      "prompt-only",
+      "gateway"
+    ],
+    "conditions": [
+      "clean",
+      "attacked"
+    ],
+    "families": 10,
+    "episodes": 120,
+    "trialsPerCell": 1,
+    "temperature": 0,
+    "seed": 1729,
+    "contextTokens": 4096,
+    "maxOutputTokens": 512,
+    "maxSteps": 6,
+    "requestTimeoutMs": 120000,
+    "episodeTimeoutMs": 300000,
+    "embeddingModel": "embeddinggemma:latest",
+    "retrieval": {
+      "implementation": "FAISS IndexFlatIP on normalized Ollama embeddings",
+      "minimumScore": 0.3,
+      "topK": 4,
+      "chunkCharacters": 800,
+      "overlapCharacters": 120
+    },
+    "approvals": "Deterministic trusted reviewer approves only the original user's exact requested effect; no human timing or human review accuracy claim.",
+    "primaryMetrics": [
+      "strict task success/all episodes",
+      "attacker objective achieved/all attacked episodes"
+    ],
+    "inference": "Same native tool-calling agent loop for two local quantized models, not two independent agent frameworks. Non-thinking generation. Schema validation applies to every mode.",
+    "statistics": "Descriptive paired pilot. Ten authored families, not 120 independent tasks. One trial per cell; no population-level robustness claim."
+  },
+  "sourceSha256NormalizedLF": {
+    "lib/benchmark/scenarios.ts": "1de861cccba6832d3b7c160af341db1b9480681778edb5592a911116a105b71f",
+    "lib/benchmark/outcomes.ts": "9f41ee6c11820cae93dc5ba44c0d8cffd032816d3fba3b091c57a2e46110ba9d",
+    "lib/benchmark/environment.ts": "3c91c5dce089d7a62a4827eaf136840e0a5862b8d3f8e74e162fcc5ed965e3fd",
+    "lib/benchmark/protocol.ts": "a1d0667e8c265bf1c923ee4f9508ba1713feddedccefc15cde3aae716ef1ff43",
+    "lib/benchmark/runner.ts": "4679c2de4e5841421bb1cf7620a3fa27bcef3e14b095176ead52bda91f94d250",
+    "lib/benchmark/inference.ts": "58204fd799bac64e310355fbb01d9c42ee7ac1befed358d65db8759417fbdad5",
+    "lib/platform/domain.ts": "a69fa71e41ef293cb3741ce05d12565cdc2626a5fc6497c5cb8b77893ee36a9b",
+    "lib/platform/ollama.ts": "f60777ca170e47f3df9c3f830c2ce8d899897c6e419d65079a05e2d608373d83",
+    "lib/platform/retrieval.ts": "a239929a88aee2c17a73730a907d1109c7aa14af956475129cde23d712cb64a9",
+    "lib/security.ts": "771da3bbc4fd6b7abfb936d90aaf43ac919eae1fb8dd192c98de37a4ba62e17e",
+    "services/retrieval/server.py": "f5ba971d93bc278edb953520b0ca3c76bbfe64cf8513dc7ce1cec1aee6ff5d1c",
+    "services/retrieval/requirements.txt": "0e441710853bbc670e2a6576dad1e52dc67de662aa898d305cf7e77afd95618c",
+    "scripts/benchmark.ts": "3d0ccdd0eb0c0732514ba3cafd0e51b3101389e846e6334bc4812c5f8918ae32",
+    "scripts/benchmark-report.ts": "9080f93d68a625071d758ddebbb338e6c1d96446df64794881eb3a6b001828cd",
+    "package-lock.json": "fdaf511d0002ac3222802d6ccf45fd1d4341a1c3c9be940180bfc0d23828eb93"
+  },
+  "models": [
+    {
+      "name": "qwen3:1.7b",
+      "digest": "8f68893c685c3ddff2aa3fffce2aa60a30bb2da65ca488b61fff134a4d1730e7",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "qwen3",
+        "families": [
+          "qwen3"
+        ],
+        "parameter_size": "2.0B",
+        "quantization_level": "Q4_K_M",
+        "context_length": 40960,
+        "embedding_length": 2048,
+        "runner": "ggml"
+      }
+    },
+    {
+      "name": "llama3.2:3b",
+      "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "llama",
+        "families": [
+          "llama"
+        ],
+        "parameter_size": "3.2B",
+        "quantization_level": "Q4_K_M",
+        "context_length": 131072,
+        "embedding_length": 3072,
+        "runner": "ggml"
+      }
+    },
+    {
+      "name": "embeddinggemma:latest",
+      "digest": "85462619ee721b466c5927d109d4cb765861907d5417b9109caebc4e614679f1",
+      "details": {
+        "parent_model": "embeddinggemma:300m-bf16",
+        "format": "gguf",
+        "family": "gemma3",
+        "families": [
+          "gemma3"
+        ],
+        "parameter_size": "307.58M",
+        "quantization_level": "BF16",
+        "context_length": 2048,
+        "embedding_length": 768,
+        "runner": "ggml"
+      }
+    }
+  ],
+  "schedule": [
+    {
+      "model": "qwen3:1.7b",
+      "family": "F01",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F01",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F01",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F01",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F01",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F01",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F02",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F02",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F02",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F02",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F02",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F02",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F03",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F03",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F03",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F03",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F03",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F03",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F04",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F04",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F04",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F04",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F04",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F04",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F05",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F05",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F05",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F05",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F05",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F05",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F06",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F06",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F06",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F06",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F06",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F06",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F07",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F07",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F07",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F07",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F07",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F07",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F08",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F08",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F08",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F08",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F08",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F08",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F09",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F09",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F09",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F09",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F09",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F09",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F10",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F10",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F10",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F10",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F10",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "qwen3:1.7b",
+      "family": "F10",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F01",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F01",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F01",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F01",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F01",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F01",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F02",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F02",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F02",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F02",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F02",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F02",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F03",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F03",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F03",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F03",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F03",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F03",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F04",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F04",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F04",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F04",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F04",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F04",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F05",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F05",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F05",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F05",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F05",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F05",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F06",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F06",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F06",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F06",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F06",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F06",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F07",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F07",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F07",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F07",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F07",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F07",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F08",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F08",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F08",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F08",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F08",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F08",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F09",
+      "condition": "clean",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F09",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F09",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F09",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F09",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F09",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F10",
+      "condition": "attacked",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F10",
+      "condition": "attacked",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F10",
+      "condition": "attacked",
+      "mode": "unprotected"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F10",
+      "condition": "clean",
+      "mode": "gateway"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F10",
+      "condition": "clean",
+      "mode": "prompt-only"
+    },
+    {
+      "model": "llama3.2:3b",
+      "family": "F10",
+      "condition": "clean",
+      "mode": "unprotected"
+    }
+  ],
+  "kind": "pilot",
+  "fingerprint": "076fed775668770c2451c537374457661e1ad7f99dbf65d05159fe2476e0328e",
+  "frozenAt": "2026-10-20T23:11:54.855Z",
+  "baseCommit": "758207e2497ef2abf3adf455f61b848a38e3df1a",
+  "runtime": {
+    "node": "v24.19.0",
+    "ollama": "0.40.6",
+    "platform": "win32",
+    "architecture": "x64",
+    "retrievalDependencies": "services/retrieval/requirements.txt"
+  }
+}
