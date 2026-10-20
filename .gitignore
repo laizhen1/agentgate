@@ -53,3 +53,4 @@ next-env.d.ts
 *.tsbuildinfo
 /.idea/
 /.dev.vars*
+/.openai/hosting.local.json

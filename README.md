@@ -74,6 +74,10 @@ Apply the migration once to a fresh local database. Open the development URL and
 
 ## Verify
 
+Public artifacts use generic hosting metadata and GitHub no-reply commit
+attribution. See [public repository hygiene](docs/public-repository.md) for
+privacy checks, local configuration, and frozen experiment integrity.
+
     npm test
     npm run typecheck
     npm run lint

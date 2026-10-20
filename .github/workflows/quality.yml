@@ -10,6 +10,8 @@ jobs:
       PROMPTFOO_DISABLE_UPDATE: "1"
     steps:
       - uses: actions/checkout@v4
+      - name: Verify public artifacts and experiment hashes
+        run: python3 scripts/check-public-repo.py
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
