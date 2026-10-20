@@ -521,6 +521,7 @@ export async function applyReply(
   session: Session,
   reply: ModelReply,
   retrieve?: (org: Org, session: Session, query: string) => Promise<string>,
+  execute: (session: Session, action: ToolAction) => string = executeSandbox,
 ) {
   session.steps++;
   session.model = reply.model;
@@ -632,7 +633,7 @@ export async function applyReply(
         continue;
       }
       proposal.status = "executed";
-      toolResult(session, proposal, executeSandbox(session, action));
+      toolResult(session, proposal, execute(session, action));
     } else toolResult(session, proposal, "DENIED: " + proposal.reason);
   }
   session.status = session.proposals.some((p) => p.status === "pending")
@@ -646,6 +647,7 @@ export async function review(
   actor: string,
   allow: boolean,
   now = Date.now(),
+  execute: (session: Session, action: ToolAction) => string = executeSandbox,
 ) {
   requireRole(org, actor, reviewers);
   const proposal = session.proposals.find((p) => p.id === proposalId);
@@ -706,7 +708,7 @@ export async function review(
       used: true,
     };
     proposal.status = "executed";
-    toolResult(session, proposal, executeSandbox(session, proposal.action));
+    toolResult(session, proposal, execute(session, proposal.action));
   }
   session.status = session.proposals.some((p) => p.status === "pending")
     ? "approval"
