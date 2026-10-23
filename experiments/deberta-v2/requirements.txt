@@ -1,0 +1,9 @@
+# Install torch separately from the CUDA 12.8 index (see run-local.ps1).
+torch==2.8.0
+transformers==4.57.6
+accelerate==1.6.0
+scikit-learn==1.6.1
+numpy==2.2.6
+sentencepiece==0.2.1
+protobuf==5.29.5
+pyarrow==19.0.1
