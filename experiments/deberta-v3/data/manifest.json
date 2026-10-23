@@ -1,0 +1,104 @@
+{
+  "families_sha256": "b9506be2486469e7567d45185b16fd6ef064b910fefa7a877a349cdc937a7581",
+  "builder_sha256": "76d2a946c4fcb4926542e2e47e0654dd74f7b8a45f95d2428a7c4c9ab4770bf7",
+  "old_manifest_sha256": "7e0c013c6335fe531c0452e0d61b8813b168aaaf8994f6600b2a2b18093b61b7",
+  "overlap_audit_sha256": "5ebf0d125e141014a503cb747aea057dcec321c48edd8e05610b75e1549c2d5f",
+  "split_method": "Category-stratified SHA256 ordering, fixed salt agentgate-v3-20261024; 18/6/6 new families per category. Add 36 original training pairs without wrappers.",
+  "datasets": {
+    "train": {
+      "sha256": "ec8cc3f2a2b4c517568ef06605fa1a66dae1db432efcd5d2c0aaf54e56b6c37f",
+      "rows": 360,
+      "classes": {
+        "0": 180,
+        "1": 180
+      },
+      "groups": 180,
+      "categories": {
+        "audit_and_workflow": 12,
+        "authority_spoofing": 12,
+        "procurement_bypass": 12,
+        "data_exfiltration": 12,
+        "security_discussion": 12,
+        "retrieval_injection": 12,
+        "audit_workflow": 36,
+        "authority": 36,
+        "exfiltration": 36,
+        "memory_task": 36,
+        "obfuscation_language": 36,
+        "procurement": 36,
+        "retrieval": 36,
+        "tool_boundary": 36
+      }
+    },
+    "validation": {
+      "sha256": "96ac9d46e0c55e315f025e7551f2c72843aae7a0503a7ef0d82b802aafce6914",
+      "rows": 96,
+      "classes": {
+        "0": 48,
+        "1": 48
+      },
+      "groups": 48,
+      "categories": {
+        "audit_workflow": 12,
+        "authority": 12,
+        "exfiltration": 12,
+        "memory_task": 12,
+        "obfuscation_language": 12,
+        "procurement": 12,
+        "retrieval": 12,
+        "tool_boundary": 12
+      }
+    },
+    "test": {
+      "sha256": "c17d63fd8f2e3e1b04612b9e4f00b2e9172df0aa618a738e4871749f69758508",
+      "rows": 96,
+      "classes": {
+        "0": 48,
+        "1": 48
+      },
+      "groups": 48,
+      "categories": {
+        "audit_workflow": 12,
+        "authority": 12,
+        "exfiltration": 12,
+        "memory_task": 12,
+        "obfuscation_language": 12,
+        "procurement": 12,
+        "retrieval": 12,
+        "tool_boundary": 12
+      }
+    },
+    "deepset": {
+      "sha256": "0aade98ec6cef0c1589215b9977df8476202424bd09c7126403eabf5e70fd259",
+      "rows": 662,
+      "classes": {
+        "1": 263,
+        "0": 399
+      },
+      "groups": 662,
+      "categories": {
+        "public_injection": 263,
+        "public_benign": 399
+      }
+    },
+    "notinject": {
+      "sha256": "38802ce91c6dac0187c0e30e75c53abf5cbea9682d0804b1571491d33d13f75e",
+      "rows": 339,
+      "classes": {
+        "0": 339
+      },
+      "groups": 339,
+      "categories": {
+        "Technique Queries": 87,
+        "Multilingual": 84,
+        "Common Queries": 126,
+        "Virtual Creation": 42
+      }
+    }
+  },
+  "exclusions": {
+    "old_train_wrappers_removed": 216,
+    "old_validation_and_test_not_reused": 192
+  },
+  "annotation": "All new labels are AI-authored, not independently human-reviewed. Shared author and attack concepts remain limitations."
+}

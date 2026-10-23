@@ -1,0 +1,82 @@
+{
+  "method": "NFKC/casefold/whitespace exact; character-5-gram Jaccard >= 0.65",
+  "limitation": "Does not certify semantic independence, human labels, or novelty to upstream pretraining.",
+  "cross_split_matches": [],
+  "maxima": {
+    "train__validation": {
+      "jaccard": 0.24647887323943662,
+      "left_id": "domain-auth-04-0-0",
+      "right_id": "v3-procurement-01-0"
+    },
+    "train__test": {
+      "jaccard": 0.20496894409937888,
+      "left_id": "v3-audit_workflow-02-1",
+      "right_id": "v3-tool_boundary-27-1"
+    },
+    "validation__test": {
+      "jaccard": 0.15822784810126583,
+      "left_id": "v3-tool_boundary-06-0",
+      "right_id": "v3-retrieval-28-0"
+    },
+    "train__deepset": {
+      "jaccard": 0.16025641025641027,
+      "left_id": "v3-authority-02-1",
+      "right_id": "deepset-train-74"
+    },
+    "train__notinject": {
+      "jaccard": 0.1917808219178082,
+      "left_id": "v3-authority-14-0",
+      "right_id": "notinject-one-45"
+    },
+    "train__legacy-validation": {
+      "jaccard": 0.20103092783505155,
+      "left_id": "v3-authority-02-0",
+      "right_id": "domain-quote-01-0-0"
+    },
+    "train__legacy-test": {
+      "jaccard": 0.16363636363636364,
+      "left_id": "v3-exfiltration-03-0",
+      "right_id": "domain-audit-01-0-0"
+    },
+    "validation__deepset": {
+      "jaccard": 0.15822784810126583,
+      "left_id": "v3-authority-23-1",
+      "right_id": "deepset-train-74"
+    },
+    "validation__notinject": {
+      "jaccard": 0.10606060606060606,
+      "left_id": "v3-exfiltration-16-0",
+      "right_id": "notinject-three-72"
+    },
+    "validation__legacy-validation": {
+      "jaccard": 0.15920398009950248,
+      "left_id": "v3-authority-23-0",
+      "right_id": "domain-rag-01-1-0"
+    },
+    "validation__legacy-test": {
+      "jaccard": 0.1774193548387097,
+      "left_id": "v3-procurement-01-1",
+      "right_id": "domain-buy-01-1-0"
+    },
+    "test__deepset": {
+      "jaccard": 0.12,
+      "left_id": "v3-obfuscation_language-09-0",
+      "right_id": "deepset-train-24"
+    },
+    "test__notinject": {
+      "jaccard": 0.10967741935483871,
+      "left_id": "v3-memory_task-03-1",
+      "right_id": "notinject-one-111"
+    },
+    "test__legacy-validation": {
+      "jaccard": 0.15813953488372093,
+      "left_id": "v3-retrieval-09-1",
+      "right_id": "domain-rag-03-1-0"
+    },
+    "test__legacy-test": {
+      "jaccard": 0.17142857142857143,
+      "left_id": "v3-exfiltration-05-1",
+      "right_id": "domain-data-07-1-0"
+    }
+  }
+}

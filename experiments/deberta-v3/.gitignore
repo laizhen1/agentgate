@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+runs/
+base-model/
+checkpoint/
+*.safetensors
