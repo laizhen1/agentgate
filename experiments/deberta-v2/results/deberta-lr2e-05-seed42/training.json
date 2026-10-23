@@ -1,0 +1,96 @@
+{
+  "seed": 42,
+  "learning_rate": 2e-05,
+  "seconds": 257.30724880000344,
+  "trainable_parameters": 184423682,
+  "peak_cuda_allocated_bytes": 3761440256,
+  "metrics": {
+    "train_runtime": 257.0539,
+    "train_samples_per_second": 3.361,
+    "train_steps_per_second": 0.42,
+    "train_loss": 0.22142697540887943,
+    "epoch": 3.0
+  },
+  "log_history": [
+    {
+      "loss": 1.1316,
+      "grad_norm": 88.59317779541016,
+      "learning_rate": 1.6363636363636366e-05,
+      "epoch": 0.2777777777777778,
+      "step": 10
+    },
+    {
+      "loss": 0.6992,
+      "grad_norm": 29.240453720092773,
+      "learning_rate": 1.8350515463917527e-05,
+      "epoch": 0.5555555555555556,
+      "step": 20
+    },
+    {
+      "loss": 0.2216,
+      "grad_norm": 19.6251220703125,
+      "learning_rate": 1.6288659793814433e-05,
+      "epoch": 0.8333333333333334,
+      "step": 30
+    },
+    {
+      "loss": 0.0864,
+      "grad_norm": 0.6150675415992737,
+      "learning_rate": 1.4226804123711342e-05,
+      "epoch": 1.1111111111111112,
+      "step": 40
+    },
+    {
+      "loss": 0.0033,
+      "grad_norm": 0.062352925539016724,
+      "learning_rate": 1.2164948453608248e-05,
+      "epoch": 1.3888888888888888,
+      "step": 50
+    },
+    {
+      "loss": 0.1624,
+      "grad_norm": 0.2475205659866333,
+      "learning_rate": 1.0103092783505156e-05,
+      "epoch": 1.6666666666666665,
+      "step": 60
+    },
+    {
+      "loss": 0.0841,
+      "grad_norm": 0.05007976293563843,
+      "learning_rate": 8.041237113402063e-06,
+      "epoch": 1.9444444444444444,
+      "step": 70
+    },
+    {
+      "loss": 0.0013,
+      "grad_norm": 0.05813458934426308,
+      "learning_rate": 5.979381443298969e-06,
+      "epoch": 2.2222222222222223,
+      "step": 80
+    },
+    {
+      "loss": 0.0007,
+      "grad_norm": 0.040632907301187515,
+      "learning_rate": 3.917525773195877e-06,
+      "epoch": 2.5,
+      "step": 90
+    },
+    {
+      "loss": 0.0005,
+      "grad_norm": 0.026363730430603027,
+      "learning_rate": 1.8556701030927837e-06,
+      "epoch": 2.7777777777777777,
+      "step": 100
+    },
+    {
+      "train_runtime": 257.0539,
+      "train_samples_per_second": 3.361,
+      "train_steps_per_second": 0.42,
+      "total_flos": 15675944469984.0,
+      "train_loss": 0.22142697540887943,
+      "epoch": 3.0,
+      "step": 108
+    }
+  ],
+  "checkpoint_sha256": "f4e82e00900b178861dc3ae683e1cd4ba4b42261645d40fee2626f3d3ad13d65"
+}

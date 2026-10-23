@@ -1,0 +1,23 @@
+{
+  "threshold": 0.3446640074253082,
+  "log_loss": 0.5061627637569827,
+  "metrics": {
+    "total": 96,
+    "tp": 43,
+    "fp": 2,
+    "tn": 46,
+    "fn": 5,
+    "errors": 0,
+    "coverage": 1.0,
+    "precision": 0.9555555555555556,
+    "recall": 0.8958333333333334,
+    "f1": 0.9247311827956989,
+    "falsePositiveRate": 0.041666666666666664,
+    "meanLatencyMs": 54.727169791476626,
+    "p50LatencyMs": 51.97710000356892,
+    "p95LatencyMs": 76.9715750029718,
+    "threshold": 0.3446640074253082
+  },
+  "name": "deberta-lr2e-05-seed44",
+  "revision": "1b82060532c8cb451c8d660f5579ac29d6349408a91ac140a2067843512568cf"
+}

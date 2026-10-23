@@ -102,6 +102,14 @@ def verify(source, run):
     if (run / 'aggregate.json').exists():
         aggregate = read(run / 'aggregate.json')
         neural = [n for n in expected_names if n.startswith('deberta')]
+        prior_rows = read(source / 'results/comparison.json')
+        assert len(aggregate['replication_vs_v1']) == 3
+        for record in aggregate['replication_vs_v1']:
+            prior = next(r for r in prior_rows if r['model'] == f"finetuned-seed{record['seed']}" and r['dataset'] == 'domain-test' and r['threshold_policy'] == 'validation-selected')
+            name = model_name(hp['learning_rate'], record['seed'])
+            assert record['revision'] == lock['selections'][name]['revision']
+            assert record['v1_revisions'] == prior['revisions']
+            assert record['same_weight_hash_as_v1'] == (prior['revisions'] == [record['revision']])
         assert len(aggregate['seed_aggregates']) == 6
         for record in aggregate['seed_aggregates']:
             assert record['seeds'] == [p['screen_seed']] + p['confirmation_seeds']

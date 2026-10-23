@@ -1,0 +1,8 @@
+{
+  "verified": true,
+  "model_configurations": 6,
+  "metric_tables": 36,
+  "selection_candidates": 6,
+  "test_families": 12,
+  "note": "Recomputes published metrics and selection decisions from saved evidence; does not rerun training or prove unseen test data."
+}

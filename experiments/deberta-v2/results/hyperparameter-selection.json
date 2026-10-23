@@ -1,0 +1,148 @@
+{
+  "utc": "2026-10-23T23:18:27.535205+00:00",
+  "learning_rate": 2e-05,
+  "tfidf_C": 0.1,
+  "neural_candidates": [
+    {
+      "threshold": 0.9852713346481323,
+      "log_loss": 0.5638544122669763,
+      "metrics": {
+        "total": 96,
+        "tp": 38,
+        "fp": 2,
+        "tn": 46,
+        "fn": 10,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.95,
+        "recall": 0.7916666666666666,
+        "f1": 0.8636363636363636,
+        "falsePositiveRate": 0.041666666666666664,
+        "meanLatencyMs": 51.26172812530664,
+        "p50LatencyMs": 50.0827500000014,
+        "p95LatencyMs": 60.455775001173606,
+        "threshold": 0.9852713346481323
+      },
+      "name": "deberta-lr5e-06-seed42",
+      "revision": "c78950595bf61e0e9cb716cbac66b7320085ba826707b69999e136045b173bec"
+    },
+    {
+      "threshold": 0.9896718263626099,
+      "log_loss": 0.45788431125028456,
+      "metrics": {
+        "total": 96,
+        "tp": 40,
+        "fp": 0,
+        "tn": 48,
+        "fn": 8,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 1.0,
+        "recall": 0.8333333333333334,
+        "f1": 0.9090909090909091,
+        "falsePositiveRate": 0.0,
+        "meanLatencyMs": 54.603330208465195,
+        "p50LatencyMs": 55.181700008688495,
+        "p95LatencyMs": 65.73910000224714,
+        "threshold": 0.9896718263626099
+      },
+      "name": "deberta-lr1e-05-seed42",
+      "revision": "10017ba0ea6139abea193a1c31e5e74407f387b4c32464a84d0c390fa1a85dea"
+    },
+    {
+      "threshold": 0.3602639436721802,
+      "log_loss": 0.39031557243296594,
+      "metrics": {
+        "total": 96,
+        "tp": 44,
+        "fp": 1,
+        "tn": 47,
+        "fn": 4,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.9777777777777777,
+        "recall": 0.9166666666666666,
+        "f1": 0.946236559139785,
+        "falsePositiveRate": 0.020833333333333332,
+        "meanLatencyMs": 78.30702708361059,
+        "p50LatencyMs": 77.9156999924453,
+        "p95LatencyMs": 93.62614999554353,
+        "threshold": 0.3602639436721802
+      },
+      "name": "deberta-lr2e-05-seed42",
+      "revision": "f4e82e00900b178861dc3ae683e1cd4ba4b42261645d40fee2626f3d3ad13d65"
+    }
+  ],
+  "tfidf_candidates": [
+    {
+      "threshold": 0.507825310972202,
+      "log_loss": 0.6603969812089591,
+      "metrics": {
+        "total": 96,
+        "tp": 39,
+        "fp": 2,
+        "tn": 46,
+        "fn": 9,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.9512195121951219,
+        "recall": 0.8125,
+        "f1": 0.8764044943820225,
+        "falsePositiveRate": 0.041666666666666664,
+        "meanLatencyMs": 0.6527374994220736,
+        "p50LatencyMs": 0.6034500038367696,
+        "p95LatencyMs": 0.9233250020770356,
+        "threshold": 0.507825310972202
+      },
+      "name": "tfidf-C0.1",
+      "revision": "a3024af98e688b4db3d795ec94e243c56e2c3f0036022a4be077a458876b82cd"
+    },
+    {
+      "threshold": 0.5517245987805682,
+      "log_loss": 0.5390872853120067,
+      "metrics": {
+        "total": 96,
+        "tp": 33,
+        "fp": 2,
+        "tn": 46,
+        "fn": 15,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.9428571428571428,
+        "recall": 0.6875,
+        "f1": 0.7951807228915663,
+        "falsePositiveRate": 0.041666666666666664,
+        "meanLatencyMs": 0.9403583332338409,
+        "p50LatencyMs": 0.7801000028848648,
+        "p95LatencyMs": 1.6665250004734844,
+        "threshold": 0.5517245987805682
+      },
+      "name": "tfidf-C1",
+      "revision": "a28dfafeb74d2602daba602810185d9d16991c0556592c0760243296d7248289"
+    },
+    {
+      "threshold": 0.6374951823123807,
+      "log_loss": 0.40796373952731174,
+      "metrics": {
+        "total": 96,
+        "tp": 33,
+        "fp": 2,
+        "tn": 46,
+        "fn": 15,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.9428571428571428,
+        "recall": 0.6875,
+        "f1": 0.7951807228915663,
+        "falsePositiveRate": 0.041666666666666664,
+        "meanLatencyMs": 0.9159291663915307,
+        "p50LatencyMs": 0.8844000039971434,
+        "p95LatencyMs": 1.2887749944638927,
+        "threshold": 0.6374951823123807
+      },
+      "name": "tfidf-C10",
+      "revision": "a950bb0da90f0cb19a4bc95f3ee180146c894fd51c0b9e4cef962b1c3088e989"
+    }
+  ],
+  "selection_data": "validation only; screening seed 42"
+}

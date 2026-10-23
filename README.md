@@ -22,7 +22,8 @@ claim of general agent robustness.
 - [Generated comparison report](experiments/agent-pilot-v1/REPORT.md)
 - [Machine-readable summary](experiments/agent-pilot-v1/summary.json)
 - [Recorded trajectories](experiments/agent-pilot-v1/episodes.jsonl)
-- [DeBERTa training experiment](experiments/deberta-v1/results/REPORT.md)
+- [Original DeBERTa training experiment](experiments/deberta-v1/results/REPORT.md)
+- [DeBERTa v2 learning-rate search and TF-IDF comparison](experiments/deberta-v2/results/REPORT.md)
 
 ```sh
 npm run benchmark -- --out artifacts/agent-pilot-v1
@@ -206,7 +207,7 @@ user/tool-message scanning. See [local setup and model limitations](docs/threat-
   evidence with citations; Ollama and authenticated MCP share enforcement.
   See [retrieval setup and boundaries](docs/retrieval.md).
 
-## Measured results and model-selection decision
+## Original DeBERTa v1 results and model-selection decision
 
 The completed pilot uses 480 AI-authored synthetic examples from 60 contrast
 families. The held-out domain test contains **12 families and 96 correlated
@@ -230,6 +231,29 @@ not attack recall or F1. These results do not establish production protection.
 See the [full report](experiments/deberta-v1/results/REPORT.md),
 [data card](experiments/deberta-v1/DATA_CARD.md), and
 [reproduction instructions and evidence](experiments/deberta-v1/README.md).
+
+## DeBERTa v2 exploratory follow-up
+
+The [v2 experiment](experiments/deberta-v2/README.md) screens three learning rates
+using validation data, then trains the selected setting with seeds 42/43/44.
+TF-IDF regularization is also selected on validation; the original C=1 baseline
+is retained. All new selections are locked before evaluation, but v1 test results
+were already known: this is an exploratory follow-up, not a new blind benchmark.
+
+Selected checkpoint weight hashes matching v1: **3/3**.
+Matching hashes reproduce the original weights; they are not newly improved models.
+
+- Selected DeBERTa LR `2e-05`: mean domain F1 **95.51%**,
+  versus original TF-IDF **95.65%** and validation-selected TF-IDF
+  (C=0.1) **94.51%**, at validation-selected thresholds.
+- Mean domain recall **95.83%**, FPR **4.86%**.
+  The paired 12-family bootstrap interval for the F1 difference from original
+  TF-IDF is **[-5.67, +8.55] percentage points**.
+- Fixed-0.5 deepset F1: upstream **57.98%**, v2 mean **50.75%**.
+  Read [every seed, both thresholds and external diagnostics](experiments/deberta-v2/results/REPORT.md).
+- The existing detector remains the default. Small synthetic samples, prior test
+  reuse and validation selection limit claims; classifier gains do not establish
+  improved end-to-end agent safety.
 
 ## Future implementations
 

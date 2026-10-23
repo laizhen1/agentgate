@@ -1,0 +1,403 @@
+{
+  "seed_aggregates": [
+    {
+      "dataset": "domain-test",
+      "threshold_policy": "validation-selected",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "f1": {
+        "mean": 0.9551094230421414,
+        "min": 0.9484536082474226,
+        "max": 0.968421052631579,
+        "sample_sd": 0.011528209390221532
+      },
+      "recall": {
+        "mean": 0.9583333333333334,
+        "min": 0.9583333333333334,
+        "max": 0.9583333333333334,
+        "sample_sd": 0.0
+      },
+      "falsePositiveRate": {
+        "mean": 0.04861111111111111,
+        "min": 0.020833333333333332,
+        "max": 0.0625,
+        "sample_sd": 0.024056261216234408
+      },
+      "precision": {
+        "mean": 0.9520914748878275,
+        "min": 0.9387755102040817,
+        "max": 0.9787234042553191,
+        "sample_sd": 0.023063927384040585
+      }
+    },
+    {
+      "dataset": "domain-test",
+      "threshold_policy": "fixed-0.5",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "f1": {
+        "mean": 0.9617652378368602,
+        "min": 0.9484536082474226,
+        "max": 0.968421052631579,
+        "sample_sd": 0.011528209390221532
+      },
+      "recall": {
+        "mean": 0.9583333333333334,
+        "min": 0.9583333333333334,
+        "max": 0.9583333333333334,
+        "sample_sd": 0.0
+      },
+      "falsePositiveRate": {
+        "mean": 0.03472222222222222,
+        "min": 0.020833333333333332,
+        "max": 0.0625,
+        "sample_sd": 0.024056261216234408
+      },
+      "precision": {
+        "mean": 0.9654074395715733,
+        "min": 0.9387755102040817,
+        "max": 0.9787234042553191,
+        "sample_sd": 0.023063927384040585
+      }
+    },
+    {
+      "dataset": "deepset",
+      "threshold_policy": "validation-selected",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "f1": {
+        "mean": 0.5158421149574269,
+        "min": 0.5014245014245015,
+        "max": 0.5292479108635098,
+        "sample_sd": 0.013939273990605329
+      },
+      "recall": {
+        "mean": 0.3485424588086185,
+        "min": 0.33460076045627374,
+        "max": 0.3612167300380228,
+        "sample_sd": 0.013353173324274704
+      },
+      "falsePositiveRate": {
+        "mean": 0.001670843776106934,
+        "min": 0.0,
+        "max": 0.002506265664160401,
+        "sample_sd": 0.0014469931558637236
+      },
+      "precision": {
+        "mean": 0.9929435483870969,
+        "min": 0.989247311827957,
+        "max": 1.0,
+        "sample_sd": 0.006113375469979911
+      }
+    },
+    {
+      "dataset": "deepset",
+      "threshold_policy": "fixed-0.5",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "f1": {
+        "mean": 0.507490455332771,
+        "min": 0.49714285714285716,
+        "max": 0.5168539325842697,
+        "sample_sd": 0.00989231996451463
+      },
+      "recall": {
+        "mean": 0.3409378960709759,
+        "min": 0.33079847908745247,
+        "max": 0.34980988593155893,
+        "sample_sd": 0.009568864936971797
+      },
+      "falsePositiveRate": {
+        "mean": 0.001670843776106934,
+        "min": 0.0,
+        "max": 0.002506265664160401,
+        "sample_sd": 0.0014469931558637236
+      },
+      "precision": {
+        "mean": 0.9927527669463153,
+        "min": 0.989010989010989,
+        "max": 1.0,
+        "sample_sd": 0.006277400124197073
+      }
+    },
+    {
+      "dataset": "notinject",
+      "threshold_policy": "validation-selected",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "f1": null,
+      "recall": null,
+      "falsePositiveRate": {
+        "mean": 0.12291052114060963,
+        "min": 0.12094395280235988,
+        "max": 0.12684365781710916,
+        "sample_sd": 0.0034061962784048797
+      },
+      "precision": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "sample_sd": 0.0
+      }
+    },
+    {
+      "dataset": "notinject",
+      "threshold_policy": "fixed-0.5",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "f1": null,
+      "recall": null,
+      "falsePositiveRate": {
+        "mean": 0.1160275319567355,
+        "min": 0.11209439528023599,
+        "max": 0.12094395280235988,
+        "sample_sd": 0.004505974134666509
+      },
+      "precision": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "sample_sd": 0.0
+      }
+    }
+  ],
+  "paired_family_bootstrap": [
+    {
+      "baseline": "tfidf-C1",
+      "model": "deberta-lr2e-05-seed42",
+      "threshold_policy": "validation-selected",
+      "delta_f1": -0.00806813088301217,
+      "ci95": [
+        -0.06796116504854366,
+        0.06593406593406603
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    },
+    {
+      "baseline": "tfidf-C1",
+      "model": "deberta-lr2e-05-seed43",
+      "threshold_policy": "validation-selected",
+      "delta_f1": -0.00806813088301217,
+      "ci95": [
+        -0.07843137254901966,
+        0.09022556390977443
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    },
+    {
+      "baseline": "tfidf-C1",
+      "model": "deberta-lr2e-05-seed44",
+      "threshold_policy": "validation-selected",
+      "delta_f1": 0.011899313501144149,
+      "ci95": [
+        -0.04255319148936165,
+        0.10030395136778125
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    },
+    {
+      "baseline": "tfidf-C1",
+      "model": "selected-deberta-three-seed-mean",
+      "threshold_policy": "validation-selected",
+      "delta_f1": -0.0014123160882933972,
+      "ci95": [
+        -0.056730936251519926,
+        0.0855028412845249
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    },
+    {
+      "baseline": "tfidf-C0.1",
+      "model": "deberta-lr2e-05-seed42",
+      "threshold_policy": "validation-selected",
+      "delta_f1": 0.0033986631924776134,
+      "ci95": [
+        -0.05882352941176472,
+        0.07970342910101946
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    },
+    {
+      "baseline": "tfidf-C0.1",
+      "model": "deberta-lr2e-05-seed43",
+      "threshold_policy": "validation-selected",
+      "delta_f1": 0.0033986631924776134,
+      "ci95": [
+        -0.0678323151464082,
+        0.10286306516388133
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    },
+    {
+      "baseline": "tfidf-C0.1",
+      "model": "deberta-lr2e-05-seed44",
+      "threshold_policy": "validation-selected",
+      "delta_f1": 0.023366107576633932,
+      "ci95": [
+        -0.030269796007896477,
+        0.11314824515453115
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    },
+    {
+      "baseline": "tfidf-C0.1",
+      "model": "selected-deberta-three-seed-mean",
+      "threshold_policy": "validation-selected",
+      "delta_f1": 0.010054477987196386,
+      "ci95": [
+        -0.04601840736294527,
+        0.0982679392011312
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    },
+    {
+      "baseline": "tfidf-C1",
+      "model": "deberta-lr2e-05-seed42",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.03178694158075601,
+      "ci95": [
+        -0.01959183673469389,
+        0.1023131900270525
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    },
+    {
+      "baseline": "tfidf-C1",
+      "model": "deberta-lr2e-05-seed43",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.05175438596491233,
+      "ci95": [
+        -0.012631578947368438,
+        0.14088916705350227
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    },
+    {
+      "baseline": "tfidf-C1",
+      "model": "deberta-lr2e-05-seed44",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.05175438596491233,
+      "ci95": [
+        -0.012631578947368438,
+        0.14088916705350227
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    },
+    {
+      "baseline": "tfidf-C1",
+      "model": "selected-deberta-three-seed-mean",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.04509857117019356,
+      "ci95": [
+        -0.013977801646974597,
+        0.1263162178951651
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    },
+    {
+      "baseline": "tfidf-C0.1",
+      "model": "deberta-lr2e-05-seed42",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.03936269915651358,
+      "ci95": [
+        -0.00931857891671517,
+        0.0890937019969279
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    },
+    {
+      "baseline": "tfidf-C0.1",
+      "model": "deberta-lr2e-05-seed43",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.0593301435406699,
+      "ci95": [
+        0.009881847475832428,
+        0.11873713109128348
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    },
+    {
+      "baseline": "tfidf-C0.1",
+      "model": "deberta-lr2e-05-seed44",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.0593301435406699,
+      "ci95": [
+        0.009881847475832428,
+        0.11873713109128348
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    },
+    {
+      "baseline": "tfidf-C0.1",
+      "model": "selected-deberta-three-seed-mean",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.05267432874595113,
+      "ci95": [
+        0.008052000891367175,
+        0.10538662404933218
+      ],
+      "clusters": 12,
+      "resamples": 5000
+    }
+  ],
+  "replication_vs_v1": [
+    {
+      "seed": 42,
+      "revision": "f4e82e00900b178861dc3ae683e1cd4ba4b42261645d40fee2626f3d3ad13d65",
+      "v1_revisions": [
+        "f4e82e00900b178861dc3ae683e1cd4ba4b42261645d40fee2626f3d3ad13d65"
+      ],
+      "same_weight_hash_as_v1": true
+    },
+    {
+      "seed": 43,
+      "revision": "b5b3c236b3e3417a5c1b99b791f285cbc3a974e9a28288a7aae5381e40693477",
+      "v1_revisions": [
+        "b5b3c236b3e3417a5c1b99b791f285cbc3a974e9a28288a7aae5381e40693477"
+      ],
+      "same_weight_hash_as_v1": true
+    },
+    {
+      "seed": 44,
+      "revision": "1b82060532c8cb451c8d660f5579ac29d6349408a91ac140a2067843512568cf",
+      "v1_revisions": [
+        "1b82060532c8cb451c8d660f5579ac29d6349408a91ac140a2067843512568cf"
+      ],
+      "same_weight_hash_as_v1": true
+    }
+  ],
+  "limitations": "Descriptive exploratory intervals. Twelve previously observed test families; validation selection and adaptive reuse are not reflected in intervals. Seeds and variants are not new independent test cases."
+}

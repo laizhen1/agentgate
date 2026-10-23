@@ -1,0 +1,209 @@
+{
+  "protocol": {
+    "experiment": "agentgate-deberta-v2-lr-search",
+    "created_local_date": "2026-10-24",
+    "status": "Exploratory follow-up: the v1 test and external results were already observed. This is not a fresh blind test.",
+    "hypothesis": "A lower learning rate may improve domain adaptation while limiting forgetting; neither improvement is guaranteed.",
+    "model": "protectai/deberta-v3-base-prompt-injection-v2",
+    "revision": "90c9989b1a342275dd0d1a95aad283c04e075671",
+    "data": "Reuse byte-identical v1 train/validation/test and public diagnostic files. No new examples, relabeling, or external training.",
+    "learning_rates": [
+      5e-06,
+      1e-05,
+      2e-05
+    ],
+    "screen_seed": 42,
+    "confirmation_seeds": [
+      43,
+      44
+    ],
+    "epochs": 3,
+    "batch_size": 1,
+    "gradient_accumulation_steps": 8,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "max_length": 512,
+    "stride": 64,
+    "bf16": true,
+    "gradient_checkpointing": true,
+    "max_validation_fpr": 0.05,
+    "tfidf_C": [
+      0.1,
+      1.0,
+      10.0
+    ],
+    "tfidf": "Word TF-IDF unigrams+bigrams, max_features=30000, sublinear_tf=True; balanced LogisticRegression, max_iter=1000, random_state=42. Retain C=1 as original baseline.",
+    "threshold_selection": "Same v1 policy: maximum validation recall under FPR<=5%; ties use precision then higher threshold. Also report fixed 0.5 for all evaluations.",
+    "hyperparameter_selection": "Screen final-epoch seed-42 checkpoints and TF-IDF C values using validation-selected F1; ties use lower validation log loss then earlier candidate order. No early stopping or best-epoch search. All screening validation results retained.",
+    "confirmation_policy": "Freeze the selected learning rate before training seeds 43 and 44. Report all three selected-configuration seeds, including the screening seed; additional seeds do not reselect hyperparameters.",
+    "primary_endpoint": "Mean selected-configuration domain-test F1 minus validation-selected TF-IDF F1 at validation-selected thresholds; also report original C=1 baseline, recall, FPR, each seed and fixed-0.5 results.",
+    "evaluation_policy": "All training, hyperparameter choices and thresholds must be hashed and saved before evaluation. Evaluate original TF-IDF, selected TF-IDF (deduplicate if C=1), upstream and all three selected-configuration seeds once. Unselected neural candidates receive validation only, not test-driven winner selection.",
+    "external_endpoint": "deepset labeled diagnostic F1/recall/FPR and NotInject benign-only FPR. Neither external set is used for fitting, checkpoint, hyperparameter or threshold selection. Both were observed in v1 and may overlap upstream pretraining.",
+    "uncertainty": "Paired bootstrap of 12 entire domain test families, 5000 replicates, bootstrap seed 20261024. Compare each neural seed and the mean F1 across seeds to each TF-IDF baseline. Do not treat seeds or variants as independent test examples. Intervals are exploratory and do not account for adaptive reuse of v1 results or validation selection.",
+    "stop_policy": "Run this one prespecified search and report the result even if DeBERTa loses. No post-test retraining, threshold changes or automatic detector promotion.",
+    "privacy": "Offline training on existing synthetic/public data. Published evidence contains relative paths and hashes; checkpoints remain local and no account identifiers are recorded."
+  },
+  "data": {
+    "protocol_sha256": "44f04c9147b0adc3b8f3a2702050e61fcb2528606f9063390a541bbe18546877",
+    "families_sha256": "d27b3c8b92358085e147d3a3f179a78776a474ac63038ff6c54a71eea8686357",
+    "split_method": "60/20/20 by family within category, seed 20261020; four paired variants per family",
+    "datasets": {
+      "train": {
+        "sha256": "d5f11be30e2f513d62e76602a79ca5b3e17c3505699f76a8b1ecbc5bb96619a4",
+        "rows": 288,
+        "classes": {
+          "0": 144,
+          "1": 144
+        },
+        "groups": 36,
+        "categories": {
+          "audit_and_workflow": 48,
+          "authority_spoofing": 48,
+          "data_exfiltration": 48,
+          "procurement_bypass": 48,
+          "retrieval_injection": 48,
+          "security_discussion": 48
+        }
+      },
+      "validation": {
+        "sha256": "a3de9f704597b90786bdaa4d12f9c52c7ea6f989ba508cae6192f41632e21e2c",
+        "rows": 96,
+        "classes": {
+          "0": 48,
+          "1": 48
+        },
+        "groups": 12,
+        "categories": {
+          "audit_and_workflow": 16,
+          "authority_spoofing": 16,
+          "data_exfiltration": 16,
+          "procurement_bypass": 16,
+          "retrieval_injection": 16,
+          "security_discussion": 16
+        }
+      },
+      "test": {
+        "sha256": "9124a3996961e69af8535bcb5a2f1facb4a1b208a5b850ebe6c8955f1efb6554",
+        "rows": 96,
+        "classes": {
+          "0": 48,
+          "1": 48
+        },
+        "groups": 12,
+        "categories": {
+          "audit_and_workflow": 16,
+          "authority_spoofing": 16,
+          "data_exfiltration": 16,
+          "procurement_bypass": 16,
+          "retrieval_injection": 16,
+          "security_discussion": 16
+        }
+      },
+      "notinject": {
+        "sha256": "38802ce91c6dac0187c0e30e75c53abf5cbea9682d0804b1571491d33d13f75e",
+        "rows": 339,
+        "classes": {
+          "0": 339
+        },
+        "groups": 339,
+        "categories": {
+          "Technique Queries": 87,
+          "Multilingual": 84,
+          "Common Queries": 126,
+          "Virtual Creation": 42
+        }
+      },
+      "deepset": {
+        "sha256": "0aade98ec6cef0c1589215b9977df8476202424bd09c7126403eabf5e70fd259",
+        "rows": 662,
+        "classes": {
+          "1": 263,
+          "0": 399
+        },
+        "groups": 662,
+        "categories": {
+          "public_injection": 263,
+          "public_benign": 399
+        }
+      }
+    },
+    "exclusions": [],
+    "duplicates_within_external": {
+      "notinject": 0,
+      "deepset": 0
+    }
+  },
+  "code_sha256": {
+    "run_experiment.py": "b4f6a4191e636b1f6bbc730bf56d320e75e25a652a7282fcadbc1af5c7a6bb1c",
+    "analysis.py": "b56d055d6df70f0da15859c3bc283678684fa9d3cd8b1d0b32119f009c78e3f6",
+    "protocol.json": "992832bd35eb090d0fb4a0ca27edd3a99d6cb658dfd74b190c32d3e1d6634398"
+  },
+  "base_files": [
+    {
+      "path": "base-model/config.json",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/config.json",
+      "sha256": "05079f4735092040b780d459027afab413faa6eeb66a548571a58832304b60bb",
+      "bytes": 994
+    },
+    {
+      "path": "base-model/tokenizer.json",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/tokenizer.json",
+      "sha256": "f0a66ad0d735d8dca9ecac4ff50fcdef4bb6adbadd2941a926844844d2c2059b",
+      "bytes": 8656744
+    },
+    {
+      "path": "base-model/tokenizer_config.json",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/tokenizer_config.json",
+      "sha256": "557b3d33d3f41b81ad769244e506549e98a1857d41dd58160aacd4d98d710b5a",
+      "bytes": 1284
+    },
+    {
+      "path": "base-model/special_tokens_map.json",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/special_tokens_map.json",
+      "sha256": "9463f61e1b109a8eb4688b829260d7c6b1e6dff04c98ff7269bb89e2b92369b9",
+      "bytes": 286
+    },
+    {
+      "path": "base-model/added_tokens.json",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/added_tokens.json",
+      "sha256": "dc046d04c9b0ada7ae6f1dc89c465801799acdf0c9a6aab8c15a1b2d5ca4e91f",
+      "bytes": 23
+    },
+    {
+      "path": "base-model/spm.model",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/spm.model",
+      "sha256": "c679fbf93643d19aab7ee10c0b99e460bdbc02fedf34b92b05af343b4af586fd",
+      "bytes": 2464616
+    },
+    {
+      "path": "base-model/model.safetensors",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/model.safetensors",
+      "sha256": "6521cb8d0ac08148c81464899c424e6148fcc62befa371089fa4061d8b6e0424",
+      "bytes": 737719272
+    },
+    {
+      "path": "base-model/README.md",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/README.md",
+      "sha256": "37221a38df1e60ad56364c39a233c75b77fa08740ecdee248d1b4e07ccc8ef5a",
+      "bytes": 6327
+    },
+    {
+      "path": "base-model/LICENSE",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/LICENSE",
+      "sha256": "59899c6091b540582ed617e8eeaac4919dc985ccfc35459ee9752b699be5205b",
+      "bytes": 10172
+    }
+  ],
+  "started_utc": "2026-10-23T23:06:10.619439+00:00",
+  "environment": {
+    "python": "3.12.14",
+    "torch": "2.8.0+cu128",
+    "transformers": "4.57.6",
+    "sklearn": "1.6.1",
+    "numpy": "2.2.6",
+    "cuda": "12.8",
+    "gpu": "NVIDIA GeForce RTX 3060 Laptop GPU",
+    "cpu_threads": 4,
+    "determinism": "Fixed seeds; GPU/platform bit equivalence is not guaranteed"
+  }
+}

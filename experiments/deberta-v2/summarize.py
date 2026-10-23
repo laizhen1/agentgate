@@ -24,6 +24,13 @@ def main():
     seeds = [p['screen_seed']] + p['confirmation_seeds']
     neural_names = [model_name(hp['learning_rate'], seed) for seed in seeds]
     baselines = list(dict.fromkeys([tfidf_name(1), tfidf_name(hp['tfidf_C'])]))
+    old = read(args.source / 'results/comparison.json')
+    replication = []
+    for seed, name in zip(seeds, neural_names):
+        prior = next(r for r in old if r['model'] == f'finetuned-seed{seed}' and r['dataset'] == 'domain-test' and r['threshold_policy'] == 'validation-selected')
+        revision = read(run / name / 'selection.json')['revision']
+        replication.append({'seed': seed, 'revision': revision, 'v1_revisions': prior['revisions'],
+                            'same_weight_hash_as_v1': prior['revisions'] == [revision]})
 
     def row(name, dataset, policy):
         return next(r for r in comparison if r['model'] == name and r['dataset'] == dataset and r['threshold_policy'] == policy)
@@ -67,7 +74,7 @@ def main():
             intervals.append({'baseline': baseline, 'model': 'selected-deberta-three-seed-mean', 'threshold_policy': policy,
                 'delta_f1': aggregate('domain-test', policy)['f1']['mean']-row(baseline, 'domain-test', policy)['f1'],
                 'ci95': np.quantile(values, [.025, .975]).tolist(), 'clusters': len(groups), 'resamples': 5000})
-    dump(run / 'aggregate.json', {'seed_aggregates': aggregates, 'paired_family_bootstrap': intervals,
+    dump(run / 'aggregate.json', {'seed_aggregates': aggregates, 'paired_family_bootstrap': intervals, 'replication_vs_v1': replication,
         'limitations': 'Descriptive exploratory intervals. Twelve previously observed test families; validation selection and adaptive reuse are not reflected in intervals. Seeds and variants are not new independent test cases.'})
     dump(run / 'verification.json', verified)
     fields = ['model', 'dataset', 'threshold_policy', 'threshold', 'total', 'tp', 'fp', 'tn', 'fn', 'f1', 'recall', 'falsePositiveRate', 'precision', 'errors']
@@ -82,7 +89,6 @@ def main():
     tuned = row(tfidf_name(hp['tfidf_C']), 'domain-test', 'validation-selected')
     delta = primary['f1']['mean'] - original['f1']
     verb = 'higher' if delta > 0 else 'lower' if delta < 0 else 'equal'
-    old = read(args.source / 'results/comparison.json')
     old_domain = [r['f1'] for r in old if r['model'].startswith('finetuned') and r['dataset'] == 'domain-test' and r['threshold_policy'] == 'validation-selected']
     old_external = [r['f1'] for r in old if r['model'].startswith('finetuned') and r['dataset'] == 'deepset' and r['threshold_policy'] == 'fixed-0.5']
     lines = ['# DeBERTa v2: validation-selected learning-rate follow-up', '',
@@ -90,6 +96,7 @@ def main():
         '## Direct answer', '',
         f"- Selected learning rate: `{hp['learning_rate']:g}`. Domain F1 at validation-selected thresholds: **{pct(primary['f1']['mean'])}** (mean of seeds 42/43/44), versus **{pct(original['f1'])}** for the original TF-IDF C=1 baseline ({abs(delta)*100:.2f} percentage points {verb}).",
         f"- Validation-selected TF-IDF C={hp['tfidf_C']:g}: **{pct(tuned['f1'])}** domain F1. Both classical baselines are reported; neither is chosen using test results.",
+        f"- Selected checkpoints matching the corresponding v1 weight hash: **{sum(r['same_weight_hash_as_v1'] for r in replication)}/3**. Matching hashes mean exact weight replication, not a newly improved model; this run still performs fresh evaluation inference.",
         f"- Selected DeBERTa mean recall **{pct(primary['recall']['mean'])}**, FPR **{pct(primary['falsePositiveRate']['mean'])}**. Test seeds exceeding the 5% FPR target: {sum(row(n, 'domain-test', 'validation-selected')['falsePositiveRate'] > .05 for n in neural_names)}/3.",
         f"- Fixed-0.5 deepset F1: upstream **{pct(row('pretrained', 'deepset', 'fixed-0.5')['f1'])}**, v1 fine-tuned mean **{pct(float(np.mean(old_external)))}**, v2 mean **{pct(external['f1']['mean'])}**. External data was not used for new selection, but its v1 regression motivated this experiment.",
         '- Small numerical differences do not establish general superiority. Inspect the family bootstrap intervals, both thresholds, all seeds and external results below. No checkpoint is automatically promoted.', '',

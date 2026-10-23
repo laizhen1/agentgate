@@ -1,0 +1,95 @@
+2026-10-23T23:06:12.525959+00:00 tfidf-C0.1: validation F1=0.876404, logloss=0.660397
+2026-10-23T23:06:12.676225+00:00 tfidf-C1: validation F1=0.795181, logloss=0.539087
+2026-10-23T23:06:12.833239+00:00 tfidf-C10: validation F1=0.795181, logloss=0.407964
+2026-10-23T23:06:19.611704+00:00 pretrained: validation F1=0.507463, logloss=1.251353
+2026-10-23T23:06:20.600330+00:00 Training deberta-lr5e-06-seed42: full parameters, 3 epochs; evaluation unopened
+2026-10-23T23:10:08.182117+00:00 deberta-lr5e-06-seed42: validation F1=0.863636, logloss=0.563854
+2026-10-23T23:10:08.367012+00:00 Finished deberta-lr5e-06-seed42: 220.8 seconds
+2026-10-23T23:10:09.198594+00:00 Training deberta-lr1e-05-seed42: full parameters, 3 epochs; evaluation unopened
+2026-10-23T23:13:58.952297+00:00 deberta-lr1e-05-seed42: validation F1=0.909091, logloss=0.457884
+2026-10-23T23:13:59.133609+00:00 Finished deberta-lr1e-05-seed42: 222.5 seconds
+2026-10-23T23:13:59.941011+00:00 Training deberta-lr2e-05-seed42: full parameters, 3 epochs; evaluation unopened
+2026-10-23T23:18:27.203968+00:00 deberta-lr2e-05-seed42: validation F1=0.946237, logloss=0.390316
+2026-10-23T23:18:27.487678+00:00 Finished deberta-lr2e-05-seed42: 257.3 seconds
+2026-10-23T23:18:27.551050+00:00 Hyperparameters frozen: LR=2e-05, TF-IDF C=0.1
+2026-10-23T23:18:29.379039+00:00 Training deberta-lr2e-05-seed43: full parameters, 3 epochs; evaluation unopened
+2026-10-23T23:25:19.179630+00:00 deberta-lr2e-05-seed43: validation F1=0.946237, logloss=0.414986
+2026-10-23T23:25:19.366481+00:00 Finished deberta-lr2e-05-seed43: 402.8 seconds
+2026-10-23T23:25:20.638944+00:00 Training deberta-lr2e-05-seed44: full parameters, 3 epochs; evaluation unopened
+2026-10-23T23:30:22.711309+00:00 deberta-lr2e-05-seed44: validation F1=0.924731, logloss=0.506163
+2026-10-23T23:30:22.970227+00:00 Finished deberta-lr2e-05-seed44: 294.6 seconds
+2026-10-23T23:30:23.266273+00:00 All selections and training locked. No evaluation predictions produced yet.
+2026-10-23T23:31:13.503522+00:00 Opening evaluation with locked models and thresholds; no further tuning allowed
+2026-10-23T23:31:13.899566+00:00 tfidf-C1: saved domain-test
+2026-10-23T23:31:14.031928+00:00 tfidf-C1: scored 100/662
+2026-10-23T23:31:14.161598+00:00 tfidf-C1: scored 200/662
+2026-10-23T23:31:14.287496+00:00 tfidf-C1: scored 300/662
+2026-10-23T23:31:14.425546+00:00 tfidf-C1: scored 400/662
+2026-10-23T23:31:14.564696+00:00 tfidf-C1: scored 500/662
+2026-10-23T23:31:14.710106+00:00 tfidf-C1: scored 600/662
+2026-10-23T23:31:15.210922+00:00 tfidf-C1: saved deepset
+2026-10-23T23:31:15.352011+00:00 tfidf-C1: scored 100/339
+2026-10-23T23:31:15.497986+00:00 tfidf-C1: scored 200/339
+2026-10-23T23:31:15.616202+00:00 tfidf-C1: scored 300/339
+2026-10-23T23:31:15.882635+00:00 tfidf-C1: saved notinject
+2026-10-23T23:31:16.289709+00:00 tfidf-C0.1: saved domain-test
+2026-10-23T23:31:16.443473+00:00 tfidf-C0.1: scored 100/662
+2026-10-23T23:31:16.597559+00:00 tfidf-C0.1: scored 200/662
+2026-10-23T23:31:16.742199+00:00 tfidf-C0.1: scored 300/662
+2026-10-23T23:31:16.894546+00:00 tfidf-C0.1: scored 400/662
+2026-10-23T23:31:17.044904+00:00 tfidf-C0.1: scored 500/662
+2026-10-23T23:31:17.188574+00:00 tfidf-C0.1: scored 600/662
+2026-10-23T23:31:17.779868+00:00 tfidf-C0.1: saved deepset
+2026-10-23T23:31:17.922252+00:00 tfidf-C0.1: scored 100/339
+2026-10-23T23:31:18.059642+00:00 tfidf-C0.1: scored 200/339
+2026-10-23T23:31:18.197351+00:00 tfidf-C0.1: scored 300/339
+2026-10-23T23:31:18.420738+00:00 tfidf-C0.1: saved notinject
+2026-10-23T23:31:27.620610+00:00 pretrained: saved domain-test
+2026-10-23T23:31:34.014113+00:00 pretrained: scored 100/662
+2026-10-23T23:31:39.547843+00:00 pretrained: scored 200/662
+2026-10-23T23:31:44.732450+00:00 pretrained: scored 300/662
+2026-10-23T23:31:49.782790+00:00 pretrained: scored 400/662
+2026-10-23T23:31:54.543632+00:00 pretrained: scored 500/662
+2026-10-23T23:31:59.189132+00:00 pretrained: scored 600/662
+2026-10-23T23:32:03.358903+00:00 pretrained: saved deepset
+2026-10-23T23:32:09.135327+00:00 pretrained: scored 100/339
+2026-10-23T23:32:16.081387+00:00 pretrained: scored 200/339
+2026-10-23T23:32:22.580601+00:00 pretrained: scored 300/339
+2026-10-23T23:32:25.200838+00:00 pretrained: saved notinject
+2026-10-23T23:32:33.923676+00:00 deberta-lr2e-05-seed42: saved domain-test
+2026-10-23T23:32:39.291270+00:00 deberta-lr2e-05-seed42: scored 100/662
+2026-10-23T23:32:43.788910+00:00 deberta-lr2e-05-seed42: scored 200/662
+2026-10-23T23:32:48.368454+00:00 deberta-lr2e-05-seed42: scored 300/662
+2026-10-23T23:32:52.239368+00:00 deberta-lr2e-05-seed42: scored 400/662
+2026-10-23T23:32:55.964120+00:00 deberta-lr2e-05-seed42: scored 500/662
+2026-10-23T23:32:59.960047+00:00 deberta-lr2e-05-seed42: scored 600/662
+2026-10-23T23:33:02.735634+00:00 deberta-lr2e-05-seed42: saved deepset
+2026-10-23T23:33:06.554496+00:00 deberta-lr2e-05-seed42: scored 100/339
+2026-10-23T23:33:10.196816+00:00 deberta-lr2e-05-seed42: scored 200/339
+2026-10-23T23:33:14.092844+00:00 deberta-lr2e-05-seed42: scored 300/339
+2026-10-23T23:33:15.767058+00:00 deberta-lr2e-05-seed42: saved notinject
+2026-10-23T23:33:21.745116+00:00 deberta-lr2e-05-seed43: saved domain-test
+2026-10-23T23:33:25.546165+00:00 deberta-lr2e-05-seed43: scored 100/662
+2026-10-23T23:33:29.339674+00:00 deberta-lr2e-05-seed43: scored 200/662
+2026-10-23T23:33:33.218078+00:00 deberta-lr2e-05-seed43: scored 300/662
+2026-10-23T23:33:37.047388+00:00 deberta-lr2e-05-seed43: scored 400/662
+2026-10-23T23:33:40.743571+00:00 deberta-lr2e-05-seed43: scored 500/662
+2026-10-23T23:33:44.751788+00:00 deberta-lr2e-05-seed43: scored 600/662
+2026-10-23T23:33:47.708975+00:00 deberta-lr2e-05-seed43: saved deepset
+2026-10-23T23:33:51.808336+00:00 deberta-lr2e-05-seed43: scored 100/339
+2026-10-23T23:33:55.531155+00:00 deberta-lr2e-05-seed43: scored 200/339
+2026-10-23T23:33:59.322357+00:00 deberta-lr2e-05-seed43: scored 300/339
+2026-10-23T23:34:00.897621+00:00 deberta-lr2e-05-seed43: saved notinject
+2026-10-23T23:34:06.600411+00:00 deberta-lr2e-05-seed44: saved domain-test
+2026-10-23T23:34:10.278822+00:00 deberta-lr2e-05-seed44: scored 100/662
+2026-10-23T23:34:14.146291+00:00 deberta-lr2e-05-seed44: scored 200/662
+2026-10-23T23:34:18.110150+00:00 deberta-lr2e-05-seed44: scored 300/662
+2026-10-23T23:34:22.049212+00:00 deberta-lr2e-05-seed44: scored 400/662
+2026-10-23T23:34:25.831758+00:00 deberta-lr2e-05-seed44: scored 500/662
+2026-10-23T23:34:29.629938+00:00 deberta-lr2e-05-seed44: scored 600/662
+2026-10-23T23:34:32.438080+00:00 deberta-lr2e-05-seed44: saved deepset
+2026-10-23T23:34:36.243452+00:00 deberta-lr2e-05-seed44: scored 100/339
+2026-10-23T23:34:40.033797+00:00 deberta-lr2e-05-seed44: scored 200/339
+2026-10-23T23:34:43.703926+00:00 deberta-lr2e-05-seed44: scored 300/339
+2026-10-23T23:34:45.309118+00:00 deberta-lr2e-05-seed44: saved notinject
+2026-10-23T23:34:45.490490+00:00 Evaluation complete

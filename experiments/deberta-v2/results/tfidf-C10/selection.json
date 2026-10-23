@@ -1,0 +1,23 @@
+{
+  "threshold": 0.6374951823123807,
+  "log_loss": 0.40796373952731174,
+  "metrics": {
+    "total": 96,
+    "tp": 33,
+    "fp": 2,
+    "tn": 46,
+    "fn": 15,
+    "errors": 0,
+    "coverage": 1.0,
+    "precision": 0.9428571428571428,
+    "recall": 0.6875,
+    "f1": 0.7951807228915663,
+    "falsePositiveRate": 0.041666666666666664,
+    "meanLatencyMs": 0.9159291663915307,
+    "p50LatencyMs": 0.8844000039971434,
+    "p95LatencyMs": 1.2887749944638927,
+    "threshold": 0.6374951823123807
+  },
+  "name": "tfidf-C10",
+  "revision": "a950bb0da90f0cb19a4bc95f3ee180146c894fd51c0b9e4cef962b1c3088e989"
+}
