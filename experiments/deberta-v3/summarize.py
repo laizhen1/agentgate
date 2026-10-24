@@ -71,6 +71,7 @@ def main():
         f"- Original-style word C=1 baseline refit on the same data: **{pct(row(baselines[0], 'domain-test', 'validation-selected')['f1'])}** F1. Both baselines are disclosed; neither was selected by test score.",
         f"- DeBERTa mean recall **{pct(primary['recall']['mean'])}**, FPR **{pct(primary['falsePositiveRate']['mean'])}**. Seeds exceeding the 5% test-FPR target: **{sum(row(n, 'domain-test', 'validation-selected')['falsePositiveRate']>.05 for n in neural)}/3**. Validation's empirical constraint is not a test guarantee.",
         f"- Fixed-0.5 deepset F1: upstream **{pct(row('pretrained', 'deepset', 'fixed-0.5')['f1'])}**, adapted mean **{pct(external['f1']['mean'])}**. Recall: upstream **{pct(row('pretrained', 'deepset', 'fixed-0.5')['recall'])}**, adapted **{pct(external['recall']['mean'])}**.",
+        f"- That external mean conceals substantial seed variation: deepset F1 ranges **{pct(external['f1']['min'])}–{pct(external['f1']['max'])}**, and **{sum(row(n, 'deepset', 'fixed-0.5')['f1'] < row('pretrained', 'deepset', 'fixed-0.5')['f1'] for n in neural)}/3 seeds underperform upstream**. Do not present the best seed or the mean alone as consistent cross-domain improvement.",
         '- No checkpoint is promoted to the default detector. Classifier results are not agent attack-success rates.', '',
         '## Data and frozen design', '',
         '- Added 240 original AI-authored contrast families across eight procurement categories, one benign and one attack text each. No new wrapper expansion.',
@@ -89,6 +90,12 @@ def main():
     for chosen in hp['tfidf_candidates'] + hp['neural_candidates']:
         m = chosen['metrics']
         lines.append(f"| {chosen['name']} | {pct(m['f1'])} | {pct(m['recall'])} | {pct(m['falsePositiveRate'])} | {chosen['log_loss']:.6f} | {chosen['threshold']:.8f} |")
+    lines += ['', '### Locked operating thresholds, including both additional seeds', '',
+        '| Selected model | Validation threshold | Validation F1 | Validation FPR |', '|---|---:|---:|---:|']
+    lock = read(run / 'selection-lock.json')
+    for name in lock['models']:
+        selected = lock['selections'][name]
+        lines.append(f"| {name} | {selected['threshold']:.8f} | {pct(selected['metrics']['f1'])} | {pct(selected['metrics']['falsePositiveRate'])} |")
     lines += ['', '## Every test and external result', '',
         'deepset has 662 labelled examples. NotInject has 339 benign-only examples, so attack recall/F1 are undefined. Both diagnostics are unchanged and unused for fitting/selection. Their earlier results were known; upstream pretraining overlap is unknown. Do not pool them as a 1,001-example F1 test.', '']
     for policy in ('validation-selected', 'fixed-0.5'):

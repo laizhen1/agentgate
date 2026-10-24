@@ -1,0 +1,409 @@
+{
+  "seed_aggregates": [
+    {
+      "dataset": "domain-test",
+      "threshold_policy": "validation-selected",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "f1": {
+        "mean": 0.9654142720571679,
+        "min": 0.9473684210526315,
+        "max": 0.9896907216494846,
+        "sample_sd": 0.021838258882615473
+      },
+      "recall": {
+        "mean": 0.9722222222222222,
+        "min": 0.9375,
+        "max": 1.0,
+        "sample_sd": 0.03182344232608222
+      },
+      "falsePositiveRate": {
+        "mean": 0.041666666666666664,
+        "min": 0.020833333333333332,
+        "max": 0.0625,
+        "sample_sd": 0.020833333333333336
+      },
+      "precision": {
+        "mean": 0.959012881748444,
+        "min": 0.94,
+        "max": 0.9795918367346939,
+        "sample_sd": 0.01984232403339621
+      }
+    },
+    {
+      "dataset": "domain-test",
+      "threshold_policy": "fixed-0.5",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "f1": {
+        "mean": 0.9519124757397872,
+        "min": 0.9361702127659575,
+        "max": 0.9690721649484536,
+        "sample_sd": 0.016496709890254427
+      },
+      "recall": {
+        "mean": 0.9652777777777778,
+        "min": 0.9166666666666666,
+        "max": 1.0,
+        "sample_sd": 0.04336804165554445
+      },
+      "falsePositiveRate": {
+        "mean": 0.0625,
+        "min": 0.041666666666666664,
+        "max": 0.10416666666666667,
+        "sample_sd": 0.036084391824351615
+      },
+      "precision": {
+        "mean": 0.9404552633194377,
+        "min": 0.9056603773584906,
+        "max": 0.9591836734693877,
+        "sample_sd": 0.030162634838201887
+      }
+    },
+    {
+      "dataset": "deepset",
+      "threshold_policy": "validation-selected",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "f1": {
+        "mean": 0.512782340160453,
+        "min": 0.4251497005988024,
+        "max": 0.5783783783783784,
+        "sample_sd": 0.07895546702164444
+      },
+      "recall": {
+        "mean": 0.3472750316856781,
+        "min": 0.26996197718631176,
+        "max": 0.4068441064638783,
+        "sample_sd": 0.07014496376183378
+      },
+      "falsePositiveRate": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "sample_sd": 0.0
+      },
+      "precision": {
+        "mean": 1.0,
+        "min": 1.0,
+        "max": 1.0,
+        "sample_sd": 0.0
+      }
+    },
+    {
+      "dataset": "deepset",
+      "threshold_policy": "fixed-0.5",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "f1": {
+        "mean": 0.6042575301103928,
+        "min": 0.5224719101123596,
+        "max": 0.7393364928909952,
+        "sample_sd": 0.1178460737769538
+      },
+      "recall": {
+        "mean": 0.4423320659062104,
+        "min": 0.35361216730038025,
+        "max": 0.5931558935361216,
+        "sample_sd": 0.1312934602137404
+      },
+      "falsePositiveRate": {
+        "mean": 0.002506265664160401,
+        "min": 0.0,
+        "max": 0.007518796992481203,
+        "sample_sd": 0.004340979467591171
+      },
+      "precision": {
+        "mean": 0.9937106918238994,
+        "min": 0.9811320754716981,
+        "max": 1.0,
+        "sample_sd": 0.010893401305464635
+      }
+    },
+    {
+      "dataset": "notinject",
+      "threshold_policy": "validation-selected",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "f1": null,
+      "recall": null,
+      "falsePositiveRate": {
+        "mean": 0.09144542772861357,
+        "min": 0.08259587020648967,
+        "max": 0.10914454277286136,
+        "sample_sd": 0.015327883252821924
+      },
+      "precision": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "sample_sd": 0.0
+      }
+    },
+    {
+      "dataset": "notinject",
+      "threshold_policy": "fixed-0.5",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "f1": null,
+      "recall": null,
+      "falsePositiveRate": {
+        "mean": 0.1288102261553589,
+        "min": 0.0855457227138643,
+        "max": 0.20648967551622419,
+        "sample_sd": 0.06741773733105978
+      },
+      "precision": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "sample_sd": 0.0
+      }
+    }
+  ],
+  "paired_family_bootstrap": [
+    {
+      "baseline": "tfidf-word-C1",
+      "model": "deberta-lr5e-05-seed42",
+      "threshold_policy": "validation-selected",
+      "delta_f1": 0.11015911872705009,
+      "ci95": [
+        0.041010252563140726,
+        0.1898344360529759
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    },
+    {
+      "baseline": "tfidf-word-C1",
+      "model": "deberta-lr5e-05-seed43",
+      "threshold_policy": "validation-selected",
+      "delta_f1": 0.12197437114380627,
+      "ci95": [
+        0.050906781059231146,
+        0.20364214963482896
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    },
+    {
+      "baseline": "tfidf-word-C1",
+      "model": "deberta-lr5e-05-seed44",
+      "threshold_policy": "validation-selected",
+      "delta_f1": 0.15248141932390313,
+      "ci95": [
+        0.08080576459388666,
+        0.23600209314495024
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    },
+    {
+      "baseline": "tfidf-word-C1",
+      "model": "selected-deberta-three-seed-mean",
+      "threshold_policy": "validation-selected",
+      "delta_f1": 0.12820496973158646,
+      "ci95": [
+        0.061286301067792356,
+        0.2078040790430472
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    },
+    {
+      "baseline": "tfidf-union-C10",
+      "model": "deberta-lr5e-05-seed42",
+      "threshold_policy": "validation-selected",
+      "delta_f1": 0.12383900928792568,
+      "ci95": [
+        0.0499112950916617,
+        0.21027121800627915
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    },
+    {
+      "baseline": "tfidf-union-C10",
+      "model": "deberta-lr5e-05-seed43",
+      "threshold_policy": "validation-selected",
+      "delta_f1": 0.13565426170468187,
+      "ci95": [
+        0.0595647193585338,
+        0.22483568777277727
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    },
+    {
+      "baseline": "tfidf-union-C10",
+      "model": "deberta-lr5e-05-seed44",
+      "threshold_policy": "validation-selected",
+      "delta_f1": 0.16616130988477873,
+      "ci95": [
+        0.09070294784580502,
+        0.25551350645961113
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    },
+    {
+      "baseline": "tfidf-union-C10",
+      "model": "selected-deberta-three-seed-mean",
+      "threshold_policy": "validation-selected",
+      "delta_f1": 0.14188486029246206,
+      "ci95": [
+        0.07066721437162037,
+        0.2275742928750447
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    },
+    {
+      "baseline": "tfidf-word-C1",
+      "model": "deberta-lr5e-05-seed42",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.11758701643360214,
+      "ci95": [
+        0.05840402790279027,
+        0.17750105529759397
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    },
+    {
+      "baseline": "tfidf-word-C1",
+      "model": "deberta-lr5e-05-seed43",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.084685064251106,
+      "ci95": [
+        0.007583634963211938,
+        0.15833333333333333
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    },
+    {
+      "baseline": "tfidf-word-C1",
+      "model": "deberta-lr5e-05-seed44",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.09900990099009899,
+      "ci95": [
+        0.025214900006825396,
+        0.1727737315875612
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    },
+    {
+      "baseline": "tfidf-word-C1",
+      "model": "selected-deberta-three-seed-mean",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.10042732722493575,
+      "ci95": [
+        0.0351908638988488,
+        0.16475364114291827
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    },
+    {
+      "baseline": "tfidf-union-C10",
+      "model": "deberta-lr5e-05-seed42",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.08486163863266416,
+      "ci95": [
+        0.034324942791762014,
+        0.1418675031354917
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    },
+    {
+      "baseline": "tfidf-union-C10",
+      "model": "deberta-lr5e-05-seed43",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.05195968645016802,
+      "ci95": [
+        -0.015567765567765512,
+        0.11909280303030294
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    },
+    {
+      "baseline": "tfidf-union-C10",
+      "model": "deberta-lr5e-05-seed44",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.066284523189161,
+      "ci95": [
+        0.006393076136944395,
+        0.13218770654329148
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    },
+    {
+      "baseline": "tfidf-union-C10",
+      "model": "selected-deberta-three-seed-mean",
+      "threshold_policy": "fixed-0.5",
+      "delta_f1": 0.06770194942399776,
+      "ci95": [
+        0.015480151599811984,
+        0.12446893660179634
+      ],
+      "clusters": 48,
+      "resamples": 5000,
+      "rng": "Python random.Random",
+      "seed": 20261024
+    }
+  ],
+  "limitations": "Paired bootstrap of 48 newly held-out synthetic families, not 96 independent scenarios. Intervals exclude author/style bias and validation-selection uncertainty. All labels are AI-authored, without independent human validation. Seeds do not add independent test cases."
+}

@@ -24,6 +24,7 @@ claim of general agent robustness.
 - [Recorded trajectories](experiments/agent-pilot-v1/episodes.jsonl)
 - [Original DeBERTa training experiment](experiments/deberta-v1/results/REPORT.md)
 - [DeBERTa v2 learning-rate search and TF-IDF comparison](experiments/deberta-v2/results/REPORT.md)
+- [DeBERTa v3 expanded-data and fresh-test comparison](experiments/deberta-v3/results/REPORT.md)
 
 ```sh
 npm run benchmark -- --out artifacts/agent-pilot-v1
@@ -206,6 +207,34 @@ user/tool-message scanning. See [local setup and model limitations](docs/threat-
   service. The Documents tab and governed `search_documents` tool return source
   evidence with citations; Ollama and authenticated MCP share enforcement.
   See [retrieval setup and boundaries](docs/retrieval.md).
+
+## DeBERTa v3: expanded training and a fresh synthetic test
+
+The [v3 experiment](experiments/deberta-v3/README.md) adds 240 original AI-authored
+contrast families and removes repeated wrappers from the old training set.
+Training now has **360 distinct texts from 180 families** (previously 36 families).
+Validation and fresh test each have **96 texts from 48 new families**.
+All labels are AI-authored; the test is held out from fitting/selection, not
+independently human-annotated or a production benchmark.
+
+- Validation selects among nine word/character TF-IDF configurations and three
+  DeBERTa learning rates. The selected learning rate `5e-05` is
+  evaluated across seeds 42/43/44 after all choices are locked.
+- Primary validation-selected thresholds: DeBERTa mean F1 **96.54%**
+  versus selected `tfidf-union-C10` **82.35%**;
+  difference **+14.19 pp**, paired 48-family bootstrap
+  95% interval **[+7.07, +22.76] pp**.
+- DeBERTa mean recall **97.22%**, FPR
+  **4.17%**. Validation's 5% FPR constraint
+  does not guarantee test FPR.
+- Fixed-0.5 deepset F1: upstream **57.98%**, v3 mean
+  **60.43%**, but seed F1 ranges
+  **52.25%–73.93%** and two of three seeds
+  regress against upstream. External diagnostics and both threshold policies
+  remain visible in the [complete report](experiments/deberta-v3/results/REPORT.md).
+- The default detector is unchanged. Shared synthetic style, short fragments and
+  limited test families constrain the claim; classifier results do not establish
+  end-to-end agent security. Earlier v1/v2 results are preserved below.
 
 ## Original DeBERTa v1 results and model-selection decision
 

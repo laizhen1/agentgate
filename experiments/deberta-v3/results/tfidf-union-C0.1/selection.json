@@ -1,0 +1,23 @@
+{
+  "threshold": 0.5157686609058649,
+  "log_loss": 0.6465003041530043,
+  "metrics": {
+    "total": 96,
+    "tp": 38,
+    "fp": 2,
+    "tn": 46,
+    "fn": 10,
+    "errors": 0,
+    "coverage": 1.0,
+    "precision": 0.95,
+    "recall": 0.7916666666666666,
+    "f1": 0.8636363636363636,
+    "falsePositiveRate": 0.041666666666666664,
+    "meanLatencyMs": 2.528115625409555,
+    "p50LatencyMs": 2.4417000022367574,
+    "p95LatencyMs": 3.3795000053942204,
+    "threshold": 0.5157686609058649
+  },
+  "name": "tfidf-union-C0.1",
+  "revision": "b7fdd784c32ebd3e668e8428f9d7ed591f14551d7c7eb5c227f8e8e034843ba7"
+}

@@ -16,6 +16,10 @@ jobs:
         run: |
           python3 -B -m unittest discover -s experiments/deberta-v2 -p test_protocol.py
           python3 -B experiments/deberta-v2/verify_results.py --source experiments/deberta-v1 --run experiments/deberta-v2/results
+      - name: Verify expanded DeBERTa data and fresh-test evidence
+        run: |
+          python3 -B -m unittest discover -s experiments/deberta-v3 -p 'test_*.py'
+          python3 -B experiments/deberta-v3/verify_results.py --source experiments/deberta-v1 --run experiments/deberta-v3/results
       - uses: actions/setup-node@v4
         with:
           node-version: "24"

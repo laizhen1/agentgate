@@ -1,0 +1,289 @@
+{
+  "utc": "2026-10-24T00:14:18.693044+00:00",
+  "learning_rate": 5e-05,
+  "tfidf_config": {
+    "features": "union",
+    "C": 10
+  },
+  "neural_candidates": [
+    {
+      "threshold": 0.9367494583129883,
+      "log_loss": 0.30736907975956057,
+      "metrics": {
+        "total": 96,
+        "tp": 36,
+        "fp": 2,
+        "tn": 46,
+        "fn": 12,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.9473684210526315,
+        "recall": 0.75,
+        "f1": 0.8372093023255814,
+        "falsePositiveRate": 0.041666666666666664,
+        "meanLatencyMs": 37.39414270815663,
+        "p50LatencyMs": 34.406400001898874,
+        "p95LatencyMs": 55.83897499673185,
+        "threshold": 0.9367494583129883
+      },
+      "name": "deberta-lr1e-05-seed42",
+      "revision": "303a7b67f0b8bb4eb81e06682cddc904bf6345563349996baa54ae44f728f2df"
+    },
+    {
+      "threshold": 0.3869951069355011,
+      "log_loss": 0.2762118166834152,
+      "metrics": {
+        "total": 96,
+        "tp": 46,
+        "fp": 2,
+        "tn": 46,
+        "fn": 2,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.9583333333333334,
+        "recall": 0.9583333333333334,
+        "f1": 0.9583333333333334,
+        "falsePositiveRate": 0.041666666666666664,
+        "meanLatencyMs": 51.80432187474556,
+        "p50LatencyMs": 46.65160000149626,
+        "p95LatencyMs": 88.97007499399479,
+        "threshold": 0.3869951069355011
+      },
+      "name": "deberta-lr2e-05-seed42",
+      "revision": "e09b3fd66301f97f4e55be87ec04461d1d19566be098d22b4f2414d85e7698c6"
+    },
+    {
+      "threshold": 0.7697732448577881,
+      "log_loss": 0.11226334869185058,
+      "metrics": {
+        "total": 96,
+        "tp": 48,
+        "fp": 2,
+        "tn": 46,
+        "fn": 0,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.96,
+        "recall": 1.0,
+        "f1": 0.9795918367346939,
+        "falsePositiveRate": 0.041666666666666664,
+        "meanLatencyMs": 37.27110937461475,
+        "p50LatencyMs": 35.573649998696055,
+        "p95LatencyMs": 45.31502500685747,
+        "threshold": 0.7697732448577881
+      },
+      "name": "deberta-lr5e-05-seed42",
+      "revision": "ac4edb4113963aed079552838dc4e7ff04716e6840a2224905819af38bfb3c22"
+    }
+  ],
+  "tfidf_candidates": [
+    {
+      "threshold": 0.5062342330399334,
+      "log_loss": 0.6692246351674908,
+      "metrics": {
+        "total": 96,
+        "tp": 41,
+        "fp": 2,
+        "tn": 46,
+        "fn": 7,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.9534883720930233,
+        "recall": 0.8541666666666666,
+        "f1": 0.9010989010989011,
+        "falsePositiveRate": 0.041666666666666664,
+        "meanLatencyMs": 1.4271614572862745,
+        "p50LatencyMs": 1.2876999971922487,
+        "p95LatencyMs": 1.8177500023739412,
+        "threshold": 0.5062342330399334
+      },
+      "name": "tfidf-word-C0.1",
+      "revision": "ad3c2c0fc96b99282cdd0d99340bc58fd55a6594cba0f29367a363b083489dba"
+    },
+    {
+      "threshold": 0.5500571553893195,
+      "log_loss": 0.5433142100203973,
+      "metrics": {
+        "total": 96,
+        "tp": 41,
+        "fp": 2,
+        "tn": 46,
+        "fn": 7,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.9534883720930233,
+        "recall": 0.8541666666666666,
+        "f1": 0.9010989010989011,
+        "falsePositiveRate": 0.041666666666666664,
+        "meanLatencyMs": 1.4141374996749316,
+        "p50LatencyMs": 1.2734499978250824,
+        "p95LatencyMs": 3.008174997376045,
+        "threshold": 0.5500571553893195
+      },
+      "name": "tfidf-word-C1",
+      "revision": "c260c155b6f08f29c84e6af08bf2f990dd07babc09cf87689a483becf683af8d"
+    },
+    {
+      "threshold": 0.6459027909180205,
+      "log_loss": 0.3585935226564261,
+      "metrics": {
+        "total": 96,
+        "tp": 41,
+        "fp": 2,
+        "tn": 46,
+        "fn": 7,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.9534883720930233,
+        "recall": 0.8541666666666666,
+        "f1": 0.9010989010989011,
+        "falsePositiveRate": 0.041666666666666664,
+        "meanLatencyMs": 1.1424614567658864,
+        "p50LatencyMs": 1.1379999996279366,
+        "p95LatencyMs": 1.515625001047738,
+        "threshold": 0.6459027909180205
+      },
+      "name": "tfidf-word-C10",
+      "revision": "e2d7da9b07dd064358daa188d6a3e810c9eed5db49f6bfbfe619e818bc67f3dd"
+    },
+    {
+      "threshold": 0.5110583357052879,
+      "log_loss": 0.6674452939520682,
+      "metrics": {
+        "total": 96,
+        "tp": 32,
+        "fp": 2,
+        "tn": 46,
+        "fn": 16,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.9411764705882353,
+        "recall": 0.6666666666666666,
+        "f1": 0.7804878048780488,
+        "falsePositiveRate": 0.041666666666666664,
+        "meanLatencyMs": 1.3974395822818526,
+        "p50LatencyMs": 1.3522999943234026,
+        "p95LatencyMs": 1.9152499953634106,
+        "threshold": 0.5110583357052879
+      },
+      "name": "tfidf-char-C0.1",
+      "revision": "60d2bd6843173e469096164ea12739833cc9107db9c5da1aac658aa2ef246a4a"
+    },
+    {
+      "threshold": 0.5917944491470376,
+      "log_loss": 0.5362617898385775,
+      "metrics": {
+        "total": 96,
+        "tp": 30,
+        "fp": 0,
+        "tn": 48,
+        "fn": 18,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 1.0,
+        "recall": 0.625,
+        "f1": 0.7692307692307693,
+        "falsePositiveRate": 0.0,
+        "meanLatencyMs": 1.5038187502796063,
+        "p50LatencyMs": 1.4779500052100047,
+        "p95LatencyMs": 2.051999999821419,
+        "threshold": 0.5917944491470376
+      },
+      "name": "tfidf-char-C1",
+      "revision": "b64b5eec4bc3c75347cc8cc4355375dc25fe3659c6d0abf0192b50ac5e6c3935"
+    },
+    {
+      "threshold": 0.6046778967335117,
+      "log_loss": 0.33693930379058123,
+      "metrics": {
+        "total": 96,
+        "tp": 42,
+        "fp": 2,
+        "tn": 46,
+        "fn": 6,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.9545454545454546,
+        "recall": 0.875,
+        "f1": 0.9130434782608695,
+        "falsePositiveRate": 0.041666666666666664,
+        "meanLatencyMs": 1.504586457485857,
+        "p50LatencyMs": 1.495750002504792,
+        "p95LatencyMs": 2.311474996531615,
+        "threshold": 0.6046778967335117
+      },
+      "name": "tfidf-char-C10",
+      "revision": "0a3667115262bad0e48267aadfcf68346d0975d5cbebe0e08daed29f6df1da9c"
+    },
+    {
+      "threshold": 0.5157686609058649,
+      "log_loss": 0.6465003041530043,
+      "metrics": {
+        "total": 96,
+        "tp": 38,
+        "fp": 2,
+        "tn": 46,
+        "fn": 10,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.95,
+        "recall": 0.7916666666666666,
+        "f1": 0.8636363636363636,
+        "falsePositiveRate": 0.041666666666666664,
+        "meanLatencyMs": 2.528115625409555,
+        "p50LatencyMs": 2.4417000022367574,
+        "p95LatencyMs": 3.3795000053942204,
+        "threshold": 0.5157686609058649
+      },
+      "name": "tfidf-union-C0.1",
+      "revision": "b7fdd784c32ebd3e668e8428f9d7ed591f14551d7c7eb5c227f8e8e034843ba7"
+    },
+    {
+      "threshold": 0.5758416910912332,
+      "log_loss": 0.47088749775343225,
+      "metrics": {
+        "total": 96,
+        "tp": 41,
+        "fp": 2,
+        "tn": 46,
+        "fn": 7,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.9534883720930233,
+        "recall": 0.8541666666666666,
+        "f1": 0.9010989010989011,
+        "falsePositiveRate": 0.041666666666666664,
+        "meanLatencyMs": 2.6361833338341967,
+        "p50LatencyMs": 2.6932000037049875,
+        "p95LatencyMs": 3.6949499990441836,
+        "threshold": 0.5758416910912332
+      },
+      "name": "tfidf-union-C1",
+      "revision": "2096f07d54efc9a2974051ec0b4a55bbf2093882aa4585c06b953f2a94c3ee60"
+    },
+    {
+      "threshold": 0.6330358563781046,
+      "log_loss": 0.30423225022694367,
+      "metrics": {
+        "total": 96,
+        "tp": 43,
+        "fp": 2,
+        "tn": 46,
+        "fn": 5,
+        "errors": 0,
+        "coverage": 1.0,
+        "precision": 0.9555555555555556,
+        "recall": 0.8958333333333334,
+        "f1": 0.9247311827956989,
+        "falsePositiveRate": 0.041666666666666664,
+        "meanLatencyMs": 2.6840958322888278,
+        "p50LatencyMs": 2.5567000047885813,
+        "p95LatencyMs": 3.754250003112247,
+        "threshold": 0.6330358563781046
+      },
+      "name": "tfidf-union-C10",
+      "revision": "01ae3a305c357c9e67b6db6ea13cc0435d070c90b4005ef00443cb9c6668e6db"
+    }
+  ],
+  "selection_data": "validation only; screening seed 42"
+}

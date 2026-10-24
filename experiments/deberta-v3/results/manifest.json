@@ -1,0 +1,259 @@
+{
+  "protocol": {
+    "experiment": "agentgate-deberta-v3-expanded-families",
+    "created_local_date": "2026-10-24",
+    "status": "Prospectively frozen v3 fitting and comparison on new held-out synthetic families. Authors saw all texts while constructing them; not independently human-authored or a blinded real-world benchmark. Historical v1/v2 results were known.",
+    "hypothesis": "More distinct procurement scenarios and benign/attack intent contrasts may improve generalization. A stronger lexical baseline may still win.",
+    "model": "protectai/deberta-v3-base-prompt-injection-v2",
+    "revision": "90c9989b1a342275dd0d1a95aad283c04e075671",
+    "data": "240 new AI-authored contrast families, eight categories, two texts per family with no wrapper expansion. Stratified deterministic family split 144/48/48; add 36 old training pairs after removing wrappers. Total 360/96/96 texts and 180/48/48 families. No old validation/test or public diagnostic data used to fit/select.",
+    "learning_rates": [
+      1e-05,
+      2e-05,
+      5e-05
+    ],
+    "screen_seed": 42,
+    "confirmation_seeds": [
+      43,
+      44
+    ],
+    "epochs": 3,
+    "batch_size": 1,
+    "gradient_accumulation_steps": 8,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "max_length": 512,
+    "stride": 64,
+    "bf16": true,
+    "gradient_checkpointing": true,
+    "max_validation_fpr": 0.05,
+    "tfidf_candidates": [
+      {
+        "features": "word",
+        "C": 0.1
+      },
+      {
+        "features": "word",
+        "C": 1
+      },
+      {
+        "features": "word",
+        "C": 10
+      },
+      {
+        "features": "char",
+        "C": 0.1
+      },
+      {
+        "features": "char",
+        "C": 1
+      },
+      {
+        "features": "char",
+        "C": 10
+      },
+      {
+        "features": "union",
+        "C": 0.1
+      },
+      {
+        "features": "union",
+        "C": 1
+      },
+      {
+        "features": "union",
+        "C": 10
+      }
+    ],
+    "tfidf": "Word (1,2) ngrams max_features 30000; char_wb (3,5) ngrams max_features 50000; or concatenated word+char FeatureUnion, each sublinear TF and default L2 normalization. Balanced logistic regression, max_iter 1000, random_state 42. Nine cheap classical candidates versus three neural learning rates; not equal compute, deliberately gives baseline a broader search. Retain word C=1 separately.",
+    "threshold_selection": "Maximize validation recall subject to empirical FPR <=5%; ties use precision then higher threshold. Also report fixed 0.5 for all models and datasets. At 48 benign validation examples, the constraint allows at most two false positives; it does not guarantee test FPR <=5%.",
+    "hyperparameter_selection": "Select final-epoch seed-42 neural checkpoint and classical configuration by validation-selected F1; ties use lower log loss then earlier grid order. No best-epoch selection. Same data and endpoint for both model classes; report all validation candidates.",
+    "confirmation_policy": "Freeze LR before training seeds 43 and 44. Report all three selected-configuration seeds, including screening seed, without reselecting hyperparameters.",
+    "primary_endpoint": "Mean selected-configuration DeBERTa fresh-domain-test F1 minus validation-selected TF-IDF F1 at validation-selected thresholds. Report original word C=1, upstream, each seed, recall/FPR and fixed-0.5 results too.",
+    "evaluation_policy": "Hash all fitting inputs, choices and selected weights before opening test prediction generation. All selected models and upstream evaluated once on new test and unchanged external diagnostics. Unselected neural candidates get validation only. Any bug invalidating fitting requires a disclosed new run, not silently altered provenance.",
+    "external_endpoint": "Unchanged deepset 662 labeled examples: F1/recall/FPR; NotInject 339 benign examples: FPR only. Not used for fitting or selection. Their previous results were known and overlap with upstream pretraining is unknown.",
+    "uncertainty": "Paired family bootstrap over 48 new test families, 5000 resamples, seed 20261024. Preserve paired examples and use same draws for every model. Report mean and each seed. Intervals describe this synthetic test and exclude author/style bias and validation selection uncertainty.",
+    "stop_policy": "One frozen search, no post-test tuning, no picking the best test seed or automatically replacing the default detector. Publish even if DeBERTa loses or public results regress.",
+    "privacy": "Offline local training on original synthetic and pinned public diagnostic text. No real user/supplier data, account paths or credentials in public evidence. Only reserved example.invalid addresses in new examples. Model weights remain local."
+  },
+  "data": {
+    "families_sha256": "b9506be2486469e7567d45185b16fd6ef064b910fefa7a877a349cdc937a7581",
+    "builder_sha256": "76d2a946c4fcb4926542e2e47e0654dd74f7b8a45f95d2428a7c4c9ab4770bf7",
+    "old_manifest_sha256": "7e0c013c6335fe531c0452e0d61b8813b168aaaf8994f6600b2a2b18093b61b7",
+    "overlap_audit_sha256": "5ebf0d125e141014a503cb747aea057dcec321c48edd8e05610b75e1549c2d5f",
+    "split_method": "Category-stratified SHA256 ordering, fixed salt agentgate-v3-20261024; 18/6/6 new families per category. Add 36 original training pairs without wrappers.",
+    "datasets": {
+      "train": {
+        "sha256": "ec8cc3f2a2b4c517568ef06605fa1a66dae1db432efcd5d2c0aaf54e56b6c37f",
+        "rows": 360,
+        "classes": {
+          "0": 180,
+          "1": 180
+        },
+        "groups": 180,
+        "categories": {
+          "audit_and_workflow": 12,
+          "authority_spoofing": 12,
+          "procurement_bypass": 12,
+          "data_exfiltration": 12,
+          "security_discussion": 12,
+          "retrieval_injection": 12,
+          "audit_workflow": 36,
+          "authority": 36,
+          "exfiltration": 36,
+          "memory_task": 36,
+          "obfuscation_language": 36,
+          "procurement": 36,
+          "retrieval": 36,
+          "tool_boundary": 36
+        }
+      },
+      "validation": {
+        "sha256": "96ac9d46e0c55e315f025e7551f2c72843aae7a0503a7ef0d82b802aafce6914",
+        "rows": 96,
+        "classes": {
+          "0": 48,
+          "1": 48
+        },
+        "groups": 48,
+        "categories": {
+          "audit_workflow": 12,
+          "authority": 12,
+          "exfiltration": 12,
+          "memory_task": 12,
+          "obfuscation_language": 12,
+          "procurement": 12,
+          "retrieval": 12,
+          "tool_boundary": 12
+        }
+      },
+      "test": {
+        "sha256": "c17d63fd8f2e3e1b04612b9e4f00b2e9172df0aa618a738e4871749f69758508",
+        "rows": 96,
+        "classes": {
+          "0": 48,
+          "1": 48
+        },
+        "groups": 48,
+        "categories": {
+          "audit_workflow": 12,
+          "authority": 12,
+          "exfiltration": 12,
+          "memory_task": 12,
+          "obfuscation_language": 12,
+          "procurement": 12,
+          "retrieval": 12,
+          "tool_boundary": 12
+        }
+      },
+      "deepset": {
+        "sha256": "0aade98ec6cef0c1589215b9977df8476202424bd09c7126403eabf5e70fd259",
+        "rows": 662,
+        "classes": {
+          "1": 263,
+          "0": 399
+        },
+        "groups": 662,
+        "categories": {
+          "public_injection": 263,
+          "public_benign": 399
+        }
+      },
+      "notinject": {
+        "sha256": "38802ce91c6dac0187c0e30e75c53abf5cbea9682d0804b1571491d33d13f75e",
+        "rows": 339,
+        "classes": {
+          "0": 339
+        },
+        "groups": 339,
+        "categories": {
+          "Technique Queries": 87,
+          "Multilingual": 84,
+          "Common Queries": 126,
+          "Virtual Creation": 42
+        }
+      }
+    },
+    "exclusions": {
+      "old_train_wrappers_removed": 216,
+      "old_validation_and_test_not_reused": 192
+    },
+    "annotation": "All new labels are AI-authored, not independently human-reviewed. Shared author and attack concepts remain limitations."
+  },
+  "code_sha256": {
+    "run_experiment.py": "df390aff445a92cc11fe74f98975ac2943c3daaf16cd1ca02e67d922e4d9bdf8",
+    "analysis.py": "9e8595d03c59e81fa104fe6c243b765da0f92b0d136c7bd52bbef48fc4d638cf",
+    "protocol.json": "6bb42e0684cc4da981481a31e977a2c5c9df88b8e7c982c6187616c5d2934211",
+    "families.json": "b9506be2486469e7567d45185b16fd6ef064b910fefa7a877a349cdc937a7581",
+    "prepare_data.py": "76d2a946c4fcb4926542e2e47e0654dd74f7b8a45f95d2428a7c4c9ab4770bf7",
+    "author_families.py": "2e3e6e654501923814b81d96a22670e4b25c80f1816ee0719463b9c48643099a"
+  },
+  "base_files": [
+    {
+      "path": "base-model/config.json",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/config.json",
+      "sha256": "05079f4735092040b780d459027afab413faa6eeb66a548571a58832304b60bb",
+      "bytes": 994
+    },
+    {
+      "path": "base-model/tokenizer.json",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/tokenizer.json",
+      "sha256": "f0a66ad0d735d8dca9ecac4ff50fcdef4bb6adbadd2941a926844844d2c2059b",
+      "bytes": 8656744
+    },
+    {
+      "path": "base-model/tokenizer_config.json",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/tokenizer_config.json",
+      "sha256": "557b3d33d3f41b81ad769244e506549e98a1857d41dd58160aacd4d98d710b5a",
+      "bytes": 1284
+    },
+    {
+      "path": "base-model/special_tokens_map.json",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/special_tokens_map.json",
+      "sha256": "9463f61e1b109a8eb4688b829260d7c6b1e6dff04c98ff7269bb89e2b92369b9",
+      "bytes": 286
+    },
+    {
+      "path": "base-model/added_tokens.json",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/added_tokens.json",
+      "sha256": "dc046d04c9b0ada7ae6f1dc89c465801799acdf0c9a6aab8c15a1b2d5ca4e91f",
+      "bytes": 23
+    },
+    {
+      "path": "base-model/spm.model",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/spm.model",
+      "sha256": "c679fbf93643d19aab7ee10c0b99e460bdbc02fedf34b92b05af343b4af586fd",
+      "bytes": 2464616
+    },
+    {
+      "path": "base-model/model.safetensors",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/model.safetensors",
+      "sha256": "6521cb8d0ac08148c81464899c424e6148fcc62befa371089fa4061d8b6e0424",
+      "bytes": 737719272
+    },
+    {
+      "path": "base-model/README.md",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/README.md",
+      "sha256": "37221a38df1e60ad56364c39a233c75b77fa08740ecdee248d1b4e07ccc8ef5a",
+      "bytes": 6327
+    },
+    {
+      "path": "base-model/LICENSE",
+      "url": "https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2/resolve/90c9989b1a342275dd0d1a95aad283c04e075671/LICENSE",
+      "sha256": "59899c6091b540582ed617e8eeaac4919dc985ccfc35459ee9752b699be5205b",
+      "bytes": 10172
+    }
+  ],
+  "started_utc": "2026-10-23T23:57:45.144845+00:00",
+  "environment": {
+    "python": "3.12.14",
+    "torch": "2.8.0+cu128",
+    "transformers": "4.57.6",
+    "sklearn": "1.6.1",
+    "numpy": "2.2.6",
+    "cuda": "12.8",
+    "gpu": "NVIDIA GeForce RTX 3060 Laptop GPU",
+    "cpu_threads": 4,
+    "determinism": "Fixed seeds; GPU/platform bit equivalence is not guaranteed"
+  }
+}

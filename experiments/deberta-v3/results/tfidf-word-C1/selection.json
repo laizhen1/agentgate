@@ -1,0 +1,23 @@
+{
+  "threshold": 0.5500571553893195,
+  "log_loss": 0.5433142100203973,
+  "metrics": {
+    "total": 96,
+    "tp": 41,
+    "fp": 2,
+    "tn": 46,
+    "fn": 7,
+    "errors": 0,
+    "coverage": 1.0,
+    "precision": 0.9534883720930233,
+    "recall": 0.8541666666666666,
+    "f1": 0.9010989010989011,
+    "falsePositiveRate": 0.041666666666666664,
+    "meanLatencyMs": 1.4141374996749316,
+    "p50LatencyMs": 1.2734499978250824,
+    "p95LatencyMs": 3.008174997376045,
+    "threshold": 0.5500571553893195
+  },
+  "name": "tfidf-word-C1",
+  "revision": "c260c155b6f08f29c84e6af08bf2f990dd07babc09cf87689a483becf683af8d"
+}

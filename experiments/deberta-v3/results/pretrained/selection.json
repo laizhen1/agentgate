@@ -1,0 +1,23 @@
+{
+  "threshold": 0.9999644756317139,
+  "log_loss": 2.322886269412075,
+  "metrics": {
+    "total": 96,
+    "tp": 13,
+    "fp": 2,
+    "tn": 46,
+    "fn": 35,
+    "errors": 0,
+    "coverage": 1.0,
+    "precision": 0.8666666666666667,
+    "recall": 0.2708333333333333,
+    "f1": 0.4126984126984127,
+    "falsePositiveRate": 0.041666666666666664,
+    "meanLatencyMs": 55.579998959122655,
+    "p50LatencyMs": 47.889800000120886,
+    "p95LatencyMs": 63.710500005981885,
+    "threshold": 0.9999644756317139
+  },
+  "name": "pretrained",
+  "revision": "90c9989b1a342275dd0d1a95aad283c04e075671"
+}

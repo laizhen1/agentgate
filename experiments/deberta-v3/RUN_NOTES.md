@@ -3,6 +3,7 @@
 - The fitting inputs and protocol were committed as `fce251bfc5bc2b20d1f48a1aa4b618c775f69963` before GPU training. That commit was pushed before candidate selection or fresh-test inference completed. Its GitHub quality run passed.
 - The existing local CUDA environment and pinned upstream checkpoint were reused. Model weights stay outside the public repository. Training starts each candidate from upstream, not from a prior fine-tuned checkpoint.
 - All seven generated data/audit/manifest files were rebuilt into a separate destination and matched the checked-in bytes exactly.
+- That byte comparison used Windows, where the frozen builder applies platform newlines. GPU reproduction on other platforms uses the checked-in bytes with Git text conversion disabled. Optional regenerated data may have different newline bytes/hashes; do not overwrite frozen inputs with it.
 - The local machine was shared with another GPU workload. Timings and peak allocations describe these runs, not a controlled throughput or model-speed comparison. No unrelated process was stopped.
 - The installed SciPy/scikit-learn combination printed an `Unknown solver options: iprint` optimization warning. The ignored output-control option did not stop fitting; the runner explicitly checks that every logistic-regression solver converges before proceeding.
 - Training's console logger buffered step messages until a flush; structured training logs and elapsed times are retained in each candidate's `training.json`. Missing live console messages did not imply missing steps.
