@@ -1,4 +1,5 @@
 "use client";
+import { WorkspaceShell } from "@/components/workspace-shell";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { ThreatLab } from "./threat-lab";
@@ -250,12 +251,12 @@ export default function PlatformPage() {
     ) ?? [],
   );
   return (
-    <main className="workspace platform">
+    <WorkspaceShell active="live">
       <header className="topbar">
         <div className="brand">
           <ShieldCheck />
-          <strong>AgentGate</strong>
-          <span>LIVE TRUST PLATFORM</span>
+          <strong>Workspace</strong>
+          <span>Live evaluation</span>
         </div>
         <Link className="secondary" href="/">
           <ArrowLeft size={16} />
@@ -264,13 +265,11 @@ export default function PlatformPage() {
       </header>
       <section className="intro">
         <div>
-          <p className="eyebrow">
-            REAL MODEL · ENFORCED TOOLS · MEASURABLE EVIDENCE
-          </p>
-          <h1>Put trust under pressure.</h1>
+          <p className="eyebrow">AGENT OPERATIONS</p>
+          <h1>Live workspace</h1>
           <p>
-            Run an Ollama purchasing agent through a controlled security
-            gateway.
+            Run procurement tasks, review tool calls, and inspect execution
+            evidence.
           </p>
         </div>
         <div className="actions">
@@ -412,7 +411,7 @@ export default function PlatformPage() {
             </div>
           </div>
           <Tabs value={tab} onValueChange={setTab}>
-            <TabsList className="platform-tabs">
+            <TabsList variant="line" className="platform-tabs">
               <TabsTrigger value="runs">Agent runs</TabsTrigger>
               <TabsTrigger value="approvals">
                 Approvals ({pending.length})
@@ -534,9 +533,24 @@ export default function PlatformPage() {
                 </aside>
                 <section className="panel">
                   {!session ? (
-                    <div className="empty">
-                      Choose a run to inspect its model conversation, enforced
-                      actions, and execution trace.
+                    <div className="empty execution-empty">
+                      <div className="empty-icon">
+                        <Activity size={28} />
+                      </div>
+                      <p className="eyebrow">EXECUTION INSPECTOR</p>
+                      <h2>Your next run starts here</h2>
+                      <p>
+                        Launch a task or select a saved run to inspect the model
+                        conversation, tool decisions, and execution trace.
+                      </p>
+                      <div
+                        className="execution-stages"
+                        aria-label="Execution stages"
+                      >
+                        <span>01 · Model</span>
+                        <span>02 · Tools</span>
+                        <span>03 · Evidence</span>
+                      </div>
                     </div>
                   ) : (
                     <>
@@ -1431,12 +1445,13 @@ export default function PlatformPage() {
       )}
       <footer className="footer">
         <span>
-          AgentGate · Local Ollama + server-side gateway + isolated sandbox
+          AgentGate · V1.5 · Local Ollama + server-side gateway + isolated
+          sandbox
         </span>
         <span>
           Lab limits: 100 runs / organization · six steps / run · 900 KB state
         </span>
       </footer>
-    </main>
+    </WorkspaceShell>
   );
 }

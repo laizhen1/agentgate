@@ -1,4 +1,5 @@
 "use client";
+import { WorkspaceShell } from "@/components/workspace-shell";
 import { useCallback, useEffect, useState } from "react";
 import {
   ShieldCheck,
@@ -225,16 +226,16 @@ export default function Home() {
       .catch(() => {});
   }
   return (
-    <main className="workspace">
+    <WorkspaceShell active="reference">
       <header className="topbar">
         <div className="brand">
           <ShieldCheck />
-          <strong>AgentGate</strong>
-          <span>SECURITY WORKBENCH</span>
+          <strong>Workspace</strong>
+          <span>Reference lab</span>
         </div>
         <div className="actions">
           <a className="primary" href="/platform">
-            Open live platform <ArrowRight size={16} />
+            Live workspace <ArrowRight size={16} />
           </a>
           <span className="badge">
             <FlaskConical size={14} />
@@ -244,9 +245,11 @@ export default function Home() {
       </header>
       <section className="intro">
         <div>
-          <p className="eyebrow">AGENT ASSURANCE / RELEASE CONTROL</p>
-          <h1>Trust is tested.</h1>
-          <p>Inspect what an agent can do before it reaches production.</p>
+          <p className="eyebrow">POLICY EVALUATION</p>
+          <h1>Reference workbench</h1>
+          <p>
+            Compare agent policies. Inspect decisions. Track release readiness.
+          </p>
         </div>
         <button
           className="primary"
@@ -603,7 +606,7 @@ export default function Home() {
         </TabsContent>
       </Tabs>
       <footer className="footer">
-        <span>AgentGate · v0.1 · Reference workbench</span>
+        <span>AgentGate · V1.5 · Reference workbench</span>
         <a
           href="https://github.com/promptfoo/promptfoo"
           target="_blank"
@@ -769,6 +772,6 @@ export default function Home() {
           )}
         </DialogContent>
       </Dialog>
-    </main>
+    </WorkspaceShell>
   );
 }
