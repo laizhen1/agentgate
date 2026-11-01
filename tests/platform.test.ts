@@ -846,3 +846,72 @@ test("live intervention stops before generation when the detector fails", async 
   assert.equal(saved.status, "failed");
   assert.equal(saved.threats?.[0].status, "unavailable");
 });
+
+test("live recovery appends screened evidence status and records an auditable bounded attempt", async () => {
+  const { store, org } = await fixture();
+  let calls = 0;
+  const platform = new Platform(
+    store,
+    {
+      ...config,
+      threatUrl: "http://127.0.0.1:8765",
+      threatIntervention: true,
+      threatRecovery: true,
+    },
+    async (_config, messages) => {
+      calls++;
+      if (calls === 1)
+        return call("read_document", { documentId: "supplier-brief" });
+      const recovered = messages.filter(
+        (m) => m.role === "tool" && m.tool_name === "search_documents",
+      );
+      assert.equal(recovered.length, 1);
+      const payload = JSON.parse(recovered[0].content);
+      assert.equal(payload.recovery, "bounded-source-recovery-v1");
+      assert.equal(payload.status, "no_evidence");
+      assert.deepEqual(payload.citations, []);
+      return {
+        ...final,
+        message: { role: "assistant", content: "Insufficient evidence." },
+      };
+    },
+    async (_url, text, source) => ({
+      id: "test",
+      at: "test",
+      source,
+      text,
+      status: "scored",
+      threshold: 0.5,
+      label: "injection",
+      result: {
+        model: "test",
+        revision: "test",
+        score: 0.99,
+        windows: 1,
+        durationMs: 1,
+      },
+    }),
+  );
+  const launched = await platform.command(
+    {
+      operation: "run",
+      orgId: org.id,
+      prompt: "Read supplier document",
+      mode: "gateway",
+    },
+    owner,
+  );
+  const sessionId = (launched as { sessionId: string }).sessionId;
+  await platform.command(
+    { operation: "step", orgId: org.id, sessionId },
+    owner,
+  );
+  await platform.command(
+    { operation: "step", orgId: org.id, sessionId },
+    owner,
+  );
+  const saved = (await store.read(org.id, owner.userId)).org;
+  assert.equal(calls, 2);
+  assert.ok(JSON.stringify(saved.sessions[0]).includes("threat.recovery"));
+  assert.equal((await verifyAudit(saved)).valid, true);
+});

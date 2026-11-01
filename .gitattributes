@@ -16,3 +16,5 @@ experiments/deberta-v3/results/** linguist-generated=true
 
 experiments/agent-detector-v1/*.jsonl linguist-generated=true
 experiments/agent-detector-v1/supplementary/*.jsonl linguist-generated=true
+
+experiments/agent-recovery-v1/*.jsonl linguist-generated=true

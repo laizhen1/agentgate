@@ -26,7 +26,9 @@ remain in the audit assessment records; filtered context is persisted for later 
 
 A detector outage or invalid response stops the step before generation. It is not
 classified as a benign passage or a false alarm. No additional retries or invented
-replacement evidence are introduced. To use a fine-tuned local checkpoint and its
+replacement evidence are introduced in filtering-only mode. An optional
+[bounded recovery path](recovery-comparison.md) is evaluated separately on fresh tasks.
+To use a fine-tuned local checkpoint and its
 validation threshold with the existing service, see [ML workflow](ml-workflow.md).
 
 ## Comparison design

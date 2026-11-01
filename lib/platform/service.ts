@@ -1,3 +1,8 @@
+import {
+  recoverFilteredEvidence,
+  recoverySearch,
+  type RecoveryRecord,
+} from "./recovery.ts";
 import { guardToolMessages, configuredScorer } from "./detector-guard.ts";
 import { z } from "zod";
 import { detectThreat } from "./threat.ts";
@@ -202,16 +207,28 @@ function sessionFor(org: Org, sessionId: string): Session {
 export class Platform {
   private detector: typeof detectThreat;
   private store: OrgStore;
-  private config: ModelConfig & { threatIntervention?: boolean };
+  private config: ModelConfig & {
+    threatIntervention?: boolean;
+    threatRecovery?: boolean;
+  };
   private model: (
-    config: ModelConfig & { threatIntervention?: boolean },
+    config: ModelConfig & {
+      threatIntervention?: boolean;
+      threatRecovery?: boolean;
+    },
     messages: Session["messages"],
   ) => Promise<ModelReply>;
   constructor(
     store: OrgStore,
-    config: ModelConfig & { threatIntervention?: boolean },
+    config: ModelConfig & {
+      threatIntervention?: boolean;
+      threatRecovery?: boolean;
+    },
     model: (
-      config: ModelConfig & { threatIntervention?: boolean },
+      config: ModelConfig & {
+        threatIntervention?: boolean;
+        threatRecovery?: boolean;
+      },
       messages: Session["messages"],
     ) => Promise<ModelReply> = chat,
     detector: typeof detectThreat = detectThreat,
@@ -580,6 +597,7 @@ export class Platform {
           )
         : [];
     let guardedInput: Session["messages"] | undefined;
+    let recoveryRecord: RecoveryRecord | null = null;
     let withheldCount = 0;
     let failure: string | undefined;
     try {
@@ -590,6 +608,11 @@ export class Platform {
             "Detector intervention is enabled but no detector is configured.",
           );
         const scorer = configuredScorer(this.config.threatUrl, this.detector);
+        const trackedScorer = async (text: string) => {
+          const assessment = await scorer(text);
+          threats.push(assessment);
+          return assessment;
+        };
         const guarded = await guardToolMessages(
           leased,
           leased.length - incoming.length,
@@ -600,6 +623,19 @@ export class Platform {
           },
         );
         guardedInput = guarded.messages;
+        if (this.config.threatRecovery) {
+          const { org } = await this.store.read(orgId, user.userId);
+          requireRole(org, user.userId, operators);
+          const recovered = await recoverFilteredEvidence(
+            leased,
+            guarded.messages,
+            guarded.records,
+            trackedScorer,
+            recoverySearch(org, user.userId, this.config.retrievalUrl),
+          );
+          guardedInput = recovered.messages;
+          recoveryRecord = recovered.recovery;
+        }
         withheldCount = guarded.records.filter(
           (record) => record.blocked,
         ).length;
@@ -633,6 +669,8 @@ export class Platform {
               " untrusted source passages withheld before inference.",
           );
         }
+        if (recoveryRecord)
+          trace(session, "threat.recovery", JSON.stringify(recoveryRecord));
         for (const threat of threats) {
           (session.threats ??= []).push(threat);
           trace(

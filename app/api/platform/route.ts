@@ -19,6 +19,7 @@ function configuration() {
     model: vars.AGENTGATE_OLLAMA_MODEL ?? "",
     threatUrl: vars.AGENTGATE_THREAT_URL,
     threatIntervention: vars.AGENTGATE_THREAT_INTERVENTION === "withhold",
+    threatRecovery: vars.AGENTGATE_THREAT_RECOVERY === "retrieve",
     retrievalUrl: vars.AGENTGATE_RETRIEVAL_URL,
   };
 }

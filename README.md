@@ -4,6 +4,29 @@ An AI agent evaluation workbench for measuring task completion, tool-use correct
 
 AgentGate runs local tool-using models through procurement tasks, retrieves evidence with Ollama embeddings and FAISS, and checks the resulting answers and sandbox state independently of the gateway. Controlled comparisons separate model behavior, prompt defenses, and server-side enforcement. The DeBERTa work includes classifier adaptation and a separate detector-in-the-loop agent comparison, with baseline and cross-domain results preserved.
 
+## Recovery after filtering
+
+The live agent also supports one bounded recovery attempt after filtering: search
+the same authorized organization corpus, exclude the blocked source, and rescan
+all replacement passages before inference. Enable it with
+`AGENTGATE_THREAT_RECOVERY=retrieve` alongside input filtering.
+
+A separate **96-episode fresh-scenario comparison** holds the fine-tuned detector,
+gateway, tools and agent budgets fixed while comparing filtering-only with
+filtering plus recovery. Both arms can access the same fallback documents.
+It reports task completion, attacker success, paired task gains/losses and latency.
+
+On this pilot, attacked task completion rose from **1/24 to 5/24**; attack success
+stayed at **2/24** and clean completion at **9/24**. Overall mean latency increased
+from **1.58 s to 2.47 s**. The paired comparison contains five task gains and one loss.
+
+- [Comparison report](experiments/agent-recovery-v1/REPORT.md)
+- [Implementation and reproduction](docs/recovery-comparison.md)
+
+```sh
+npm run benchmark:recovery:verify
+```
+
 ## Detector-in-the-loop comparison
 
 The live agent supports opt-in DeBERTa filtering of untrusted tool results and

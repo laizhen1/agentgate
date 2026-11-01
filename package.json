@@ -24,7 +24,10 @@
     "benchmark:detector:verify": "node --experimental-strip-types scripts/benchmark-detector-report.ts --input experiments/agent-detector-v1 --verify",
     "benchmark": "node --experimental-strip-types scripts/benchmark.ts",
     "benchmark:report": "node --experimental-strip-types scripts/benchmark-report.ts",
-    "benchmark:verify": "node --experimental-strip-types scripts/benchmark-report.ts --input experiments/agent-pilot-v1 --verify"
+    "benchmark:verify": "node --experimental-strip-types scripts/benchmark-report.ts --input experiments/agent-pilot-v1 --verify",
+    "benchmark:recovery": "node --experimental-strip-types scripts/benchmark-recovery.ts",
+    "benchmark:recovery:report": "node --experimental-strip-types scripts/benchmark-recovery-report.ts",
+    "benchmark:recovery:verify": "node --experimental-strip-types scripts/benchmark-recovery-report.ts --input experiments/agent-recovery-v1 --verify"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

@@ -32,6 +32,8 @@ jobs:
         run: |
           npm run benchmark:detector:verify
           npm run benchmark:detector:report -- --input experiments/agent-detector-v1/supplementary --verify
+      - name: Replay fresh recovery comparison
+        run: npm run benchmark:recovery:verify
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run format:check
