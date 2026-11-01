@@ -13,3 +13,6 @@ experiments/deberta-v2/results/** linguist-generated=true
 # Preserve v3 data, protocol and result evidence bytes.
 experiments/deberta-v3/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
 experiments/deberta-v3/results/** linguist-generated=true
+
+experiments/agent-detector-v1/*.jsonl linguist-generated=true
+experiments/agent-detector-v1/supplementary/*.jsonl linguist-generated=true

@@ -2,7 +2,24 @@
 
 An AI agent evaluation workbench for measuring task completion, tool-use correctness, and resilience to prompt injection.
 
-AgentGate runs local tool-using models through procurement tasks, retrieves evidence with Ollama embeddings and FAISS, and checks the resulting answers and sandbox state independently of the gateway. Controlled comparisons separate model behavior, prompt defenses, and server-side enforcement. The existing DeBERTa experiment measures detector adaptation separately and preserves its baseline and cross-domain limitations.
+AgentGate runs local tool-using models through procurement tasks, retrieves evidence with Ollama embeddings and FAISS, and checks the resulting answers and sandbox state independently of the gateway. Controlled comparisons separate model behavior, prompt defenses, and server-side enforcement. The DeBERTa work includes classifier adaptation and a separate detector-in-the-loop agent comparison, with baseline and cross-domain results preserved.
+
+## Detector-in-the-loop comparison
+
+The live agent supports opt-in DeBERTa filtering of untrusted tool results and
+retrieved passages before generation. A controlled comparison holds the gateway,
+scripted reviewer, tasks and agent settings fixed while varying no detector,
+upstream DeBERTa and the domain-adapted checkpoint.
+
+See the [results and run provenance](experiments/agent-detector-v1/README.md) and
+[implementation/reproduction guide](docs/detector-comparison.md). Both a primary
+120-episode run and the first supplementary run are retained separately. The
+report measures attacker success, clean/attacked task completion, false alarms,
+and end-to-end/detector latency.
+
+```sh
+npm run benchmark:detector:verify
+```
 
 ## Real agent benchmark
 

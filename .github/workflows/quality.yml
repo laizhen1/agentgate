@@ -28,6 +28,10 @@ jobs:
       - run: npm test
       - name: Replay published agent benchmark evidence
         run: npm run benchmark:verify
+      - name: Replay detector-in-the-loop comparison
+        run: |
+          npm run benchmark:detector:verify
+          npm run benchmark:detector:report -- --input experiments/agent-detector-v1/supplementary --verify
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run format:check

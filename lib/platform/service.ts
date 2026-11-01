@@ -1,3 +1,4 @@
+import { guardToolMessages, configuredScorer } from "./detector-guard.ts";
 import { z } from "zod";
 import { detectThreat } from "./threat.ts";
 import {
@@ -201,16 +202,16 @@ function sessionFor(org: Org, sessionId: string): Session {
 export class Platform {
   private detector: typeof detectThreat;
   private store: OrgStore;
-  private config: ModelConfig;
+  private config: ModelConfig & { threatIntervention?: boolean };
   private model: (
-    config: ModelConfig,
+    config: ModelConfig & { threatIntervention?: boolean },
     messages: Session["messages"],
   ) => Promise<ModelReply>;
   constructor(
     store: OrgStore,
-    config: ModelConfig,
+    config: ModelConfig & { threatIntervention?: boolean },
     model: (
-      config: ModelConfig,
+      config: ModelConfig & { threatIntervention?: boolean },
       messages: Session["messages"],
     ) => Promise<ModelReply> = chat,
     detector: typeof detectThreat = detectThreat,
@@ -566,20 +567,44 @@ export class Platform {
       if (message.role !== "user" && message.role !== "tool") break;
       incoming.unshift(message);
     }
-    const threats = this.config.threatUrl
-      ? await Promise.all(
-          incoming.map((message) =>
-            this.detector(
-              this.config.threatUrl,
-              message.content,
-              message.role as "user" | "tool",
+    const threats =
+      this.config.threatUrl && !this.config.threatIntervention
+        ? await Promise.all(
+            incoming.map((message) =>
+              this.detector(
+                this.config.threatUrl,
+                message.content,
+                message.role as "user" | "tool",
+              ),
             ),
-          ),
-        )
-      : [];
+          )
+        : [];
+    let guardedInput: Session["messages"] | undefined;
+    let withheldCount = 0;
     let failure: string | undefined;
     try {
-      reply = await this.model(this.config, leased);
+      if (this.config.threatIntervention) {
+        if (!this.config.threatUrl)
+          throw new Fault(
+            503,
+            "Detector intervention is enabled but no detector is configured.",
+          );
+        const scorer = configuredScorer(this.config.threatUrl, this.detector);
+        const guarded = await guardToolMessages(
+          leased,
+          leased.length - incoming.length,
+          async (text) => {
+            const assessment = await scorer(text);
+            threats.push(assessment);
+            return assessment;
+          },
+        );
+        guardedInput = guarded.messages;
+        withheldCount = guarded.records.filter(
+          (record) => record.blocked,
+        ).length;
+      }
+      reply = await this.model(this.config, guardedInput ?? leased);
     } catch (error) {
       failure = error instanceof Fault ? error.message : "Model step failed.";
     }
@@ -599,6 +624,15 @@ export class Platform {
             "A newer step superseded this response; it was not executed.",
           );
         delete session.lease;
+        if (guardedInput) {
+          session.messages = guardedInput;
+          trace(
+            session,
+            "threat.intervention",
+            withheldCount +
+              " untrusted source passages withheld before inference.",
+          );
+        }
         for (const threat of threats) {
           (session.threats ??= []).push(threat);
           trace(
@@ -608,7 +642,9 @@ export class Platform {
               ? threat.label +
                   ": " +
                   threat.result.score.toFixed(4) +
-                  " (observation only)"
+                  (this.config.threatIntervention
+                    ? " (input filtering enabled)"
+                    : " (observation only)")
               : threat.error!,
           );
         }

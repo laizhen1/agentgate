@@ -40,7 +40,7 @@ def inspect_content(label, content, errors):
 
 def main():
     errors = []
-    files = [p for p in git("ls-files", "-z").decode("utf-8").split("\0") if p]
+    files = [p for p in git("ls-files", "--cached", "--others", "--exclude-standard", "-z").decode("utf-8").split("\0") if p]
     for name in files:
         inspect_content(name, (ROOT / name).read_bytes(), errors)
     # CI checkout may be shallow; the release audit separately checks all history.
@@ -66,7 +66,7 @@ def main():
 
     if errors:
         raise SystemExit("\n".join(errors))
-    print(f"Public artifact checks passed: {len(files)} tracked files, ZIP contents, "
+    print(f"Public artifact checks passed: {len(files)} tracked and non-ignored new files, ZIP contents, "
           f"no-reply commit emails, {len(expected)} frozen hashes, and {len(bundles)} bundles.")
     print("Pattern checks supplement manual review; they do not prove absence of all personal data.")
 

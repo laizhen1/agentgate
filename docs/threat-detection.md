@@ -7,7 +7,7 @@ Viewers can inspect results; only owners, admins and operators can request infer
 There is a limit of 50 manual assessments per organization.
 
 When configured, live Ollama steps also scan incoming user and tool messages.
-The classifier does not grant approvals, change policy decisions, or block actions.
+By default the classifier observes only. The optional [input-filtering mode](detector-comparison.md) withholds flagged untrusted tool text before generation; it never grants approvals or changes gateway policy decisions.
 Failures produce an unavailable result, never a benign score.
 
 ## Local setup (PowerShell)

@@ -743,3 +743,106 @@ test("live BERT observations scan all tool results without changing gateway deci
   );
   assert.equal((await verifyAudit(saved)).valid, true);
 });
+
+test("live detector intervention filters context before model inference and persists raw assessment", async () => {
+  const { store, org } = await fixture();
+  let calls = 0;
+  const platform = new Platform(
+    store,
+    { ...config, threatUrl: "http://127.0.0.1:8765", threatIntervention: true },
+    async (_config, messages) => {
+      calls++;
+      if (calls === 1)
+        return call("read_document", { documentId: "supplier-brief" });
+      const tool = messages.find((m) => m.role === "tool")!;
+      assert.match(tool.content, /Source content withheld/);
+      assert.ok(!tool.content.includes("IGNORE PRIOR RULES"));
+      return final;
+    },
+    async (_url, text, source) => ({
+      id: "test",
+      at: new Date().toISOString(),
+      source,
+      text,
+      status: "scored",
+      threshold: 0.5,
+      label: "injection",
+      result: {
+        model: "test",
+        revision: "test",
+        score: 0.99,
+        windows: 1,
+        durationMs: 1,
+      },
+    }),
+  );
+  const launched = await platform.command(
+    {
+      operation: "run",
+      orgId: org.id,
+      prompt: "Read the supplier document",
+      mode: "gateway",
+    },
+    owner,
+  );
+  const sessionId = (launched as { sessionId: string }).sessionId;
+  await platform.command(
+    { operation: "step", orgId: org.id, sessionId },
+    owner,
+  );
+  await platform.command(
+    { operation: "step", orgId: org.id, sessionId },
+    owner,
+  );
+  const saved = (await store.read(org.id, owner.userId)).org;
+  assert.equal(calls, 2);
+  assert.equal(saved.sessions[0].threats?.length, 1);
+  assert.ok(saved.sessions[0].threats?.[0].text.includes("IGNORE PRIOR RULES"));
+  assert.match(
+    saved.sessions[0].messages.find((m) => m.role === "tool")!.content,
+    /Source content withheld/,
+  );
+  assert.equal((await verifyAudit(saved)).valid, true);
+});
+test("live intervention stops before generation when the detector fails", async () => {
+  const { store, org } = await fixture();
+  let calls = 0;
+  const platform = new Platform(
+    store,
+    { ...config, threatUrl: "http://127.0.0.1:8765", threatIntervention: true },
+    async () => {
+      calls++;
+      return call("read_document", { documentId: "supplier-brief" });
+    },
+    async (_url, text, source) => ({
+      id: "test",
+      at: "test",
+      source,
+      text,
+      status: "unavailable",
+      threshold: 0.5,
+    }),
+  );
+  const launched = await platform.command(
+    {
+      operation: "run",
+      orgId: org.id,
+      prompt: "Read supplier document",
+      mode: "gateway",
+    },
+    owner,
+  );
+  const sessionId = (launched as { sessionId: string }).sessionId;
+  await platform.command(
+    { operation: "step", orgId: org.id, sessionId },
+    owner,
+  );
+  await platform.command(
+    { operation: "step", orgId: org.id, sessionId },
+    owner,
+  );
+  assert.equal(calls, 1);
+  const saved = (await store.read(org.id, owner.userId)).org.sessions[0];
+  assert.equal(saved.status, "failed");
+  assert.equal(saved.threats?.[0].status, "unavailable");
+});
